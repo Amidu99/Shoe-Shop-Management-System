@@ -27,8 +27,8 @@ public class CustomerServiceIMPL implements CustomerService {
     }
 
     @Override
-    public CustomerDTO getSelectedCustomer(String customerCode) {
-        return null;
+    public CustomerDTO getCustomerByCustomerCode(String customerCode) {
+        return mapping.toCustomerDTO(repo.getCustomerByCustomerCode(customerCode));
     }
 
     @Override

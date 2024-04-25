@@ -35,6 +35,18 @@ public class Customer {
         }
     }
 
+    @GetMapping("get")
+    public ResponseEntity<?> getOneCustomer(@RequestHeader String customerCode){
+        Boolean isExists = customerService.existsByCustomerCode(customerCode);
+        if (!isExists){
+            System.out.println("Not Exists Customer.");
+            return ResponseEntity.badRequest().body("Customer not found!");
+        }
+        CustomerDTO customerDTO = customerService.getCustomerByCustomerCode(customerCode);
+        System.out.println("Customer founded: "+customerDTO);
+        return ResponseEntity.ok(customerDTO);
+    }
+
     private void validateCustomer(CustomerDTO customerDTO) {
         if (!Pattern.compile("^[C]-\\d{4}$").matcher(customerDTO.getCustomerCode()).matches()) {
             throw new RuntimeException("Invalid Customer Code.");
