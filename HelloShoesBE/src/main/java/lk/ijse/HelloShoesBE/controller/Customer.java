@@ -23,6 +23,7 @@ public class Customer {
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveCustomer(@RequestBody CustomerDTO customerDTO) {
         try {
+            validateCustomer(customerDTO);
             if (customerService.existsByCustomerCode(customerDTO.getCustomerCode())) {
                 System.out.println("Exists Customer.");
                 return ResponseEntity.badRequest().body("This customer already exists.");
@@ -32,5 +33,18 @@ public class Customer {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    private void validateCustomer(CustomerDTO customerDTO) {
+        if (!Pattern.compile("^[C]-\\d{4}$").matcher(customerDTO.getCustomerCode()).matches()) {
+            throw new RuntimeException("Invalid Customer Code.");
+        }
+        if (!Pattern.compile("^[A-Za-z\\s]{3,}$").matcher(customerDTO.getCustomerName()).matches()) {
+            throw new RuntimeException("Invalid Customer Name.");
+        }
+        if (!Pattern.compile("^\\d{10}$").matcher(customerDTO.getContactNo()).matches()) {
+            throw new RuntimeException("Invalid Customer Contact Number.");
+        }
+        System.out.println("Customer validated.");
     }
 }
