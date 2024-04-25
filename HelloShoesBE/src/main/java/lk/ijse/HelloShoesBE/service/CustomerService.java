@@ -9,4 +9,5 @@ public interface CustomerService {
     CustomerDTO getSelectedCustomer(String customerCode);
     List<CustomerDTO> getAllCustomers();
     void updateCustomer(String customerCode, CustomerDTO customerDTO);
+    Boolean existsByCustomerCode(String customerCode);
 }
