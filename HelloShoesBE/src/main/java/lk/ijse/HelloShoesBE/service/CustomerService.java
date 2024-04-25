@@ -8,6 +8,6 @@ public interface CustomerService {
     void deleteCustomer(String customerCode);
     CustomerDTO getCustomerByCustomerCode(String customerCode);
     List<CustomerDTO> getAllCustomers();
-    void updateCustomer(String customerCode, CustomerDTO customerDTO);
+    void updateCustomer(CustomerDTO customerDTO);
     Boolean existsByCustomerCode(String customerCode);
 }

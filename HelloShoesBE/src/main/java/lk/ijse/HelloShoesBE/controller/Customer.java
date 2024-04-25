@@ -56,6 +56,21 @@ public class Customer {
         return ResponseEntity.ok().body(allCustomers);
     }
 
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateCustomer(@RequestBody CustomerDTO customerDTO) {
+        try {
+            validateCustomer(customerDTO);
+            if (customerService.existsByCustomerCode(customerDTO.getCustomerCode())) {
+                customerService.updateCustomer(customerDTO);
+                return ResponseEntity.ok().build();
+            }
+            System.out.println("Not Exists Customer.");
+            return ResponseEntity.badRequest().body("This customer not exists.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     private void validateCustomer(CustomerDTO customerDTO) {
         if (!Pattern.compile("^[C]-\\d{4}$").matcher(customerDTO.getCustomerCode()).matches()) {
             throw new RuntimeException("Invalid Customer Code.");
