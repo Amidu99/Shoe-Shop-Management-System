@@ -33,7 +33,7 @@ public class CustomerServiceIMPL implements CustomerService {
 
     @Override
     public List<CustomerDTO> getAllCustomers() {
-        return null;
+        return mapping.toCustomerDTOList(repo.findAll());
     }
 
     @Override

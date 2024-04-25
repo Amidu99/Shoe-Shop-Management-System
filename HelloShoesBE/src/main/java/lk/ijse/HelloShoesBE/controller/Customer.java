@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @RestController
@@ -35,7 +36,7 @@ public class Customer {
         }
     }
 
-    @GetMapping("get")
+    @GetMapping("/get")
     public ResponseEntity<?> getOneCustomer(@RequestHeader String customerCode){
         Boolean isExists = customerService.existsByCustomerCode(customerCode);
         if (!isExists){
@@ -45,6 +46,14 @@ public class Customer {
         CustomerDTO customerDTO = customerService.getCustomerByCustomerCode(customerCode);
         System.out.println("Customer founded: "+customerDTO);
         return ResponseEntity.ok(customerDTO);
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAllCustomers(){
+        List<CustomerDTO> allCustomers = customerService.getAllCustomers();
+        System.out.println("No of all customers: "+allCustomers.size());
+        if (allCustomers.size() == 0) return ResponseEntity.ok().body("No customers found");
+        return ResponseEntity.ok().body(allCustomers);
     }
 
     private void validateCustomer(CustomerDTO customerDTO) {
