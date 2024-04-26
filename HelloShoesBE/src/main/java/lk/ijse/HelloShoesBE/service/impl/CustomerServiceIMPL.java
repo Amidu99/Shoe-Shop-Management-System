@@ -24,7 +24,7 @@ public class CustomerServiceIMPL implements CustomerService {
 
     @Override
     public void deleteCustomer(String customerCode) {
-
+        repo.deleteById(customerCode);
     }
 
     @Override

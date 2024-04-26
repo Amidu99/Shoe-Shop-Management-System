@@ -71,6 +71,18 @@ public class Customer {
         }
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteCustomer(@RequestHeader String customerCode){
+        Boolean isExists = customerService.existsByCustomerCode(customerCode);
+        if (!isExists){
+            System.out.println("Not Exists Customer.");
+            return ResponseEntity.badRequest().body("Customer not found!");
+        }
+        customerService.deleteCustomer(customerCode);
+        System.out.println("Customer deleted.");
+        return ResponseEntity.ok().build();
+    }
+
     private void validateCustomer(CustomerDTO customerDTO) {
         if (!Pattern.compile("^[C]-\\d{4}$").matcher(customerDTO.getCustomerCode()).matches()) {
             throw new RuntimeException("Invalid Customer Code.");
