@@ -83,6 +83,16 @@ public class Customer {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/getNextCode")
+    public ResponseEntity<?> getNextCustomerCode(){
+        String lastCustomerCode = customerService.getLastCustomerCode();
+        System.out.println("Last CustomerCode: "+lastCustomerCode);
+        if (lastCustomerCode==null) return ResponseEntity.ok("C-0001");
+        int nextCode = Integer.parseInt(lastCustomerCode.replace("C-", "")) + 1;
+        System.out.println("Next CustomerCode: "+nextCode);
+        return ResponseEntity.ok(String.format("C-%04d", nextCode));
+    }
+
     private void validateCustomer(CustomerDTO customerDTO) {
         if (!Pattern.compile("^[C]-\\d{4}$").matcher(customerDTO.getCustomerCode()).matches()) {
             throw new RuntimeException("Invalid Customer Code.");

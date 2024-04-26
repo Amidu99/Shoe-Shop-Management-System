@@ -63,4 +63,9 @@ public class CustomerServiceIMPL implements CustomerService {
     public Boolean existsByCustomerCode(String customerCode) {
         return repo.existsByCustomerCode(customerCode);
     }
+
+    @Override
+    public String getLastCustomerCode() {
+        return repo.getLastCustomerCode();
+    }
 }

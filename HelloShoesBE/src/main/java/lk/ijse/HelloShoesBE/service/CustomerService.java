@@ -10,4 +10,5 @@ public interface CustomerService {
     List<CustomerDTO> getAllCustomers();
     void updateCustomer(CustomerDTO customerDTO);
     Boolean existsByCustomerCode(String customerCode);
+    String getLastCustomerCode();
 }
