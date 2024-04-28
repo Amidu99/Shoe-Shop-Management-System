@@ -56,6 +56,21 @@ public class Supplier {
         return ResponseEntity.ok().body(allSuppliers);
     }
 
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateSupplier(@RequestBody SupplierDTO supplierDTO) {
+        try {
+            validateSupplier(supplierDTO);
+            if (supplierService.existsBySupplierCode(supplierDTO.getSupplierCode())) {
+                supplierService.updateSupplier(supplierDTO);
+                return ResponseEntity.ok().build();
+            }
+            System.out.println("Not Exists Supplier.");
+            return ResponseEntity.badRequest().body("This supplier not exists.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     private void validateSupplier(SupplierDTO supplierDTO) {
         if (!Pattern.compile("^[S]-\\d{4}$").matcher(supplierDTO.getSupplierCode()).matches()) {
             throw new RuntimeException("Invalid Supplier Code.");
