@@ -58,4 +58,9 @@ public class SupplierServiceIMPL implements SupplierService {
     public void deleteSupplier(String supplierCode) {
         repo.deleteById(supplierCode);
     }
+
+    @Override
+    public String getLastSupplierCode() {
+        return repo.getLastSupplierCode();
+    }
 }

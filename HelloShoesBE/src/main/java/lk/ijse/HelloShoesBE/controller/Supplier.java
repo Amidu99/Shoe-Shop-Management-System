@@ -83,6 +83,16 @@ public class Supplier {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/getNextCode")
+    public ResponseEntity<?> getNextSupplierCode(){
+        String lastSupplierCode = supplierService.getLastSupplierCode();
+        System.out.println("Last SupplierCode: "+lastSupplierCode);
+        if (lastSupplierCode==null) return ResponseEntity.ok("S-0001");
+        int nextCode = Integer.parseInt(lastSupplierCode.replace("S-", "")) + 1;
+        System.out.println("Next SupplierCode: "+nextCode);
+        return ResponseEntity.ok(String.format("S-%04d", nextCode));
+    }
+
     private void validateSupplier(SupplierDTO supplierDTO) {
         if (!Pattern.compile("^[S]-\\d{4}$").matcher(supplierDTO.getSupplierCode()).matches()) {
             throw new RuntimeException("Invalid Supplier Code.");
