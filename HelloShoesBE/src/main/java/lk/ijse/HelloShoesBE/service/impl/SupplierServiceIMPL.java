@@ -19,4 +19,9 @@ public class SupplierServiceIMPL implements SupplierService {
     public SupplierDTO saveSupplier(SupplierDTO supplierDTO) {
         return mapping.toSupplierDTO(repo.save(mapping.toSupplierEntity(supplierDTO)));
     }
+
+    @Override
+    public boolean existsBySupplierCode(String supplierCode) {
+        return repo.existsBySupplierCode(supplierCode);
+    }
 }

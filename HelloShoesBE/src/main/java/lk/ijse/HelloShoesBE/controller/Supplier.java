@@ -24,6 +24,10 @@ public class Supplier {
     public ResponseEntity<?> saveSupplier(@RequestBody SupplierDTO supplierDTO) {
         try {
             validateSupplier(supplierDTO);
+            if (supplierService.existsBySupplierCode(supplierDTO.getSupplierCode())) {
+                System.out.println("Exists Supplier.");
+                return ResponseEntity.badRequest().body("This supplier already exists.");
+            }
             supplierService.saveSupplier(supplierDTO);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
