@@ -7,6 +7,7 @@ import lk.ijse.HelloShoesBE.service.SupplierService;
 import lk.ijse.HelloShoesBE.util.Mapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @Transactional
@@ -28,5 +29,10 @@ public class SupplierServiceIMPL implements SupplierService {
     @Override
     public SupplierDTO getSupplierBySupplierCode(String supplierCode) {
         return mapping.toSupplierDTO(repo.getSupplierBySupplierCode(supplierCode));
+    }
+
+    @Override
+    public List<SupplierDTO> getAllSuppliers() {
+        return mapping.toSupplierDTOList(repo.findAll());
     }
 }

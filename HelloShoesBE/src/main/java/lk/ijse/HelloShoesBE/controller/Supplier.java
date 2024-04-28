@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @RestController
@@ -45,6 +46,14 @@ public class Supplier {
         SupplierDTO supplierDTO = supplierService.getSupplierBySupplierCode(supplierCode);
         System.out.println("Supplier founded: "+supplierDTO);
         return ResponseEntity.ok(supplierDTO);
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAllSuppliers(){
+        List<SupplierDTO> allSuppliers = supplierService.getAllSuppliers();
+        System.out.println("No of all suppliers: "+allSuppliers.size());
+        if (allSuppliers.size() == 0) return ResponseEntity.ok().body("No suppliers found");
+        return ResponseEntity.ok().body(allSuppliers);
     }
 
     private void validateSupplier(SupplierDTO supplierDTO) {
