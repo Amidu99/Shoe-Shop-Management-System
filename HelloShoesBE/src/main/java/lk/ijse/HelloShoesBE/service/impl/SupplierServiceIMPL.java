@@ -24,4 +24,9 @@ public class SupplierServiceIMPL implements SupplierService {
     public boolean existsBySupplierCode(String supplierCode) {
         return repo.existsBySupplierCode(supplierCode);
     }
+
+    @Override
+    public SupplierDTO getSupplierBySupplierCode(String supplierCode) {
+        return mapping.toSupplierDTO(repo.getSupplierBySupplierCode(supplierCode));
+    }
 }

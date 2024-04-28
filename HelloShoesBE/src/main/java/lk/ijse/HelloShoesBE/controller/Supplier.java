@@ -35,6 +35,18 @@ public class Supplier {
         }
     }
 
+    @GetMapping("/get")
+    public ResponseEntity<?> getOneSupplier(@RequestHeader String supplierCode){
+        boolean isExists = supplierService.existsBySupplierCode(supplierCode);
+        if (!isExists){
+            System.out.println("Not Exists Supplier.");
+            return ResponseEntity.noContent().build();
+        }
+        SupplierDTO supplierDTO = supplierService.getSupplierBySupplierCode(supplierCode);
+        System.out.println("Supplier founded: "+supplierDTO);
+        return ResponseEntity.ok(supplierDTO);
+    }
+
     private void validateSupplier(SupplierDTO supplierDTO) {
         if (!Pattern.compile("^[S]-\\d{4}$").matcher(supplierDTO.getSupplierCode()).matches()) {
             throw new RuntimeException("Invalid Supplier Code.");
