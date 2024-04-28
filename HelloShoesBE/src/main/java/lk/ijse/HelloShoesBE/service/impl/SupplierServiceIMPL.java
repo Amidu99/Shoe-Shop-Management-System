@@ -53,4 +53,9 @@ public class SupplierServiceIMPL implements SupplierService {
         existingSupplier.setEmail(supplierDTO.getEmail());
         repo.save(existingSupplier);
     }
+
+    @Override
+    public void deleteSupplier(String supplierCode) {
+        repo.deleteById(supplierCode);
+    }
 }

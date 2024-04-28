@@ -71,6 +71,18 @@ public class Supplier {
         }
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteSupplier(@RequestHeader String supplierCode){
+        boolean isExists = supplierService.existsBySupplierCode(supplierCode);
+        if (!isExists){
+            System.out.println("Not Exists Supplier.");
+            return ResponseEntity.badRequest().body("Supplier not found!");
+        }
+        supplierService.deleteSupplier(supplierCode);
+        System.out.println("Supplier deleted.");
+        return ResponseEntity.ok().build();
+    }
+
     private void validateSupplier(SupplierDTO supplierDTO) {
         if (!Pattern.compile("^[S]-\\d{4}$").matcher(supplierDTO.getSupplierCode()).matches()) {
             throw new RuntimeException("Invalid Supplier Code.");
