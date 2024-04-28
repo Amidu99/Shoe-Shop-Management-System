@@ -41,7 +41,7 @@ public class Customer {
         Boolean isExists = customerService.existsByCustomerCode(customerCode);
         if (!isExists){
             System.out.println("Not Exists Customer.");
-            return ResponseEntity.badRequest().body("Customer not found!");
+            return ResponseEntity.noContent().build();
         }
         CustomerDTO customerDTO = customerService.getCustomerByCustomerCode(customerCode);
         System.out.println("Customer founded: "+customerDTO);
@@ -100,7 +100,7 @@ public class Customer {
         if (!Pattern.compile("^[A-Za-z\\s]{3,}$").matcher(customerDTO.getCustomerName()).matches()) {
             throw new RuntimeException("Invalid Customer Name.");
         }
-        if (!Pattern.compile("^\\d{10}$").matcher(customerDTO.getContactNo()).matches()) {
+        if (!Pattern.compile("^(?:0|94|\\+94|0094)?(?:(11|21|23|24|25|26|27|31|32|33|34|35|36|37|38|41|45|47|51|52|54|55|57|63|65|66|67|81|91)(0|2|3|4|5|7|9)|7(0|1|2|4|5|6|7|8)\\d)\\d{6}$").matcher(customerDTO.getContactNo()).matches()) {
             throw new RuntimeException("Invalid Customer Contact Number.");
         }
         System.out.println("Customer validated.");
