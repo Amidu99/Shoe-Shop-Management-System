@@ -9,4 +9,5 @@ public interface EmployeeService {
     EmployeeDTO getEmployeeByEmployeeCode(String employeeCode);
     List<EmployeeDTO> getAllEmployees();
     void updateEmployee(EmployeeDTO employeeDTO);
+    void deleteEmployee(String employeeCode);
 }

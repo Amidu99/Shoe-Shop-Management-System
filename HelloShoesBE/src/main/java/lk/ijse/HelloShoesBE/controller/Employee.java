@@ -71,6 +71,18 @@ public class Employee {
         }
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteEmployee(@RequestHeader String employeeCode){
+        boolean isExists = employeeService.existsByEmployeeCode(employeeCode);
+        if (!isExists){
+            System.out.println("Not Exists Employee.");
+            return ResponseEntity.badRequest().body("Employee not found!");
+        }
+        employeeService.deleteEmployee(employeeCode);
+        System.out.println("Employee deleted.");
+        return ResponseEntity.ok().build();
+    }
+
     private void validateEmployee(EmployeeDTO employeeDTO) {
         if (!Pattern.compile("^[E]-\\d{4}$").matcher(employeeDTO.getEmployeeCode()).matches()) {
             throw new RuntimeException("Invalid Employee Code.");

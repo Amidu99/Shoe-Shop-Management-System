@@ -60,4 +60,9 @@ public class EmployeeServiceIMPL implements EmployeeService {
         existingEmployee.setGuardianContactNo(employeeDTO.getGuardianContactNo());
         repo.save(existingEmployee);
     }
+
+    @Override
+    public void deleteEmployee(String employeeCode) {
+        repo.deleteById(employeeCode);
+    }
 }
