@@ -1,8 +1,10 @@
 package lk.ijse.HelloShoesBE.util;
 
 import lk.ijse.HelloShoesBE.dto.CustomerDTO;
+import lk.ijse.HelloShoesBE.dto.EmployeeDTO;
 import lk.ijse.HelloShoesBE.dto.SupplierDTO;
 import lk.ijse.HelloShoesBE.entity.Customer;
+import lk.ijse.HelloShoesBE.entity.Employee;
 import lk.ijse.HelloShoesBE.entity.Supplier;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -34,5 +36,16 @@ public class Mapping {
     }
     public List<SupplierDTO> toSupplierDTOList(List<Supplier> suppliers) {
         return mapper.map(suppliers, List.class);
+    }
+
+    // Employee Mapping
+    public EmployeeDTO toEmployeeDTO(Employee employee) {
+        return  mapper.map(employee, EmployeeDTO.class);
+    }
+    public Employee toEmployeeEntity(EmployeeDTO employeeDTO) {
+        return  mapper.map(employeeDTO, Employee.class);
+    }
+    public List<EmployeeDTO> toEmployeeDTOList(List<Employee> employees) {
+        return mapper.map(employees, List.class);
     }
 }
