@@ -1,11 +1,14 @@
 package lk.ijse.HelloShoesBE.controller;
 
+import lk.ijse.HelloShoesBE.dto.CustomerDTO;
 import lk.ijse.HelloShoesBE.dto.EmployeeDTO;
 import lk.ijse.HelloShoesBE.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.regex.Pattern;
 
 @RestController
@@ -45,6 +48,14 @@ public class Employee {
         EmployeeDTO employeeDTO = employeeService.getEmployeeByEmployeeCode(employeeCode);
         System.out.println("Employee founded: "+employeeDTO);
         return ResponseEntity.ok(employeeDTO);
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAllEmployees(){
+        List<EmployeeDTO> allEmployees = employeeService.getAllEmployees();
+        System.out.println("No of all employees: "+allEmployees.size());
+        if (allEmployees.size() == 0) return ResponseEntity.ok().body("No employees found");
+        return ResponseEntity.ok().body(allEmployees);
     }
 
     private void validateEmployee(EmployeeDTO employeeDTO) {

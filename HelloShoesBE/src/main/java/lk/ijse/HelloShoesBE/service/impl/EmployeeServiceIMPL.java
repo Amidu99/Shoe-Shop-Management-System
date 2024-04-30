@@ -7,6 +7,7 @@ import lk.ijse.HelloShoesBE.service.EmployeeService;
 import lk.ijse.HelloShoesBE.util.Mapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @Transactional
@@ -28,5 +29,10 @@ public class EmployeeServiceIMPL implements EmployeeService {
     @Override
     public EmployeeDTO getEmployeeByEmployeeCode(String employeeCode) {
         return mapping.toEmployeeDTO(repo.getEmployeeByEmployeeCode(employeeCode));
+    }
+
+    @Override
+    public List<EmployeeDTO> getAllEmployees() {
+        return mapping.toEmployeeDTOList(repo.findAll());
     }
 }
