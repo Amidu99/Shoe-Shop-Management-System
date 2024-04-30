@@ -65,4 +65,9 @@ public class EmployeeServiceIMPL implements EmployeeService {
     public void deleteEmployee(String employeeCode) {
         repo.deleteById(employeeCode);
     }
+
+    @Override
+    public String getLastEmployeeCode() {
+        return repo.getLastEmployeeCode();
+    }
 }

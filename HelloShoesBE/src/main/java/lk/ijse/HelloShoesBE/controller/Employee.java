@@ -83,6 +83,16 @@ public class Employee {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/getNextCode")
+    public ResponseEntity<?> getNextEmployeeCode(){
+        String lastEmployeeCode = employeeService.getLastEmployeeCode();
+        System.out.println("Last EmployeeCode: "+lastEmployeeCode);
+        if (lastEmployeeCode==null) return ResponseEntity.ok("E-0001");
+        int nextCode = Integer.parseInt(lastEmployeeCode.replace("E-", "")) + 1;
+        System.out.println("Next EmployeeCode: "+nextCode);
+        return ResponseEntity.ok(String.format("E-%04d", nextCode));
+    }
+
     private void validateEmployee(EmployeeDTO employeeDTO) {
         if (!Pattern.compile("^[E]-\\d{4}$").matcher(employeeDTO.getEmployeeCode()).matches()) {
             throw new RuntimeException("Invalid Employee Code.");

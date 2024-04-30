@@ -10,4 +10,5 @@ public interface EmployeeService {
     List<EmployeeDTO> getAllEmployees();
     void updateEmployee(EmployeeDTO employeeDTO);
     void deleteEmployee(String employeeCode);
+    String getLastEmployeeCode();
 }
