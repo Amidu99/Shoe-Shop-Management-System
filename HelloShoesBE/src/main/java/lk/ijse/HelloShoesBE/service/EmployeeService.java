@@ -8,4 +8,5 @@ public interface EmployeeService {
     boolean existsByEmployeeCode(String employeeCode);
     EmployeeDTO getEmployeeByEmployeeCode(String employeeCode);
     List<EmployeeDTO> getAllEmployees();
+    void updateEmployee(EmployeeDTO employeeDTO);
 }

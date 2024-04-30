@@ -1,13 +1,11 @@
 package lk.ijse.HelloShoesBE.controller;
 
-import lk.ijse.HelloShoesBE.dto.CustomerDTO;
 import lk.ijse.HelloShoesBE.dto.EmployeeDTO;
 import lk.ijse.HelloShoesBE.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -56,6 +54,21 @@ public class Employee {
         System.out.println("No of all employees: "+allEmployees.size());
         if (allEmployees.size() == 0) return ResponseEntity.ok().body("No employees found");
         return ResponseEntity.ok().body(allEmployees);
+    }
+
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        try {
+            validateEmployee(employeeDTO);
+            if (employeeService.existsByEmployeeCode(employeeDTO.getEmployeeCode())) {
+                employeeService.updateEmployee(employeeDTO);
+                return ResponseEntity.ok().build();
+            }
+            System.out.println("Not Exists Employee.");
+            return ResponseEntity.badRequest().body("This employee not exists.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     private void validateEmployee(EmployeeDTO employeeDTO) {
