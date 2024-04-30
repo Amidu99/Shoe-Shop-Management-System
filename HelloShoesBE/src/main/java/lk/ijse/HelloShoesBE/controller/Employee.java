@@ -23,6 +23,11 @@ public class Employee {
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
         try {
+            validateEmployee(employeeDTO);
+            if (employeeService.existsByEmployeeCode(employeeDTO.getEmployeeCode())) {
+                System.out.println("Exists Employee.");
+                return ResponseEntity.badRequest().body("This employee already exists.");
+            }
             employeeService.saveEmployee(employeeDTO);
             return ResponseEntity.ok().build();
         } catch (Exception e) {

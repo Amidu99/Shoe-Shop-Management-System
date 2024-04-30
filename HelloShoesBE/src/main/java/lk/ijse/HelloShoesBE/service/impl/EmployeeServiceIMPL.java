@@ -19,4 +19,9 @@ public class EmployeeServiceIMPL implements EmployeeService {
     public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
         return mapping.toEmployeeDTO(repo.save(mapping.toEmployeeEntity(employeeDTO)));
     }
+
+    @Override
+    public boolean existsByEmployeeCode(String employeeCode) {
+        return repo.existsByEmployeeCode(employeeCode);
+    }
 }

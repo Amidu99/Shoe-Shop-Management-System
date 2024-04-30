@@ -4,4 +4,5 @@ import lk.ijse.HelloShoesBE.dto.EmployeeDTO;
 
 public interface EmployeeService {
     EmployeeDTO saveEmployee(EmployeeDTO employeeDTO);
+    boolean existsByEmployeeCode(String employeeCode);
 }
