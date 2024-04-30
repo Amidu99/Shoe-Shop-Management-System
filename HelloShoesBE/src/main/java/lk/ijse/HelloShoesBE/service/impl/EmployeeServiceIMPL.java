@@ -24,4 +24,9 @@ public class EmployeeServiceIMPL implements EmployeeService {
     public boolean existsByEmployeeCode(String employeeCode) {
         return repo.existsByEmployeeCode(employeeCode);
     }
+
+    @Override
+    public EmployeeDTO getEmployeeByEmployeeCode(String employeeCode) {
+        return mapping.toEmployeeDTO(repo.getEmployeeByEmployeeCode(employeeCode));
+    }
 }

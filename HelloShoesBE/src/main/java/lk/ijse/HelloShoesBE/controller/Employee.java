@@ -35,6 +35,18 @@ public class Employee {
         }
     }
 
+    @GetMapping("/get")
+    public ResponseEntity<?> getOneEmployee(@RequestHeader String employeeCode){
+        boolean isExists = employeeService.existsByEmployeeCode(employeeCode);
+        if (!isExists){
+            System.out.println("Not Exists Employee.");
+            return ResponseEntity.noContent().build();
+        }
+        EmployeeDTO employeeDTO = employeeService.getEmployeeByEmployeeCode(employeeCode);
+        System.out.println("Employee founded: "+employeeDTO);
+        return ResponseEntity.ok(employeeDTO);
+    }
+
     private void validateEmployee(EmployeeDTO employeeDTO) {
         if (!Pattern.compile("^[E]-\\d{4}$").matcher(employeeDTO.getEmployeeCode()).matches()) {
             throw new RuntimeException("Invalid Employee Code.");
