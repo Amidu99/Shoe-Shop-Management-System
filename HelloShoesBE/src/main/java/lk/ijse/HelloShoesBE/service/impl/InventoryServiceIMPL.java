@@ -14,4 +14,8 @@ public class InventoryServiceIMPL implements InventoryService {
     private final InventoryRepo repo;
     private final Mapping mapping;
 
+    @Override
+    public boolean existsByItemCode(String itemCode) {
+        return repo.existsByItemCode(itemCode);
+    }
 }
