@@ -7,6 +7,7 @@ import lk.ijse.HelloShoesBE.service.InventoryService;
 import lk.ijse.HelloShoesBE.util.Mapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @Transactional
@@ -28,5 +29,10 @@ public class InventoryServiceIMPL implements InventoryService {
     @Override
     public InventoryDTO getInventoryByItemCode(String itemCode) {
         return mapping.toInventoryDTO(repo.getInventoryByItemCode(itemCode));
+    }
+
+    @Override
+    public List<InventoryDTO> getAllInventories() {
+        return mapping.toInventoryDTOList(repo.findAll());
     }
 }
