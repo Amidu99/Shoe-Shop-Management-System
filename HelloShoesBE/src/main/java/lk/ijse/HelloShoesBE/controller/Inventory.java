@@ -3,9 +3,9 @@ package lk.ijse.HelloShoesBE.controller;
 import lk.ijse.HelloShoesBE.dto.InventoryDTO;
 import lk.ijse.HelloShoesBE.service.InventoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.util.regex.Pattern;
 
 @RestController
@@ -18,6 +18,21 @@ public class Inventory {
     public String healthTest(){
         System.out.println("Inventory Health Test Passed.");
         return "Inventory Health Test Passed.";
+    }
+
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveInventory(@RequestBody InventoryDTO inventoryDTO) {
+        try {
+            validateInventory(inventoryDTO);
+            if (inventoryService.existsByItemCode(inventoryDTO.getItemCode())) {
+                System.out.println("Exists Item.");
+                return ResponseEntity.badRequest().body("This item already exists.");
+            }
+            inventoryService.saveInventory(inventoryDTO);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     private void validateInventory(InventoryDTO inventoryDTO) {

@@ -1,6 +1,7 @@
 package lk.ijse.HelloShoesBE.service.impl;
 
 import jakarta.transaction.Transactional;
+import lk.ijse.HelloShoesBE.dto.InventoryDTO;
 import lk.ijse.HelloShoesBE.repo.InventoryRepo;
 import lk.ijse.HelloShoesBE.service.InventoryService;
 import lk.ijse.HelloShoesBE.util.Mapping;
@@ -17,5 +18,10 @@ public class InventoryServiceIMPL implements InventoryService {
     @Override
     public boolean existsByItemCode(String itemCode) {
         return repo.existsByItemCode(itemCode);
+    }
+
+    @Override
+    public InventoryDTO saveInventory(InventoryDTO inventoryDTO) {
+        return mapping.toInventoryDTO(repo.save(mapping.toInventoryEntity(inventoryDTO)));
     }
 }
