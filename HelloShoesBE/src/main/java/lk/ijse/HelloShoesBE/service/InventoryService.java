@@ -8,4 +8,5 @@ public interface InventoryService {
     InventoryDTO saveInventory(InventoryDTO inventoryDTO);
     InventoryDTO getInventoryByItemCode(String itemCode);
     List<InventoryDTO> getAllInventories();
+    void updateInventory(InventoryDTO inventoryDTO);
 }

@@ -56,6 +56,21 @@ public class Inventory {
         return ResponseEntity.ok().body(allItems);
     }
 
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateInventory(@RequestBody InventoryDTO inventoryDTO) {
+        try {
+            validateInventory(inventoryDTO);
+            if (inventoryService.existsByItemCode(inventoryDTO.getItemCode())) {
+                inventoryService.updateInventory(inventoryDTO);
+                return ResponseEntity.ok().build();
+            }
+            System.out.println("Not Exists Item.");
+            return ResponseEntity.badRequest().body("This item is not exists.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     private void validateInventory(InventoryDTO inventoryDTO) {
         if (!Pattern.compile("^[S]-\\d{4}$").matcher(inventoryDTO.getSupplierCode()).matches()) {
             throw new RuntimeException("Invalid Supplier Code.");
