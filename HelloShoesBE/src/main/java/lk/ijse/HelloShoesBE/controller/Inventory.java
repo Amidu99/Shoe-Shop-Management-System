@@ -71,6 +71,18 @@ public class Inventory {
         }
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteInventory(@RequestHeader String itemCode){
+        boolean isExists = inventoryService.existsByItemCode(itemCode);
+        if (!isExists){
+            System.out.println("Not Exists Item.");
+            return ResponseEntity.badRequest().body("Item not found!");
+        }
+        inventoryService.deleteInventory(itemCode);
+        System.out.println("Item deleted.");
+        return ResponseEntity.ok().build();
+    }
+
     private void validateInventory(InventoryDTO inventoryDTO) {
         if (!Pattern.compile("^[S]-\\d{4}$").matcher(inventoryDTO.getSupplierCode()).matches()) {
             throw new RuntimeException("Invalid Supplier Code.");

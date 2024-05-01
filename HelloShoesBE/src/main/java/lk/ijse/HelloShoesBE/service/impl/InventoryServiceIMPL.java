@@ -53,4 +53,9 @@ public class InventoryServiceIMPL implements InventoryService {
         existingInventory.setStatus(inventoryDTO.getStatus());
         repo.save(existingInventory);
     }
+
+    @Override
+    public void deleteInventory(String itemCode) {
+        repo.deleteById(itemCode);
+    }
 }
