@@ -83,6 +83,16 @@ public class Inventory {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/getNextCode")
+    public ResponseEntity<?> getNextInventoryCode(){
+        String lastItemCode = inventoryService.getLastItemCode();
+        System.out.println("Last ItemCode: "+lastItemCode);
+        if (lastItemCode==null) return ResponseEntity.ok("0001");
+        int nextCode = Integer.parseInt(lastItemCode) + 1;
+        System.out.println("Next ItemCode: "+nextCode+" : "+String.format("%04d", nextCode));
+        return ResponseEntity.ok(String.format("%04d", nextCode));
+    }
+
     private void validateInventory(InventoryDTO inventoryDTO) {
         if (!Pattern.compile("^[S]-\\d{4}$").matcher(inventoryDTO.getSupplierCode()).matches()) {
             throw new RuntimeException("Invalid Supplier Code.");

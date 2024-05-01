@@ -58,4 +58,9 @@ public class InventoryServiceIMPL implements InventoryService {
     public void deleteInventory(String itemCode) {
         repo.deleteById(itemCode);
     }
+
+    @Override
+    public String getLastItemCode() {
+        return repo.getLastItemCode();
+    }
 }
