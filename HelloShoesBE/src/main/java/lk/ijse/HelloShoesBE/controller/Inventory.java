@@ -35,6 +35,18 @@ public class Inventory {
         }
     }
 
+    @GetMapping("/get")
+    public ResponseEntity<?> getOneInventory(@RequestHeader String itemCode){
+        boolean isExists = inventoryService.existsByItemCode(itemCode);
+        if (!isExists){
+            System.out.println("Not Exists Item.");
+            return ResponseEntity.noContent().build();
+        }
+        InventoryDTO inventoryDTO = inventoryService.getInventoryByItemCode(itemCode);
+        System.out.println("Item founded: "+inventoryDTO);
+        return ResponseEntity.ok(inventoryDTO);
+    }
+
     private void validateInventory(InventoryDTO inventoryDTO) {
         if (!Pattern.compile("^[S]-\\d{4}$").matcher(inventoryDTO.getSupplierCode()).matches()) {
             throw new RuntimeException("Invalid Supplier Code.");

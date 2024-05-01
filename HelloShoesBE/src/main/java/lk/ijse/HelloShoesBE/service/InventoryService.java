@@ -5,4 +5,5 @@ import lk.ijse.HelloShoesBE.dto.InventoryDTO;
 public interface InventoryService {
     boolean existsByItemCode(String itemCode);
     InventoryDTO saveInventory(InventoryDTO inventoryDTO);
+    InventoryDTO getInventoryByItemCode(String itemCode);
 }

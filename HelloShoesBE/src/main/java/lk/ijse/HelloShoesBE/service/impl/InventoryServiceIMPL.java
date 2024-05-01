@@ -24,4 +24,9 @@ public class InventoryServiceIMPL implements InventoryService {
     public InventoryDTO saveInventory(InventoryDTO inventoryDTO) {
         return mapping.toInventoryDTO(repo.save(mapping.toInventoryEntity(inventoryDTO)));
     }
+
+    @Override
+    public InventoryDTO getInventoryByItemCode(String itemCode) {
+        return mapping.toInventoryDTO(repo.getInventoryByItemCode(itemCode));
+    }
 }
