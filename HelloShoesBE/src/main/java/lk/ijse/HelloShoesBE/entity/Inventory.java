@@ -1,12 +1,11 @@
 package lk.ijse.HelloShoesBE.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,4 +27,10 @@ public class Inventory implements SuperEntity{
     private double profit;
     private double profitMargin;
     private String status;
+
+    @OneToMany(mappedBy = "inventory")
+    private Set<SaleInventories> saleDetails = new HashSet<>();
+
+    @OneToMany(mappedBy = "inventory")
+    private Set<SupplierInventories> supplierInventoryDetails = new HashSet<>();
 }
