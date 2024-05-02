@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,4 +33,7 @@ public class Customer implements SuperEntity{
     private String contactNo;
     private String email;
     private Timestamp rpDateTime;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Sale> sales = new ArrayList<>();
 }
