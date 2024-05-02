@@ -15,6 +15,7 @@ public class Employee implements SuperEntity{
     @Id
     private String employeeCode;
     private String employeeName;
+    @Column(columnDefinition = "LONGTEXT")
     private String employeePic;
     @Enumerated(EnumType.STRING)
     private Gender gender;
