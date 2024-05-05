@@ -19,14 +19,12 @@ public class Inventory implements SuperEntity{
     @Column(columnDefinition = "LONGTEXT")
     private String itemPic;
     private String category;
-    private int size;
     private String supplierCode;
     private String supplierName;
     private double buyPrice;
     private double sellPrice;
     private double profit;
     private double profitMargin;
-    private String status;
 
     @OneToMany(mappedBy = "inventory")
     private Set<SaleInventories> saleDetails = new HashSet<>();
