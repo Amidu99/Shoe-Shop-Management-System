@@ -43,14 +43,12 @@ public class InventoryServiceIMPL implements InventoryService {
         existingInventory.setItemDesc(inventoryDTO.getItemDesc());
         existingInventory.setItemPic(inventoryDTO.getItemPic());
         existingInventory.setCategory(inventoryDTO.getCategory());
-        existingInventory.setSize(inventoryDTO.getSize());
         existingInventory.setSupplierCode(inventoryDTO.getSupplierCode());
         existingInventory.setSupplierName(inventoryDTO.getSupplierName());
         existingInventory.setBuyPrice(inventoryDTO.getBuyPrice());
         existingInventory.setSellPrice(inventoryDTO.getSellPrice());
         existingInventory.setProfit(inventoryDTO.getProfit());
         existingInventory.setProfitMargin(inventoryDTO.getProfitMargin());
-        existingInventory.setStatus(inventoryDTO.getStatus());
         repo.save(existingInventory);
     }
 
