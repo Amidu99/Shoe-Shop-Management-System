@@ -14,4 +14,8 @@ public class StockServiceIMPL implements StockService {
     private final StockRepo repo;
     private final Mapping mapping;
 
+    @Override
+    public boolean existsByStockCode(String stockCode) {
+        return repo.existsByStockCode(stockCode);
+    }
 }
