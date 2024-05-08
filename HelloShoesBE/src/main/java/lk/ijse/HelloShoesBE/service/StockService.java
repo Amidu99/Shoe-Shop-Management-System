@@ -10,4 +10,5 @@ public interface StockService {
     SupplierInventoriesDTO getStockByStockCode(String stockCode);
     List<SupplierInventoriesDTO> getAllStocks();
     void updateStock(SupplierInventoriesDTO supplierInventoriesDTO);
+    void deleteStock(String stockCode);
 }

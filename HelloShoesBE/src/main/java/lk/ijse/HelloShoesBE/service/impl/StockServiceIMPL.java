@@ -73,4 +73,9 @@ public class StockServiceIMPL implements StockService {
         existingStock.setSupplier(supplierRepo.getSupplierBySupplierCode(supplierInventoriesDTO.getSupplierCode()));
         stockRepo.save(existingStock);
     }
+
+    @Override
+    public void deleteStock(String stockCode) {
+        stockRepo.deleteById(stockCode);
+    }
 }

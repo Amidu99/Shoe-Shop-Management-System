@@ -75,6 +75,18 @@ public class Stock {
         }
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteStock(@RequestHeader String stockCode){
+        boolean isExists = stockService.existsByStockCode(stockCode);
+        if (!isExists){
+            System.out.println("Not Exists Stock.");
+            return ResponseEntity.badRequest().body("Stock not found!");
+        }
+        stockService.deleteStock(stockCode);
+        System.out.println("Stock deleted.");
+        return ResponseEntity.ok().build();
+    }
+
     private void validateStock(SupplierInventoriesDTO supplierInventoriesDTO) {
         if (!Pattern.compile("^ST-\\d{4}$").matcher(supplierInventoriesDTO.getStockCode()).matches()) {
             throw new RuntimeException("Invalid Stock Code.");
