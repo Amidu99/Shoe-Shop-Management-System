@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @RestController
@@ -49,6 +50,14 @@ public class Stock {
         SupplierInventoriesDTO stock = stockService.getStockByStockCode(stockCode);
         System.out.println("Stock founded: "+stock);
         return ResponseEntity.ok(stock);
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAllStocks(){
+        List<SupplierInventoriesDTO> allStocks = stockService.getAllStocks();
+        System.out.println("No of all stocks: "+allStocks.size());
+        if (allStocks.size() == 0) return ResponseEntity.ok().body("No stocks found");
+        return ResponseEntity.ok().body(allStocks);
     }
 
     private void validateStock(SupplierInventoriesDTO supplierInventoriesDTO) {

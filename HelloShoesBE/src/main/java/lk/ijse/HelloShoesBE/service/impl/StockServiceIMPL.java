@@ -12,6 +12,7 @@ import lk.ijse.HelloShoesBE.service.StockService;
 import lk.ijse.HelloShoesBE.util.Mapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @Transactional
@@ -56,5 +57,10 @@ public class StockServiceIMPL implements StockService {
         stockDTO.setItemCode(stock.getInventory().getItemCode());
         stockDTO.setSupplierCode(stock.getSupplier().getSupplierCode());
         return stockDTO;
+    }
+
+    @Override
+    public List<SupplierInventoriesDTO> getAllStocks() {
+        return mapping.toSupplierInventoriesDTOList(stockRepo.findAll());
     }
 }
