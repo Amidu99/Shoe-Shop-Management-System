@@ -24,8 +24,11 @@ public class Stock {
     public ResponseEntity<?> saveStock(@RequestBody SupplierInventoriesDTO supplierInventoriesDTO) {
         try {
             validateStock(supplierInventoriesDTO);
-            System.out.println("item : "+supplierInventoriesDTO.getItemCode());
             if (stockService.existsByStockCode(supplierInventoriesDTO.getStockCode())) {
+                System.out.println("Exists Stock.");
+                return ResponseEntity.badRequest().body("This stock is already exists.");
+            }
+            if (stockService.existsByItemCodeAndSize(supplierInventoriesDTO.getItemCode(), supplierInventoriesDTO.getSize())) {
                 System.out.println("Exists Stock.");
                 return ResponseEntity.badRequest().body("This stock is already exists.");
             }

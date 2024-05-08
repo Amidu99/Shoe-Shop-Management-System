@@ -43,4 +43,9 @@ public class StockServiceIMPL implements StockService {
         SupplierInventories savedEntity = stockRepo.save(supplierInventoriesEntity);
         return mapping.toSupplierInventoriesDTO(savedEntity);
     }
+
+    @Override
+    public boolean existsByItemCodeAndSize(String itemCode, int size) {
+        return stockRepo.existsByItemCodeAndSize(itemCode, size) != null;
+    }
 }
