@@ -10,4 +10,6 @@ public interface StockRepo extends JpaRepository<SupplierInventories, String> {
     @Query("SELECT si FROM SupplierInventories si WHERE si.inventory.itemCode = :itemCode AND si.size = :size")
     SupplierInventories existsByItemCodeAndSize(@Param("itemCode") String itemCode, @Param("size") int size);
     SupplierInventories getStockByStockCode(String stockCode);
+    @Query("SELECT MAX (s.stockCode) FROM SupplierInventories s")
+    String getLastStockCode();
 }

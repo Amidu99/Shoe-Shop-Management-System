@@ -78,4 +78,9 @@ public class StockServiceIMPL implements StockService {
     public void deleteStock(String stockCode) {
         stockRepo.deleteById(stockCode);
     }
+
+    @Override
+    public String getLastStockCode() {
+        return stockRepo.getLastStockCode();
+    }
 }

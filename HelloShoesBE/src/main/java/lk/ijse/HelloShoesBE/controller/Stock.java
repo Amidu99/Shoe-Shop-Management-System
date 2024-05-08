@@ -87,6 +87,16 @@ public class Stock {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/getNextCode")
+    public ResponseEntity<?> getNextStockCode(){
+        String lastStockCode = stockService.getLastStockCode();
+        System.out.println("Last StockCode: "+lastStockCode);
+        if (lastStockCode==null) return ResponseEntity.ok("ST-0001");
+        int nextCode = Integer.parseInt(lastStockCode.replace("ST-", "")) + 1;
+        System.out.println("Next StockCode: "+nextCode);
+        return ResponseEntity.ok(String.format("ST-%04d", nextCode));
+    }
+
     private void validateStock(SupplierInventoriesDTO supplierInventoriesDTO) {
         if (!Pattern.compile("^ST-\\d{4}$").matcher(supplierInventoriesDTO.getStockCode()).matches()) {
             throw new RuntimeException("Invalid Stock Code.");
