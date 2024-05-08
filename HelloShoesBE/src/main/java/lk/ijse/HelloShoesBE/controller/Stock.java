@@ -3,9 +3,9 @@ package lk.ijse.HelloShoesBE.controller;
 import lk.ijse.HelloShoesBE.dto.SupplierInventoriesDTO;
 import lk.ijse.HelloShoesBE.service.StockService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.util.regex.Pattern;
 
 @RestController
@@ -20,8 +20,24 @@ public class Stock {
         return "Stock Health Test Passed.";
     }
 
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveStock(@RequestBody SupplierInventoriesDTO supplierInventoriesDTO) {
+        try {
+            validateStock(supplierInventoriesDTO);
+            System.out.println("item : "+supplierInventoriesDTO.getItemCode());
+            if (stockService.existsByStockCode(supplierInventoriesDTO.getStockCode())) {
+                System.out.println("Exists Stock.");
+                return ResponseEntity.badRequest().body("This stock is already exists.");
+            }
+            stockService.saveStock(supplierInventoriesDTO);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     private void validateStock(SupplierInventoriesDTO supplierInventoriesDTO) {
-        if (!Pattern.compile("^[ST]-\\d{4}$").matcher(supplierInventoriesDTO.getStockCode()).matches()) {
+        if (!Pattern.compile("^ST-\\d{4}$").matcher(supplierInventoriesDTO.getStockCode()).matches()) {
             throw new RuntimeException("Invalid Stock Code.");
         }
         if (!Pattern.compile("^[1-9]\\d*$").matcher(Integer.toString(supplierInventoriesDTO.getSize())).matches()) {
@@ -36,7 +52,7 @@ public class Stock {
         if (!Pattern.compile("^[A-Za-z]{4}-\\d{4}$").matcher(supplierInventoriesDTO.getItemCode()).matches()) {
             throw new RuntimeException("Invalid Item Code.");
         }
-        if (!Pattern.compile("^[S]-\\d{4}$").matcher(supplierInventoriesDTO.getStockCode()).matches()) {
+        if (!Pattern.compile("^[S]-\\d{4}$").matcher(supplierInventoriesDTO.getSupplierCode()).matches()) {
             throw new RuntimeException("Invalid Supplier Code.");
         }
         System.out.println("Stock validated.");
