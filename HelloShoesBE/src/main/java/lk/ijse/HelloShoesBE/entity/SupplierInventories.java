@@ -13,13 +13,15 @@ import lombok.NoArgsConstructor;
 public class SupplierInventories implements SuperEntity{
     @Id
     private String stockCode;
-    private String status;
     private int size;
     private int originalQty;
     private int availableQty;
-    @ManyToOne(cascade = CascadeType.DETACH)
+    private String status;
+
+    @ManyToOne
     @JoinColumn(name = "itemCode")
     private Inventory inventory;
+
     @ManyToOne
     @JoinColumn(name = "supplierCode")
     private Supplier supplier;
