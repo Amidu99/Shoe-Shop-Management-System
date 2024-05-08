@@ -48,4 +48,13 @@ public class StockServiceIMPL implements StockService {
     public boolean existsByItemCodeAndSize(String itemCode, int size) {
         return stockRepo.existsByItemCodeAndSize(itemCode, size) != null;
     }
+
+    @Override
+    public SupplierInventoriesDTO getStockByStockCode(String stockCode) {
+        SupplierInventories stock = stockRepo.getStockByStockCode(stockCode);
+        SupplierInventoriesDTO stockDTO = mapping.toSupplierInventoriesDTO(stock);
+        stockDTO.setItemCode(stock.getInventory().getItemCode());
+        stockDTO.setSupplierCode(stock.getSupplier().getSupplierCode());
+        return stockDTO;
+    }
 }

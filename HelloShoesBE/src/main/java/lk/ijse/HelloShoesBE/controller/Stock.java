@@ -39,6 +39,18 @@ public class Stock {
         }
     }
 
+    @GetMapping("/get")
+    public ResponseEntity<?> getOneStock(@RequestHeader String stockCode){
+        boolean isExists = stockService.existsByStockCode(stockCode);
+        if (!isExists){
+            System.out.println("Not Exists Stock.");
+            return ResponseEntity.noContent().build();
+        }
+        SupplierInventoriesDTO stock = stockService.getStockByStockCode(stockCode);
+        System.out.println("Stock founded: "+stock);
+        return ResponseEntity.ok(stock);
+    }
+
     private void validateStock(SupplierInventoriesDTO supplierInventoriesDTO) {
         if (!Pattern.compile("^ST-\\d{4}$").matcher(supplierInventoriesDTO.getStockCode()).matches()) {
             throw new RuntimeException("Invalid Stock Code.");
