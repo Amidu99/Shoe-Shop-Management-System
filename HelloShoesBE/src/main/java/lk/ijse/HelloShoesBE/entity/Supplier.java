@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,4 +27,7 @@ public class Supplier implements SuperEntity{
     private String contactNo1;
     private String contactNo2;
     private String email;
+
+    @OneToMany(mappedBy = "supplier")
+    private Set<SupplierInventories> supplierInventories = new HashSet<>();
 }
