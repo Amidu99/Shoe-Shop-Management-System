@@ -60,6 +60,21 @@ public class Stock {
         return ResponseEntity.ok().body(allStocks);
     }
 
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateStock(@RequestBody SupplierInventoriesDTO supplierInventoriesDTO) {
+        try {
+            validateStock(supplierInventoriesDTO);
+            if (stockService.existsByStockCode(supplierInventoriesDTO.getStockCode())) {
+                stockService.updateStock(supplierInventoriesDTO);
+                return ResponseEntity.ok().build();
+            }
+            System.out.println("Not Exists Stock.");
+            return ResponseEntity.badRequest().body("This stock is not exists.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     private void validateStock(SupplierInventoriesDTO supplierInventoriesDTO) {
         if (!Pattern.compile("^ST-\\d{4}$").matcher(supplierInventoriesDTO.getStockCode()).matches()) {
             throw new RuntimeException("Invalid Stock Code.");
@@ -70,7 +85,7 @@ public class Stock {
         if (!Pattern.compile("^[1-9]\\d*$").matcher(Integer.toString(supplierInventoriesDTO.getOriginalQty())).matches()) {
             throw new RuntimeException("Invalid Original Qty.");
         }
-        if (!Pattern.compile("^[1-9]\\d*$").matcher(Integer.toString(supplierInventoriesDTO.getAvailableQty())).matches()) {
+        if (!Pattern.compile("^[0-9]\\d*$").matcher(Integer.toString(supplierInventoriesDTO.getAvailableQty())).matches()) {
             throw new RuntimeException("Invalid Available Qty.");
         }
         if (!Pattern.compile("^[A-Za-z]{4}-\\d{4}$").matcher(supplierInventoriesDTO.getItemCode()).matches()) {

@@ -9,4 +9,5 @@ public interface StockService {
     boolean existsByItemCodeAndSize(String itemCode, int size);
     SupplierInventoriesDTO getStockByStockCode(String stockCode);
     List<SupplierInventoriesDTO> getAllStocks();
+    void updateStock(SupplierInventoriesDTO supplierInventoriesDTO);
 }
