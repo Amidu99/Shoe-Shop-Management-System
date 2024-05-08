@@ -27,8 +27,8 @@ public class Inventory implements SuperEntity{
     private double profitMargin;
 
     @OneToMany(mappedBy = "inventory")
-    private Set<SaleInventories> saleDetails = new HashSet<>();
+    private Set<SaleInventories> saleInventories = new HashSet<>();
 
     @OneToMany(mappedBy = "inventory")
-    private Set<SupplierInventories> supplierInventoryDetails = new HashSet<>();
+    private Set<SupplierInventories> supplierInventories = new HashSet<>();
 }
