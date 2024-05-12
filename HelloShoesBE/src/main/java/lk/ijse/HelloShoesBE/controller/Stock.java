@@ -52,6 +52,17 @@ public class Stock {
         return ResponseEntity.ok(stock);
     }
 
+    @GetMapping("/getStock")
+    public ResponseEntity<?> getItemSizeStock(@RequestHeader String itemCode, @RequestHeader int size){
+        boolean isExists = stockService.existsByItemCodeAndSize(itemCode, size);
+        if (!isExists){
+            System.out.println("Not Exists Stock.");
+            return ResponseEntity.noContent().build();
+        }
+        System.out.println("This stock is already exists.");
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllStocks(){
         List<SupplierInventoriesDTO> allStocks = stockService.getAllStocks();
