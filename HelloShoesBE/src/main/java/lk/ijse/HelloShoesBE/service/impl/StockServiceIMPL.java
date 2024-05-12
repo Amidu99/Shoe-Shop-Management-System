@@ -67,9 +67,11 @@ public class StockServiceIMPL implements StockService {
     @Override
     public void updateStock(SupplierInventoriesDTO supplierInventoriesDTO) {
         SupplierInventories existingStock = stockRepo.getStockByStockCode(supplierInventoriesDTO.getStockCode());
+        existingStock.setSize(supplierInventoriesDTO.getSize());
         existingStock.setOriginalQty(supplierInventoriesDTO.getOriginalQty());
         existingStock.setAvailableQty(supplierInventoriesDTO.getAvailableQty());
         existingStock.setStatus(supplierInventoriesDTO.getStatus());
+        existingStock.setInventory(inventoryRepo.getInventoryByItemCode(supplierInventoriesDTO.getItemCode()));
         existingStock.setSupplier(supplierRepo.getSupplierBySupplierCode(supplierInventoriesDTO.getSupplierCode()));
         stockRepo.save(existingStock);
     }
