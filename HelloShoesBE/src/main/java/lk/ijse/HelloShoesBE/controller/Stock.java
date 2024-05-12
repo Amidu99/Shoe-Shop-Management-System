@@ -121,6 +121,9 @@ public class Stock {
         if (!Pattern.compile("^[0-9]\\d*$").matcher(Integer.toString(supplierInventoriesDTO.getAvailableQty())).matches()) {
             throw new RuntimeException("Invalid Available Qty.");
         }
+        if (supplierInventoriesDTO.getAvailableQty() > supplierInventoriesDTO.getOriginalQty()) {
+            throw new RuntimeException("Invalid Available Qty.");
+        }
         if (!Pattern.compile("^[A-Za-z]{4}-\\d{4}$").matcher(supplierInventoriesDTO.getItemCode()).matches()) {
             throw new RuntimeException("Invalid Item Code.");
         }
