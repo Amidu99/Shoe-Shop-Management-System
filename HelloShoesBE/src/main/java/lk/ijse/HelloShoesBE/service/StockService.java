@@ -7,6 +7,7 @@ public interface StockService {
     boolean existsByStockCode(String stockCode);
     SupplierInventoriesDTO saveStock(SupplierInventoriesDTO supplierInventoriesDTO);
     boolean existsByItemCodeAndSize(String itemCode, int size);
+    boolean existsByStockCodeItemCodeSize(String stockCode, String itemCode, int size);
     SupplierInventoriesDTO getStockByStockCode(String stockCode);
     List<SupplierInventoriesDTO> getAllStocks();
     void updateStock(SupplierInventoriesDTO supplierInventoriesDTO);
