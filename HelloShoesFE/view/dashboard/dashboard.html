@@ -491,6 +491,118 @@
                 </div>
             </section>
         </div>
+        <!--Stock page-->
+        <div class="tab-pane fade" id="v-pills-stock" role="tabpanel" aria-labelledby="v-pills-stock-tab" tabindex="0">
+            <!--Stock Form-->
+            <section id="stock_form_section">
+                <h3>Stock</h3><hr>
+                <form class="row g-3">
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="stock_code" class="form-label">Stock Code</label>
+                        <input type="text" class="form-control" id="stock_code" readonly>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="stock_item_code_select" class="form-label">Item Code</label>
+                        <select id="stock_item_code_select" class="form-select">
+                            <option value="0">-Select Item-</option>
+                            <option>FMSH-0001</option>
+                            <option>FWSH-0002</option>
+                        </select>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="stock_supplier_code" class="form-label">Supplier Code</label>
+                        <input type="text" class="form-control" id="stock_supplier_code" readonly>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="stock_item_size_select" class="form-label">Size</label>
+                        <select id="stock_item_size_select" class="form-select">
+                            <option value="0">-Select Size-</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                        </select>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="original_qty" class="form-label">Original Qty.</label>
+                        <input type="number" class="form-control" id="original_qty">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="available_qty" class="form-label">Available Qty.</label>
+                        <input type="number" class="form-control" id="available_qty">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="stock_status" class="form-label">Status</label>
+                        <input type="text" class="form-control" id="stock_status" readonly>
+                    </div>
+                    <div id="stock_btns" class="mt-3 mb-4">
+                        <button type="button" class="btn btn-success">Save</button>
+                        <button type="button" class="btn btn-primary">Update</button>
+                        <button type="button" class="btn btn-danger">Delete</button>
+                        <button type="button" class="btn btn-warning">RE</button>
+                    </div>
+                </form>
+            </section>
+            <!--Stock Table-->
+            <section id="stock_table_section">
+                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <table class="table table-info table-sm table-hover table-borderless">
+                        <thead>
+                        <tr>
+                            <th scope="col">Stock Code</th>
+                            <th scope="col">Item Code</th>
+                            <th scope="col">Supplier Code</th>
+                            <th scope="col">Size</th>
+                            <th scope="col">Original Qty.</th>
+                            <th scope="col">Available Qty.</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody id="stock_tbl_body">
+                        <tr>
+                            <td>ST-0001</td>
+                            <td>FMSH-0001</td>
+                            <td>S-0001</td>
+                            <td>6</td>
+                            <td>100</td>
+                            <td>75</td>
+                            <td>Available</td>
+                        </tr>
+                        <tr>
+                            <td>ST-0002</td>
+                            <td>FWSH-0002</td>
+                            <td>S-0001</td>
+                            <td>5</td>
+                            <td>80</td>
+                            <td>30</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td>ST-0003</td>
+                            <td>FMSH-0001</td>
+                            <td>S-0002</td>
+                            <td>7</td>
+                            <td>100</td>
+                            <td>0</td>
+                            <td>Not Available</td>
+                        </tr>
+                        <tr>
+                            <td>ST-0004</td>
+                            <td>FWSH-0002</td>
+                            <td>S-0002</td>
+                            <td>6</td>
+                            <td>80</td>
+                            <td>30</td>
+                            <td>Low</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
     </div>
 </div>
 <script src="../../assets/js/jquery.min.js"></script>
@@ -504,5 +616,6 @@
 <script src="../../controller/customer-controller.js"></script>
 <script src="../../controller/inventory-controller.js"></script>
 <script src="../../controller/supplier-controller.js"></script>
+<script src="../../controller/stock-controller.js"></script>
 </body>
 </html>
