@@ -51,6 +51,162 @@
     <div class="tab-content" id="v-pills-tabContent">
         <!--Home page-->
         <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0"> home</div>
+
+        <!--Customer page-->
+        <div class="tab-pane fade" id="v-pills-customer" role="tabpanel" aria-labelledby="v-pills-customer-tab" tabindex="0">
+            <!--Customer Form-->
+            <section id="customer_form_section">
+                <h3><i class="fa-solid fa-users fa-flip" style="color: #FFD43B;"></i>Customer</h3><hr>
+                <form class="row g-3">
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="customer_code" class="form-label">Customer Code</label>
+                        <input type="text" class="form-control" id="customer_code" readonly>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="customer_name" class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" id="customer_name">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="gender_select" class="form-label">Gender</label>
+                        <select id="gender_select" class="form-select">
+                            <option value="0">-Select Gender-</option>
+                            <option value="MALE">MALE</option>
+                            <option value="FEMALE">FEMALE</option>
+                        </select>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="join_date" class="form-label">Join Date</label>
+                        <input type="date" class="form-control" id="join_date">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="total_points" class="form-label">Total Points</label>
+                        <input type="number" class="form-control" id="total_points">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="customer_level" class="form-label">Level</label>
+                        <input type="text" class="form-control" id="customer_level" readonly>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="dob" class="form-label">Birthday</label>
+                        <input type="date" class="form-control" id="dob">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="building_no" class="form-label">Home/Building No.</label>
+                        <input type="text" class="form-control" id="building_no">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="lane" class="form-label">Lane</label>
+                        <input type="text" class="form-control" id="lane">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" class="form-control" id="city">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="state" class="form-label">State</label>
+                        <input type="text" class="form-control" id="state">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="postal_code" class="form-label">Postal Code</label>
+                        <input type="text" class="form-control" id="postal_code">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="contact_no" class="form-label">Contact No.</label>
+                        <input type="tel" class="form-control" id="contact_no">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="rp_date_time" class="form-label">Recent Purchase D&T</label>
+                        <input type="datetime-local" class="form-control" id="rp_date_time" readonly>
+                    </div>
+                    <div id="customer_btns" class="mt-3 mb-4">
+                        <button type="button" class="btn btn-success" id="save">Save</button>
+                        <button type="button" class="btn btn-primary">Update</button>
+                        <button type="button" class="btn btn-danger">Delete</button>
+                        <button type="button" class="btn btn-warning">RE</button>
+                    </div>
+                </form>
+            </section>
+            <!--Customer Table-->
+            <section id="customer_table_section">
+                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <table class="table table-info table-sm table-hover table-borderless">
+                        <thead>
+                        <tr>
+                            <th scope="col">Customer Code</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Gender</th>
+                            <th scope="col">Join Date</th>
+                            <th scope="col">Level</th>
+                            <th scope="col">Points</th>
+                            <th scope="col">DOB</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Contact</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Recent Purchase D&T</th>
+                        </tr>
+                        </thead>
+                        <tbody id="customer_tbl_body">
+                        <tr>
+                            <td>C-0001</td>
+                            <td>Customer Name</td>
+                            <td>Male</td>
+                            <td>2022-02-02</td>
+                            <td>NEW</td>
+                            <td>0</td>
+                            <td>1999-09-09</td>
+                            <td>Sample customer address 00000</td>
+                            <td>0701234567</td>
+                            <td>customer@gmail.com</td>
+                            <td>2024-04-04 11:30:00.688000</td>
+                        </tr>
+                        <tr>
+                            <td>C-0002</td>
+                            <td>Customer Name</td>
+                            <td>Male</td>
+                            <td>2022-02-02</td>
+                            <td>NEW</td>
+                            <td>0</td>
+                            <td>1999-09-09</td>
+                            <td>Sample customer address 00000</td>
+                            <td>0701234567</td>
+                            <td>customer@gmail.com</td>
+                            <td>2024-04-04 11:30:00.688000</td>
+                        </tr>
+                        <tr>
+                            <td>C-0003</td>
+                            <td>Customer Name</td>
+                            <td>Male</td>
+                            <td>2022-02-02</td>
+                            <td>NEW</td>
+                            <td>0</td>
+                            <td>1999-09-09</td>
+                            <td>Sample customer address 00000</td>
+                            <td>0701234567</td>
+                            <td>customer@gmail.com</td>
+                            <td>2024-04-04 11:30:00.688000</td>
+                        </tr>
+                        <tr>
+                            <td>C-0004</td>
+                            <td>Customer Name</td>
+                            <td>Male</td>
+                            <td>2022-02-02</td>
+                            <td>NEW</td>
+                            <td>0</td>
+                            <td>1999-09-09</td>
+                            <td>Sample customer address 00000</td>
+                            <td>0701234567</td>
+                            <td>customer@gmail.com</td>
+                            <td>2024-04-04 11:30:00.688000</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
     </div>
 </div>
 <script src="../../assets/js/jquery.min.js"></script>
