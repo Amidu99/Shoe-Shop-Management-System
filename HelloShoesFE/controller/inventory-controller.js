@@ -25,7 +25,7 @@ async function isAvailableItemCode(itemCode) {
 
 // load all supplier codes to the select box
 const loadSuppliers = () => {
-    let title = $('<option>', { text: '-Select Supplier-', value: '0' });
+    let title = $('<option>', { text: '-Select Supplier-', value: "0" });
     $("#item_supplier_select").append(title);
     const getAllSupplierURL = new URL(`${SupplierServiceUrl}/getAll`);
     fetch(getAllSupplierURL, { method: 'GET', })
@@ -252,15 +252,18 @@ $("#inventory_btns>button[type='button']").eq(3).on("click", async () => {
 // when change the item_supplier_select
 $("#item_supplier_select").on("change", async function () {
     let selectedSupplierCode = $(this).val();
+    $("#item_supplier_name").val('');
     const urlToGet = new URL(`${SupplierServiceUrl}/get`);
-    try {
-        const response = await fetch(urlToGet, {method: 'GET', headers: {"supplierCode": selectedSupplierCode}});
-        if (response.ok) {
-            const data = await response.json();
-            const supplierName = data.supplierName;
-            $("#item_supplier_name").val(supplierName);
-        } else { console.error(`HTTP error! Status: ${response.status}`);}
-    } catch (error) { console.error('Error:', error);}
+    if (selectedSupplierCode!=="0") {
+        try {
+            const response = await fetch(urlToGet, {method: 'GET', headers: {"supplierCode": selectedSupplierCode}});
+            if (response.ok) {
+                const data = await response.json();
+                const supplierName = data.supplierName;
+                $("#item_supplier_name").val(supplierName);
+            } else { console.error(`HTTP error! Status: ${response.status}`); }
+        } catch (error) { console.error('Error:', error); }
+    }
 });
 
 // load all inventories to the table
