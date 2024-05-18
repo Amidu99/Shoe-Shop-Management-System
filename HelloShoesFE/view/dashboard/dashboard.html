@@ -207,6 +207,167 @@
                 </div>
             </section>
         </div>
+        <!--Inventories page-->
+        <div class="tab-pane fade" id="v-pills-items" role="tabpanel" aria-labelledby="v-pills-items-tab" tabindex="0">
+            <!--Inventories Form-->
+            <section id="inventory_form_section">
+                <h3>Inventories</h3><hr>
+                <div class="item_pic_container">
+                    <figure class="figure" id="item_pic_figure">
+                        <img class="figure-img img-fluid rounded" id="preview_item_pic" src="#" alt="Preview" style="display: none;">
+                    </figure>
+                </div>
+                <form class="row g-3">
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="item_code" class="form-label">Item Code</label>
+                        <input type="text" class="form-control" id="item_code" readonly>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="item_desc" class="form-label">Item Desc</label>
+                        <input type="text" class="form-control" id="item_desc">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="item_pic" class="form-label">Item Img</label>
+                        <input type="file" class="form-control" id="item_pic">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="item_category_select" class="form-label">Category</label>
+                        <select id="item_category_select" class="form-select">
+                            <option value="0">-Select Category-</option>
+                            <option value="F">Formal</option>
+                            <option value="C">Casual</option>
+                            <option value="S">Sport</option>
+                            <option value="I">Industrial</option>
+                        </select>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="item_gender_select" class="form-label">Gender Type</label>
+                        <select id="item_gender_select" class="form-select">
+                            <option value="0">-Select Gender-</option>
+                            <option value="M">Men</option>
+                            <option value="W">Women</option>
+                        </select>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="item_type_select" class="form-label">Type</label>
+                        <select id="item_type_select" class="form-select">
+                            <option value="0">-Select Type-</option>
+                            <option value="HE">Heel</option>
+                            <option value="FL">Flats</option>
+                            <option value="WE">Wedges</option>
+                            <option value="FF">Flip Flops</option>
+                            <option value="SA">Sandals</option>
+                            <option value="SH">Shoes</option>
+                            <option value="SL">Slippers</option>
+                        </select>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="item_supplier_select" class="form-label">Supplier Code</label>
+                        <select id="item_supplier_select" class="form-select">
+                            <option value="0">-Select Supplier-</option>
+                        </select>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="item_supplier_name" class="form-label">Supplier Name</label>
+                        <input type="text" class="form-control" id="item_supplier_name" readonly>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="item_buy_price" class="form-label">Buy Price</label>
+                        <input type="number" class="form-control" id="item_buy_price">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="item_sell_price" class="form-label">Sell Price</label>
+                        <input type="number" class="form-control" id="item_sell_price">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="item_profit" class="form-label">Profit</label>
+                        <input type="number" class="form-control" id="item_profit" readonly>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="item_profit_margin" class="form-label">Profit Margin</label>
+                        <input type="number" class="form-control" id="item_profit_margin" readonly>
+                    </div>
+
+                    <div id="inventory_btns" class="mt-3 mb-4">
+                        <button type="button" class="btn btn-success">Save</button>
+                        <button type="button" class="btn btn-primary">Update</button>
+                        <button type="button" class="btn btn-danger">Delete</button>
+                        <button type="button" class="btn btn-warning">RE</button>
+                    </div>
+                </form>
+            </section>
+            <!--Inventories Table-->
+            <section id="inventory_table_section">
+                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <table class="table table-info table-sm table-hover table-borderless">
+                        <thead>
+                        <tr>
+                            <th scope="col">Item Code</th>
+                            <th scope="col">Desc</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Supplier</th>
+                            <th scope="col">Sup_Name</th>
+                            <th scope="col">Buy Price</th>
+                            <th scope="col">Sell Price</th>
+                            <th scope="col">Profit</th>
+                            <th scope="col">P_Margin</th>
+                        </tr>
+                        </thead>
+                        <tbody id="inventory_tbl_body">
+                        <tr>
+                            <td>FMSH-0001</td>
+                            <td>Sample description</td>
+                            <td><img src="../../assets/images/samplePic.png" alt="Image" width="100px"></td>
+                            <td>Casual</td>
+                            <td>S-0001</td>
+                            <td>Supplier Name</td>
+                            <td>1000.00</td>
+                            <td>1200.00</td>
+                            <td>200.00</td>
+                            <td>16.67</td>
+                        </tr>
+                        <tr>
+                            <td>FMSH-0002</td>
+                            <td>Sample description</td>
+                            <td><img src="../../assets/images/samplePic.png" alt="Image" width="100px"></td>
+                            <td>Casual</td>
+                            <td>S-0001</td>
+                            <td>Supplier Name</td>
+                            <td>1000.00</td>
+                            <td>1200.00</td>
+                            <td>200.00</td>
+                            <td>16.67</td>
+                        </tr>
+                        <tr>
+                            <td>FMSH-0003</td>
+                            <td>Sample description</td>
+                            <td><img src="../../assets/images/samplePic.png" alt="Image" width="100px"></td>
+                            <td>Casual</td>
+                            <td>S-0001</td>
+                            <td>Supplier Name</td>
+                            <td>1000.00</td>
+                            <td>1200.00</td>
+                            <td>200.00</td>
+                            <td>16.67</td>
+                        </tr>
+                        <tr>
+                            <td>FMSH-0004</td>
+                            <td>Sample description</td>
+                            <td><img src="../../assets/images/samplePic.png" alt="Image" width="100px"></td>
+                            <td>Casual</td>
+                            <td>S-0001</td>
+                            <td>Supplier Name</td>
+                            <td>1000.00</td>
+                            <td>1200.00</td>
+                            <td>200.00</td>
+                            <td>16.67</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
     </div>
 </div>
 <script src="../../assets/js/jquery.min.js"></script>
