@@ -66,4 +66,15 @@ public class Mapping {
     public List<SupplierInventoriesDTO> toSupplierInventoriesDTOList(List<SupplierInventories> supplierInventories) {
         return mapper.map(supplierInventories, List.class);
     }
+
+    // User Mapping
+    public UserDTO toUserDTO(User user) {
+        return  mapper.map(user, UserDTO.class);
+    }
+    public User toUserEntity(UserDTO userDTO) {
+        return  mapper.map(userDTO, User.class);
+    }
+    public List<UserDTO> toUserDTOList(List<User> users) {
+        return mapper.map(users, List.class);
+    }
 }
