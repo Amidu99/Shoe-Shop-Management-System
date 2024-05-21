@@ -9,4 +9,5 @@ public interface UserService {
     UserDTO getUserByEmail(String email);
     boolean existsByEmail(String email);
     List<UserDTO> getAllUsers();
+    void deleteUser(String email);
 }

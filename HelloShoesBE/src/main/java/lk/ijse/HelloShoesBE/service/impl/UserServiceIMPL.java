@@ -37,4 +37,9 @@ public class UserServiceIMPL implements UserService {
     public List<UserDTO> getAllUsers() {
         return mapping.toUserDTOList(userRepo.findAll());
     }
+
+    @Override
+    public void deleteUser(String email) {
+        userRepo.deleteById(userRepo.findUserByEmail(email).getUserCode());
+    }
 }

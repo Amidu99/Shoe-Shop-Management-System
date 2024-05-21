@@ -65,4 +65,17 @@ public class User {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @DeleteMapping("/delete")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<?> deleteUser(@RequestHeader String email){
+        boolean isExists = userService.existsByEmail(email);
+        if (!isExists){
+            System.out.println("Not Exists User.");
+            return ResponseEntity.badRequest().body("User not found!");
+        }
+        userService.deleteUser(email);
+        System.out.println("User deleted.");
+        return ResponseEntity.ok().build();
+    }
 }
