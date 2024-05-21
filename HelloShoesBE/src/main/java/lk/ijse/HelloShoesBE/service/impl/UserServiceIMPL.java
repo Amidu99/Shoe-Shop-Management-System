@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserServiceIMPL implements UserService {
-    final private UserRepo userRepo;
+    private final UserRepo userRepo;
     private final Mapping mapping;
 
     @Override

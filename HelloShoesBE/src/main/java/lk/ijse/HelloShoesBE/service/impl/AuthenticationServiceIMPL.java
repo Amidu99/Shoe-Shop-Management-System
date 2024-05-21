@@ -56,4 +56,18 @@ public class AuthenticationServiceIMPL implements AuthenticationService {
         return JwtAuthResponse.builder().
                 token(jwtService.generateToken(User)).build();
     }
+
+    @Override
+    public boolean matchPassword(UserDTO userDTO) {
+        User existingUser = userRepo.findUserByEmail(userDTO.getEmail());
+        return passwordEncoder.matches(userDTO.getUserCode(), existingUser.getPassword());
+    }
+
+    @Override
+    public void updatePassword(UserDTO userDTO) {
+        User existingUser = userRepo.findUserByEmail(userDTO.getEmail());
+        String newPassword = passwordEncoder.encode(userDTO.getPassword());
+        existingUser.setPassword(newPassword);
+        userRepo.save(existingUser);
+    }
 }
