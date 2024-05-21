@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +31,10 @@ public class UserServiceIMPL implements UserService {
     @Override
     public boolean existsByEmail(String email) {
         return userRepo.existsByEmail(email);
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        return mapping.toUserDTOList(userRepo.findAll());
     }
 }
