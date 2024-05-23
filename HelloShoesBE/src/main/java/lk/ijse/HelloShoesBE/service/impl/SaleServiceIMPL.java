@@ -1,12 +1,122 @@
 package lk.ijse.HelloShoesBE.service.impl;
 
 import jakarta.transaction.Transactional;
+import lk.ijse.HelloShoesBE.dto.SaleDTO;
+import lk.ijse.HelloShoesBE.dto.SaleInventoriesDTO;
+import lk.ijse.HelloShoesBE.entity.*;
+import lk.ijse.HelloShoesBE.repo.*;
 import lk.ijse.HelloShoesBE.service.SaleService;
+import lk.ijse.HelloShoesBE.util.Mapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class SaleServiceIMPL implements SaleService {
+    private final InventoryRepo inventoryRepo;
+    private final CustomerRepo customerRepo;
+    private final DetailRepo detailRepo;
+    private final UserRepo userRepo;
+    private final SaleRepo saleRepo;
+    private final Mapping mapping;
+
+    @Override
+    public SaleDTO saveSale(SaleDTO saleDTO) {
+        Customer customer = customerRepo.getCustomerByCustomerCode(saleDTO.getCustomerCode());
+        User user = userRepo.getReferenceById(saleDTO.getUserCode());
+
+        Set<SaleInventories> saleInventories = new HashSet<>();
+        for (SaleInventoriesDTO saleInventoriesDTO : saleDTO.getSaleInventories()) {
+            SaleInventories saleInventory = new SaleInventories();
+            saleInventory.setOrderDetailCode(UUID.randomUUID().toString());
+            Inventory inventory = inventoryRepo.getReferenceById(saleInventoriesDTO.getItemCode());
+            saleInventory.setInventory(inventory);
+            saleInventory.setOrderCode(saleInventoriesDTO.getOrderCode());
+            saleInventory.setSize(saleInventoriesDTO.getSize());
+            saleInventory.setQty(saleInventoriesDTO.getQty());
+            saleInventories.add(saleInventory);
+        }
+
+        Sale sale = mapping.toSaleEntity(saleDTO);
+        if(customer!=null){ sale.setCustomerName(customer.getCustomerName()); }
+        sale.setUser(user);
+        sale.setCustomer(customer);
+        sale.setCashierName(user.getEmployee().getEmployeeName());
+        sale.setSaleInventories(saleInventories);
+        Sale savedSale = saleRepo.save(sale);
+        detailRepo.saveAll(saleInventories);
+        return mapping.toSaleDTO(savedSale);
+    }
+
+    @Override
+    public boolean existsByOrderCode(String oderCode) {
+        return saleRepo.existsByOrderCode(oderCode);
+    }
+
+    @Override
+    public Optional<SaleDTO> getOrderByOrderCode(String orderCode) {
+        Optional<SaleDTO> saleDTO = saleRepo.findSaleInfoByOrderCode(orderCode);
+        if (saleDTO.isPresent()) {
+            Set<SaleInventoriesDTO> orderDetails = detailRepo.findAllByOrderCode(orderCode);
+            saleDTO.get().setSaleInventories(orderDetails);
+        }
+        return saleDTO;
+    }
+
+    @Override
+    public List<SaleDTO> getAllSales() {
+        List<SaleDTO> sales = saleRepo.findAllSales();
+        List<String> orderCodes = sales.stream()
+                .map(SaleDTO::getOrderCode)
+                .collect(Collectors.toList());
+        List<SaleInventoriesDTO> inventories = detailRepo.findAllByOrderCodes(orderCodes);
+
+        Map<String, Set<SaleInventoriesDTO>> inventoriesByOrderCode = inventories.stream()
+                .collect(Collectors.groupingBy(SaleInventoriesDTO::getOrderCode, Collectors.toSet()));
+
+        for (SaleDTO sale : sales) {
+            sale.setSaleInventories(inventoriesByOrderCode.getOrDefault(sale.getOrderCode(), Set.of()));
+        }
+        return sales;
+    }
+
+    @Override
+    public String getLastOrderCode() {
+        return saleRepo.getLastOrderCode();
+    }
+
+    @Override
+    public void updateSale(SaleDTO saleDTO) {
+        Optional<SaleDTO> existingSaleDTO = saleRepo.findSaleInfoByOrderCode(saleDTO.getOrderCode());
+
+        if (existingSaleDTO.isPresent()) {
+            detailRepo.removeAllByOrderCode(saleDTO.getOrderCode());
+            Customer customer = customerRepo.getCustomerByCustomerCode(saleDTO.getCustomerCode());
+            User user = userRepo.getReferenceById(saleDTO.getUserCode());
+
+            Set<SaleInventories> saleInventories = new HashSet<>();
+            for (SaleInventoriesDTO saleInventoriesDTO : saleDTO.getSaleInventories()) {
+                SaleInventories saleInventory = new SaleInventories();
+                saleInventory.setOrderDetailCode(UUID.randomUUID().toString());
+                Inventory inventory = inventoryRepo.getReferenceById(saleInventoriesDTO.getItemCode());
+                saleInventory.setInventory(inventory);
+                saleInventory.setOrderCode(saleInventoriesDTO.getOrderCode());
+                saleInventory.setSize(saleInventoriesDTO.getSize());
+                saleInventory.setQty(saleInventoriesDTO.getQty());
+                saleInventories.add(saleInventory);
+            }
+
+            Sale sale = mapping.toSaleEntity(saleDTO);
+            if(customer!=null){ sale.setCustomerName(customer.getCustomerName()); }
+            sale.setUser(user);
+            sale.setCustomer(customer);
+            sale.setCashierName(user.getEmployee().getEmployeeName());
+            sale.setSaleInventories(saleInventories);
+            saleRepo.save(sale);
+            detailRepo.saveAll(saleInventories);
+        }
+    }
 }
