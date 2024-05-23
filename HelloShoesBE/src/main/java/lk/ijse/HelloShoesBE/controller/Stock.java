@@ -1,5 +1,6 @@
 package lk.ijse.HelloShoesBE.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.HelloShoesBE.dto.SupplierInventoriesDTO;
 import lk.ijse.HelloShoesBE.service.StockService;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,14 @@ public class Stock {
     private final StockService stockService;
 
     @GetMapping("/health")
+    @RolesAllowed({"ADMIN", "USER"})
     public String healthTest(){
         System.out.println("Stock Health Test Passed.");
         return "Stock Health Test Passed.";
     }
 
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> saveStock(@RequestBody SupplierInventoriesDTO supplierInventoriesDTO) {
         try {
             validateStock(supplierInventoriesDTO);
@@ -41,6 +44,7 @@ public class Stock {
     }
 
     @GetMapping("/get")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getOneStock(@RequestHeader String stockCode){
         boolean isExists = stockService.existsByStockCode(stockCode);
         if (!isExists){
@@ -53,6 +57,7 @@ public class Stock {
     }
 
     @GetMapping("/getStock")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getItemSizeStock(@RequestHeader String itemCode, @RequestHeader int size){
         boolean isExists = stockService.existsByItemCodeAndSize(itemCode, size);
         if (!isExists){
@@ -64,6 +69,7 @@ public class Stock {
     }
 
     @GetMapping("/checkThisStock")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> checkThisStock(@RequestHeader String stockCode, @RequestHeader String itemCode, @RequestHeader int size){
         boolean isExists = stockService.existsByStockCodeItemCodeSize(stockCode, itemCode, size);
         if (!isExists){
@@ -75,6 +81,7 @@ public class Stock {
     }
 
     @GetMapping("/getAll")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getAllStocks(){
         List<SupplierInventoriesDTO> allStocks = stockService.getAllStocks();
         System.out.println("No of all stocks: "+allStocks.size());
@@ -83,6 +90,7 @@ public class Stock {
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> updateStock(@RequestBody SupplierInventoriesDTO supplierInventoriesDTO) {
         try {
             validateStock(supplierInventoriesDTO);
@@ -98,6 +106,7 @@ public class Stock {
     }
 
     @DeleteMapping("/delete")
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> deleteStock(@RequestHeader String stockCode){
         boolean isExists = stockService.existsByStockCode(stockCode);
         if (!isExists){
@@ -110,6 +119,7 @@ public class Stock {
     }
 
     @GetMapping("/getNextCode")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getNextStockCode(){
         String lastStockCode = stockService.getLastStockCode();
         System.out.println("Last StockCode: "+lastStockCode);
