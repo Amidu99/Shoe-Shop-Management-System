@@ -1,5 +1,6 @@
 package lk.ijse.HelloShoesBE.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.HelloShoesBE.dto.EmployeeDTO;
 import lk.ijse.HelloShoesBE.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,14 @@ public class Employee {
     private final EmployeeService employeeService;
 
     @GetMapping("/health")
+    @RolesAllowed({"ADMIN", "USER"})
     public String healthTest(){
         System.out.println("Employee Health Test Passed.");
         return "Employee Health Test Passed.";
     }
 
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
         try {
             validateEmployee(employeeDTO);
@@ -37,6 +40,7 @@ public class Employee {
     }
 
     @GetMapping("/get")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getOneEmployee(@RequestHeader String employeeCode){
         boolean isExists = employeeService.existsByEmployeeCode(employeeCode);
         if (!isExists){
@@ -44,11 +48,23 @@ public class Employee {
             return ResponseEntity.noContent().build();
         }
         EmployeeDTO employeeDTO = employeeService.getEmployeeByEmployeeCode(employeeCode);
-        System.out.println("Employee founded: "+employeeDTO);
+        return ResponseEntity.ok(employeeDTO);
+    }
+
+    @GetMapping("/getByEmail")
+    @RolesAllowed({"ADMIN", "USER"})
+    public ResponseEntity<?> getEmployeeByEmail(@RequestHeader String email){
+        boolean isExists = employeeService.existsByEmail(email);
+        if (!isExists){
+            System.out.println("Not Exists Employee.");
+            return ResponseEntity.noContent().build();
+        }
+        EmployeeDTO employeeDTO = employeeService.getEmployeeByEmail(email);
         return ResponseEntity.ok(employeeDTO);
     }
 
     @GetMapping("/getAll")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getAllEmployees(){
         List<EmployeeDTO> allEmployees = employeeService.getAllEmployees();
         System.out.println("No of all employees: "+allEmployees.size());
@@ -57,6 +73,7 @@ public class Employee {
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> updateEmployee(@RequestBody EmployeeDTO employeeDTO) {
         try {
             validateEmployee(employeeDTO);
@@ -72,6 +89,7 @@ public class Employee {
     }
 
     @DeleteMapping("/delete")
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> deleteEmployee(@RequestHeader String employeeCode){
         boolean isExists = employeeService.existsByEmployeeCode(employeeCode);
         if (!isExists){
@@ -84,6 +102,7 @@ public class Employee {
     }
 
     @GetMapping("/getNextCode")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getNextEmployeeCode(){
         String lastEmployeeCode = employeeService.getLastEmployeeCode();
         System.out.println("Last EmployeeCode: "+lastEmployeeCode);
