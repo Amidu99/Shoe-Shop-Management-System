@@ -25,9 +25,9 @@ public class Sale implements SuperEntity{
     @ManyToOne
     @JoinColumn(name = "userCode")
     private User user;
-    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<SaleInventories> saleInventories = new HashSet<>();
     @ManyToOne
     @JoinColumn(name = "customerCode")
     private Customer customer;
+    @Transient
+    private Set<SaleInventories> saleInventories = new HashSet<>();
 }
