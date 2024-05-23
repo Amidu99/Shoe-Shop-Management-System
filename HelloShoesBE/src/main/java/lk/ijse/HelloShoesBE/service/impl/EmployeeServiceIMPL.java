@@ -33,6 +33,11 @@ public class EmployeeServiceIMPL implements EmployeeService {
     }
 
     @Override
+    public EmployeeDTO getEmployeeByEmail(String email) {
+        return mapping.toEmployeeDTO(repo.getEmployeeByEmail(email));
+    }
+
+    @Override
     public List<EmployeeDTO> getAllEmployees() {
         return mapping.toEmployeeDTOList(repo.findAll());
     }
@@ -69,5 +74,10 @@ public class EmployeeServiceIMPL implements EmployeeService {
     @Override
     public String getLastEmployeeCode() {
         return repo.getLastEmployeeCode();
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return repo.existsByEmail(email);
     }
 }
