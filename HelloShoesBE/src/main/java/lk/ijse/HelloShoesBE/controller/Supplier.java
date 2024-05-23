@@ -1,5 +1,6 @@
 package lk.ijse.HelloShoesBE.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.HelloShoesBE.dto.SupplierDTO;
 import lk.ijse.HelloShoesBE.service.SupplierService;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,14 @@ public class Supplier {
     private final SupplierService supplierService;
 
     @GetMapping("/health")
+    @RolesAllowed({"ADMIN", "USER"})
     public String healthTest(){
         System.out.println("Supplier Health Test Passed.");
         return "Supplier Health Test Passed.";
     }
 
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> saveSupplier(@RequestBody SupplierDTO supplierDTO) {
         try {
             validateSupplier(supplierDTO);
@@ -37,6 +40,7 @@ public class Supplier {
     }
 
     @GetMapping("/get")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getOneSupplier(@RequestHeader String supplierCode){
         boolean isExists = supplierService.existsBySupplierCode(supplierCode);
         if (!isExists){
@@ -49,6 +53,7 @@ public class Supplier {
     }
 
     @GetMapping("/getAll")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getAllSuppliers(){
         List<SupplierDTO> allSuppliers = supplierService.getAllSuppliers();
         System.out.println("No of all suppliers: "+allSuppliers.size());
@@ -57,6 +62,7 @@ public class Supplier {
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> updateSupplier(@RequestBody SupplierDTO supplierDTO) {
         try {
             validateSupplier(supplierDTO);
@@ -72,6 +78,7 @@ public class Supplier {
     }
 
     @DeleteMapping("/delete")
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> deleteSupplier(@RequestHeader String supplierCode){
         boolean isExists = supplierService.existsBySupplierCode(supplierCode);
         if (!isExists){
@@ -84,6 +91,7 @@ public class Supplier {
     }
 
     @GetMapping("/getNextCode")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getNextSupplierCode(){
         String lastSupplierCode = supplierService.getLastSupplierCode();
         System.out.println("Last SupplierCode: "+lastSupplierCode);
