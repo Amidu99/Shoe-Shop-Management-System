@@ -16,9 +16,7 @@ public class SaleInventories implements SuperEntity{
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "itemCode")
     private Inventory inventory;
-    @ManyToOne
-    @JoinColumn(name = "orderCode")
-    private Sale sale;
+    private String orderCode;
     private int size;
     private int qty;
 }
