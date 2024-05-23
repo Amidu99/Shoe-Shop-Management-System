@@ -1,5 +1,6 @@
 package lk.ijse.HelloShoesBE.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.HelloShoesBE.dto.CustomerDTO;
 import lk.ijse.HelloShoesBE.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,14 @@ public class Customer {
     private final CustomerService customerService;
 
     @GetMapping("/health")
+    @RolesAllowed({"ADMIN", "USER"})
     public String healthTest(){
         System.out.println("Customer Health Test Passed.");
         return "Customer Health Test Passed.";
     }
 
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> saveCustomer(@RequestBody CustomerDTO customerDTO) {
         try {
             validateCustomer(customerDTO);
@@ -37,6 +40,7 @@ public class Customer {
     }
 
     @GetMapping("/get")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getOneCustomer(@RequestHeader String customerCode){
         Boolean isExists = customerService.existsByCustomerCode(customerCode);
         if (!isExists){
@@ -49,6 +53,7 @@ public class Customer {
     }
 
     @GetMapping("/getAll")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getAllCustomers(){
         List<CustomerDTO> allCustomers = customerService.getAllCustomers();
         System.out.println("No of all customers: "+allCustomers.size());
@@ -57,6 +62,7 @@ public class Customer {
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> updateCustomer(@RequestBody CustomerDTO customerDTO) {
         try {
             validateCustomer(customerDTO);
@@ -72,6 +78,7 @@ public class Customer {
     }
 
     @DeleteMapping("/delete")
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> deleteCustomer(@RequestHeader String customerCode){
         Boolean isExists = customerService.existsByCustomerCode(customerCode);
         if (!isExists){
@@ -84,6 +91,7 @@ public class Customer {
     }
 
     @GetMapping("/getNextCode")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getNextCustomerCode(){
         String lastCustomerCode = customerService.getLastCustomerCode();
         System.out.println("Last CustomerCode: "+lastCustomerCode);
