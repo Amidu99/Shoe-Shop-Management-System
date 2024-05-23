@@ -1,5 +1,6 @@
 package lk.ijse.HelloShoesBE.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.HelloShoesBE.dto.InventoryDTO;
 import lk.ijse.HelloShoesBE.service.InventoryService;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,14 @@ public class Inventory {
     private final InventoryService inventoryService;
 
     @GetMapping("/health")
+    @RolesAllowed({"ADMIN", "USER"})
     public String healthTest(){
         System.out.println("Inventory Health Test Passed.");
         return "Inventory Health Test Passed.";
     }
 
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> saveInventory(@RequestBody InventoryDTO inventoryDTO) {
         try {
             validateInventory(inventoryDTO);
@@ -37,6 +40,7 @@ public class Inventory {
     }
 
     @GetMapping("/get")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getOneInventory(@RequestHeader String itemCode){
         boolean isExists = inventoryService.existsByItemCode(itemCode);
         if (!isExists){
@@ -49,6 +53,7 @@ public class Inventory {
     }
 
     @GetMapping("/getAll")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getAllInventories(){
         List<InventoryDTO> allItems = inventoryService.getAllInventories();
         System.out.println("No of all items: "+allItems.size());
@@ -57,6 +62,7 @@ public class Inventory {
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> updateInventory(@RequestBody InventoryDTO inventoryDTO) {
         try {
             validateInventory(inventoryDTO);
@@ -72,6 +78,7 @@ public class Inventory {
     }
 
     @DeleteMapping("/delete")
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> deleteInventory(@RequestHeader String itemCode){
         boolean isExists = inventoryService.existsByItemCode(itemCode);
         if (!isExists){
@@ -84,6 +91,7 @@ public class Inventory {
     }
 
     @GetMapping("/getNextCode")
+    @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getNextInventoryCode(){
         String lastItemCode = inventoryService.getLastItemCode();
         System.out.println("Last ItemCode: "+lastItemCode);
