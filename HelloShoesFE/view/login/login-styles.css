@@ -1,0 +1,296 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,700');
+@import url('https://fonts.googleapis.com/css2?family=Concert+One&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    outline: none;
+    box-sizing: border-box;
+    font-family: 'Raleway', sans-serif;
+}
+
+body{
+    /*background-color: rgba(0, 0, 0, 0.75);*/
+    height: 100%;
+    margin: 0;
+    background: url('../../assets/images/bg1.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.main-box{
+    position: relative;
+    display: block;
+    width: 60%;
+    height: 500px;
+    margin: 50px auto;
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.lined-link{
+    position: relative;
+    text-decoration: none;
+    transition: all 0.2s linear
+}
+
+.lined-link:hover{
+    opacity: 0.8;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.lined-link:after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    left: 0;
+    bottom: -2px;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/************ Start Slider Container **************/
+
+.slider-cont,
+.form-cont{
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+.slick-slide,
+.slick-slider{
+    width: 100%;
+    height: 100%
+}
+
+.clear-fix{
+    clear: both;
+}
+
+.slick-dots {
+    position: absolute;
+    bottom: 10px;
+    display: block;
+    width: 100%;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+}
+
+.slick-dots li {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 0 3px;
+    padding: 0;
+    cursor: pointer;
+}
+
+.slick-dots li button {
+    font-size: 0;
+    display: block;
+    width: 10px;
+    height: 10px;
+    padding: 5px;
+    cursor: pointer;
+    outline: none;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.slick-dots li.slick-active button{
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: scale(1.5);
+    box-shadow: 0 0 10px #f1eded
+}
+
+.img-txt{
+    position: relative;
+    opacity: 85%;
+}
+
+.img-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.img-txt h1{
+    position: absolute;
+    display: block;
+    top: 50%;
+    width: 100%;
+    padding: 50px 0;
+    font-size: 60px;
+    font-weight: 400;
+    text-align: center;
+    transform: translateY(-50%);
+    background-color: transparent;
+    font-family: "Concert One", sans-serif;
+    font-style: normal;
+    -webkit-text-stroke: 2px #ffffff;
+    text-stroke: 2px #ffffff;
+    color: rgba(0, 0, 0, 0.6);
+    text-shadow: 0 0 8px rgba(241, 237, 237, 0.6);
+}
+
+.img-txt h1 span{
+    font-size: 23px;
+    font-family: "Concert One", sans-serif;
+    font-style: normal;
+    -webkit-text-stroke: 1px #ffffff;
+    text-stroke: 1px #ffffff;
+}
+
+/************ Start Form Container **************/
+
+.top-buttons {
+    position: relative;
+    display: block;
+    width: 98%;
+    height: 15%;
+    padding: 25px;
+    text-align: right;
+}
+
+.top-buttons button {
+    color: rgba(255, 255, 255, 0.85);
+    border: none;
+    width: 90px;
+    margin: -2px;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    background: rgba(71, 71, 71, 0.75);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+}
+
+.top-buttons button:hover {
+    box-shadow: 0 0 8px rgb(0, 0, 0);
+}
+
+.top-buttons button:nth-child(1) {
+    border-radius: 15px 0 0 15px;
+}
+
+.top-buttons button:nth-child(2) {
+    border-radius: 0 15px 15px 0;
+}
+
+.top-active-button {
+    color: #000000 !important;
+    box-shadow: 0 0 20px rgb(255, 255, 255);
+    background: linear-gradient(#b6b6b6, #ecf3f1) !important;
+    transition: all 0.3s ease;
+}
+
+.form{
+    width: 100%;
+    height: 80%;
+    padding: 10px 50px;
+}
+
+.form form {
+    width: 100%;
+    height: 100%;
+}
+
+.form form lable,
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    display: block;
+}
+
+.form label span{
+    font-size: 15px;
+    font-weight: 400;
+    margin: 6px 0;
+    font-style: normal;
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+}
+
+p.terms {
+    color: #9E9E9E;
+    margin-bottom: 60px;
+}
+
+.form form input[type="text"],
+input[type="email"],
+input[type="password"] {
+    color: #fff;
+    width: 90%;
+    border: none;
+    font-size: 14px;
+    font-weight: 300;
+    margin-bottom: 20px;
+    margin-top: 6px;
+    padding: 5px 0 10px 0;
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.form form input::placeholder{
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.form form a {
+    color: #fff;
+    text-decoration: none;
+}
+
+input.form-btn {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 16px;
+    font-weight: 400;
+    background: rgba(71, 71, 71, 0.75);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+    padding: 8px 30px;
+    margin-right: 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.3s linear;
+}
+
+input.form-btn:hover{
+    box-shadow: 0 0 15px rgb(0, 0, 0);
+}
+
+.form-signin{
+    display: block;
+    padding-top: 100px;
+    padding-left: 80px;
+}
+
+.form-signup{
+    padding-top: 65px;
+    padding-left: 80px;
+    display: none;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 5px 0;
+}
+
+#footer p {
+    font-family: "Roboto Thin", sans-serif;
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 16px;
+    margin: 0;
+}
