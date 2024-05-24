@@ -5,9 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Amidu Shamika">
     <title>SignIn | SignUp</title>
+    <link rel="icon" href="../../assets/favicon.png" type="image/png" sizes="16x16">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-wordpress-admin/wordpress-admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    <link rel="stylesheet" href="./login-styles.css">
 </head>
 
 <body>
-
+<div class="main-box">
+    <div class="slider-cont">
+        <div class="signup-slider">
+            <div class="img-txt">
+                <div class="img-layer"></div>
+                <h1>Hello Shoes<span>-Pvt Ltd</span> Say Hello to Stylish Steps.</h1>
+                <img src="../../assets/images/welcome1.jpg" alt="welcome1 img"/>
+            </div>
+            <div class="img-txt">
+                <div class="img-layer"></div>
+                <h1>Step into Elegance, Walk with Ease!</h1>
+                <img src="../../assets/images/welcome2.jpg" alt="welcome2 img"/>
+            </div>
+            <div class="img-txt">
+                <div class="img-layer"></div>
+                <h1>Join US Now..</h1>
+                <img src="../../assets/images/welcome3.jpg" alt="welcome3 img"/>
+            </div>
+        </div>
+    </div>
+    <div class="form-cont">
+        <div class="top-buttons">
+            <button class="to-signup">Sign Up</button>
+            <button class="to-signin top-active-button">Sign In</button>
+        </div>
+        <div class="form form-signup">
+            <form action="#" id="signup_form">
+                <label><span>E-MAIL</span><input id="signup_form_email" type="email" placeholder="Enter the e-mail" autocomplete=""></label>
+                <label><span>PASSWORD</span><input id="signup_form_password" type="password" placeholder="Enter password" autocomplete="new-password"></label>
+                <label><span>RE-PASSWORD</span><input id="signup_form_re_password" type="password" placeholder="Re-Enter password" autocomplete="new-password"></label>
+                <input id="signup_btn" type="submit" class="form-btn" value="Sign Up"/>
+                <br><br>
+                <a href="#" class="lined-link to-signin-link">I'm already member</a>
+            </form>
+        </div>
+        <div class="form form-signin">
+            <form action="#">
+                <label><span>E-MAIL</span><input id="signin_form_email" type="email" placeholder="Enter your e-mail" autocomplete=""></label>
+                <label><span>PASSWORD</span><input id="signin_form_password" type="password" placeholder="Enter your password" autocomplete="current-password"></label>
+                <input id="signin_btn" type="submit" class="form-btn" value="Sign In"/>
+                <br><br>
+                <a href="#" class="lined-link to-signup-link">Create new account</a>
+            </form>
+        </div>
+    </div>
+    <div class="clear-fix"></div>
+</div>
+<footer id="footer"><p>©Copyright - All Right Reserved Designed by Amidu Shamika</p></footer>
+<script src="../../assets/js/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.js"></script>
+<script src="../../controller/login-controller.js"></script>
 </body>
 </html>
