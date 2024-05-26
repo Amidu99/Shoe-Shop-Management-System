@@ -1,24 +1,15 @@
-let InventoryServiceUrl = 'http://localhost:8080/helloshoesbe/api/v1/inventory';
-
-const descPattern = /^[A-Za-z\d\s.,@&*()#!"']{3,}$/;
+import {Inventory} from "../model/Inventory.js";
+import {InventoryServiceUrl, SupplierServiceUrl} from "../assets/js/urls.js";
+import {descPattern} from '../assets/js/regex.js';
+import {showError, showSwalError} from "../assets/js/notifications.js";
 let base64InventoryPic = null;
 let inventory_row_index = null;
-
-// toastr error message
-function showError(message) {
-    toastr.error(message, 'Oops...', {
-        "closeButton": true,
-        "progressBar": true,
-        "positionClass": "toast-top-center",
-        "timeOut": "2500"
-    });
-}
 
 // check availability of the itemCode
 async function isAvailableItemCode(itemCode) {
     const url = new URL(`${InventoryServiceUrl}/get`);
     try {
-        const response = await fetch(url, {method: 'GET', headers: {"itemCode": itemCode}});
+        const response = await fetch(url, {method: 'GET', headers: {"itemCode": itemCode, "Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
         return response.status !== 204;
     } catch (error) {console.error('Error:', error);}
 }
@@ -28,7 +19,7 @@ const loadSuppliers = () => {
     let title = $('<option>', { text: '-Select Supplier-', value: "0" });
     $("#item_supplier_select").append(title);
     const getAllSupplierURL = new URL(`${SupplierServiceUrl}/getAll`);
-    fetch(getAllSupplierURL, { method: 'GET', })
+    fetch(getAllSupplierURL, { method: 'GET', headers: { "Authorization": "Bearer " + localStorage.getItem("AuthToken")}})
         .then(response => {
             if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status}`); }
             return response.json();
@@ -48,16 +39,13 @@ const loadSuppliers = () => {
 function previewImage() {
     var file = $('#item_pic').prop('files')[0];
     var reader = new FileReader();
-
     reader.onload = function() {
         base64InventoryPic = reader.result;
         $('#preview_item_pic').attr('src', base64InventoryPic).css('display', 'block');
     };
-
     if (file) { reader.readAsDataURL(file);}
     else { $('#preview_item_pic').css('display', 'none'); }
 }
-
 $(document).ready(function() {
     $('#item_pic').on('change', previewImage);
 });
@@ -91,7 +79,6 @@ $("#inventory_btns>button[type='button']").eq(0).on("click", async () => {
     let sellPrice = parseFloat($("#item_sell_price").val());
     let profit = $("#item_profit").val();
     let profitMargin = $("#item_profit_margin").val();
-
     if ( itemNumberCode && itemDesc && itemPicFile && supplierName && buyPrice && sellPrice && profit && profitMargin) {
         if (categoryCode!=="0" && genderCode!=="0" && typeCode!=="0" && supplierCode!=="0"){
             let itemCode = categoryCode+genderCode+typeCode+"-"+itemNumberCode;
@@ -101,29 +88,21 @@ $("#inventory_btns>button[type='button']").eq(0).on("click", async () => {
                     if (itemPic) {
                         if (buyPrice > 0 && sellPrice > 0) {
                             if (buyPrice < sellPrice) {
-                                let inventoryObject = {
-                                    itemCode: itemCode,
-                                    itemDesc: itemDesc,
-                                    itemPic: itemPic,
-                                    category: category,
-                                    supplierCode: supplierCode,
-                                    supplierName: supplierName,
-                                    buyPrice: buyPrice,
-                                    sellPrice: sellPrice,
-                                    profit: profit,
-                                    profitMargin: profitMargin
-                                };
+                                let inventoryObject = new Inventory(itemCode, itemDesc, itemPic, category, supplierCode, supplierName, buyPrice, sellPrice, profit, profitMargin);
                                 let inventoryJSON = JSON.stringify(inventoryObject);
                                 $.ajax({
                                     url: `${InventoryServiceUrl}/save`,
                                     type: "POST",
                                     data: inventoryJSON,
-                                    headers: {"Content-Type": "application/json"},
+                                    headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("AuthToken")},
                                     success: (res) => {
                                         Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Saved!', showConfirmButton: false, timer: 2000});
                                         $("#inventory_btns>button[type='button']").eq(3).click();
                                     },
-                                    error: (err) => { console.error(err);}
+                                    error: (err) => {
+                                        if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                        else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                                    }
                                 });
                             } else { showError('Invalid sell price!');}
                         } else { showError('Invalid price input!');}
@@ -158,29 +137,21 @@ $("#inventory_btns>button[type='button']").eq(1).on("click", async () => {
                     if (itemPic) {
                         if (buyPrice > 0 && sellPrice > 0) {
                             if (buyPrice < sellPrice) {
-                                let inventoryObject = {
-                                    itemCode: itemCode,
-                                    itemDesc: itemDesc,
-                                    itemPic: itemPic,
-                                    category: category,
-                                    supplierCode: supplierCode,
-                                    supplierName: supplierName,
-                                    buyPrice: buyPrice,
-                                    sellPrice: sellPrice,
-                                    profit: profit,
-                                    profitMargin: profitMargin
-                                };
+                                let inventoryObject = new Inventory(itemCode, itemDesc, itemPic, category, supplierCode, supplierName, buyPrice, sellPrice, profit, profitMargin);
                                 let inventoryJSON = JSON.stringify(inventoryObject);
                                 $.ajax({
                                     url: `${InventoryServiceUrl}/update`,
                                     type: "PUT",
                                     data: inventoryJSON,
-                                    headers: {"Content-Type": "application/json"},
+                                    headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("AuthToken")},
                                     success: (res) => {
                                         Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Updated!', showConfirmButton: false, timer: 2000});
                                         $("#inventory_btns>button[type='button']").eq(3).click();
                                     },
-                                    error: (err) => { console.error(err);}
+                                    error: (err) => {
+                                        if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                        else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                                    }
                                 });
                             } else { showError('Invalid sell price!');}
                         } else { showError('Invalid price input!');}
@@ -197,22 +168,24 @@ $("#inventory_btns>button[type='button']").eq(2).on("click", async () => {
     if (itemCode) {
         if ((await isAvailableItemCode(itemCode))) {
             Swal.fire({
-                width: '300px', title: 'Delete Item',
-                text: "Are you sure you want to permanently remove this item?",
-                icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete!'
+                width: '300px', title: 'Delete Item', icon: 'question',
+                text: "Are you sure you want to permanently remove this item?",  iconColor: '#FF7E00FF',
+                showCancelButton: true, confirmButtonText: 'Yes, delete!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     const url = new URL(`${InventoryServiceUrl}/delete`);
                     $.ajax({
                         url: url,
                         type: "DELETE",
-                        headers: { "itemCode": itemCode },
+                        headers: { "itemCode": itemCode, "Authorization": "Bearer " + localStorage.getItem("AuthToken") },
                         success: (res) => {
                             Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Deleted!', showConfirmButton: false, timer: 2000});
                             $("#inventory_btns>button[type='button']").eq(3).click();
                         },
-                        error: (err) => { console.error(err)}
+                        error: (err) => {
+                            if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                            else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                        }
                     });
                 }
             });
@@ -241,7 +214,7 @@ $("#inventory_btns>button[type='button']").eq(3).on("click", async () => {
 
     const getNextCodeURL = new URL(`${InventoryServiceUrl}/getNextCode`);
     try {
-        const response = await fetch(getNextCodeURL, { method: 'GET', });
+        const response = await fetch(getNextCodeURL, { method: 'GET', headers: { "Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
         if (response.ok) {
             const nextItemCode = await response.text();
             $("#item_code").val(nextItemCode);
@@ -256,7 +229,7 @@ $("#item_supplier_select").on("change", async function () {
     const urlToGet = new URL(`${SupplierServiceUrl}/get`);
     if (selectedSupplierCode!=="0") {
         try {
-            const response = await fetch(urlToGet, {method: 'GET', headers: {"supplierCode": selectedSupplierCode}});
+            const response = await fetch(urlToGet, {method: 'GET', headers: {"supplierCode": selectedSupplierCode, "Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
             if (response.ok) {
                 const data = await response.json();
                 const supplierName = data.supplierName;
@@ -269,7 +242,7 @@ $("#item_supplier_select").on("change", async function () {
 // load all inventories to the table
 const loadInventoryData = () => {
     const getAllURL = new URL(`${InventoryServiceUrl}/getAll`);
-    fetch(getAllURL, { method: 'GET', })
+    fetch(getAllURL, { method: 'GET', headers: { "Authorization": "Bearer " + localStorage.getItem("AuthToken")}})
         .then(response => {
             if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status}`); }
             return response.json();
