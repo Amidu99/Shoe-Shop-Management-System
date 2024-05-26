@@ -1,24 +1,15 @@
-let EmployeeServiceUrl = 'http://localhost:8080/helloshoesbe/api/v1/employee';
-
-const employeeCodePattern = /^[E]-\d{4}$/;
+import {Employee} from "../model/Employee.js";
+import {EmployeeServiceUrl} from "../assets/js/urls.js";
+import {namePattern, addressPattern, postalPattern, contactPattern, emailPattern} from '../assets/js/regex.js';
+import {showError, showSwalError} from "../assets/js/notifications.js";
 let employee_row_index = null;
 let base64EmployeePic = null;
-
-// toastr error message
-function showError(message) {
-    toastr.error(message, 'Oops...', {
-        "closeButton": true,
-        "progressBar": true,
-        "positionClass": "toast-top-center",
-        "timeOut": "2500"
-    });
-}
 
 // check availability of the employeeCode
 async function isAvailableEmployeeCode(employeeCode) {
     const url = new URL(`${EmployeeServiceUrl}/get`);
     try {
-        const response = await fetch(url, {method: 'GET', headers: {"employeeCode": employeeCode}});
+        const response = await fetch(url, {method: 'GET', headers: {"employeeCode": employeeCode, "Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
         return response.status !== 204;
     } catch (error) {console.error('Error:', error);}
 }
@@ -72,7 +63,6 @@ $("#employee_btns>button[type='button']").eq(0).on("click", async () => {
     let email = $("#employee_email").val();
     let guardian = $("#guardian_name").val();
     let guardianContactNo = $("#guardian_contact_no").val();
-
     if (employeeCode && employeeName && employeePicFile && role && dob && joinDate && branch && addLine1 && addLine2) {
         if (gender!=="0" && status!=="0" && designation!=="0" && addLine3 && addLine4 && addLine5 && contactNo && email && guardian && guardianContactNo){
             employeePic = base64EmployeePic;
@@ -83,38 +73,22 @@ $("#employee_btns>button[type='button']").eq(0).on("click", async () => {
                             if (contactPattern.test(contactNo) && contactPattern.test(guardianContactNo)) {
                                 if (emailPattern.test(email)) {
                                     if (employeePic) {
-                                        let employeeObject = {
-                                            employeeCode: employeeCode,
-                                            employeeName: employeeName,
-                                            employeePic: employeePic,
-                                            gender: gender,
-                                            status: status,
-                                            designation: designation,
-                                            role: role,
-                                            dob: dob,
-                                            joinDate: joinDate,
-                                            branch: branch,
-                                            addLine1: addLine1,
-                                            addLine2: addLine2,
-                                            addLine3: addLine3,
-                                            addLine4: addLine4,
-                                            addLine5: addLine5,
-                                            contactNo: contactNo,
-                                            email: email,
-                                            guardian: guardian,
-                                            guardianContactNo: guardianContactNo
-                                        };
+                                        let employeeObject = new Employee(employeeCode, employeeName, employeePic, gender, status, designation, role, dob, joinDate,
+                                                                branch, addLine1, addLine2, addLine3, addLine4, addLine5, contactNo, email, guardian, guardianContactNo);
                                         let employeeJSON = JSON.stringify(employeeObject);
                                         $.ajax({
                                             url: `${EmployeeServiceUrl}/save`,
                                             type: "POST",
                                             data: employeeJSON,
-                                            headers: {"Content-Type": "application/json"},
+                                            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("AuthToken")},
                                             success: (res) => {
                                                 Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Saved!', showConfirmButton: false, timer: 2000});
                                                 $("#employee_btns>button[type='button']").eq(3).click();
                                             },
-                                            error: (err) => { console.error(err);}
+                                            error: (err) => {
+                                                if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                                else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                                            }
                                         });
                                     } else { showError('Invalid employee pic!');}
                                 } else { showError('Invalid email input!');}
@@ -148,7 +122,6 @@ $("#employee_btns>button[type='button']").eq(1).on("click", async () => {
     let email = $("#employee_email").val();
     let guardian = $("#guardian_name").val();
     let guardianContactNo = $("#guardian_contact_no").val();
-
     if (employeeCode && employeeName && role && dob && joinDate && branch && addLine1 && addLine2) {
         if (gender!=="0" && status!=="0" && designation!=="0" && addLine3 && addLine4 && addLine5 && contactNo && email && guardian && guardianContactNo){
             employeePic = base64EmployeePic;
@@ -159,38 +132,22 @@ $("#employee_btns>button[type='button']").eq(1).on("click", async () => {
                             if (contactPattern.test(contactNo) && contactPattern.test(guardianContactNo)) {
                                 if (emailPattern.test(email)) {
                                     if (employeePic) {
-                                        let employeeObject = {
-                                            employeeCode: employeeCode,
-                                            employeeName: employeeName,
-                                            employeePic: employeePic,
-                                            gender: gender,
-                                            status: status,
-                                            designation: designation,
-                                            role: role,
-                                            dob: dob,
-                                            joinDate: joinDate,
-                                            branch: branch,
-                                            addLine1: addLine1,
-                                            addLine2: addLine2,
-                                            addLine3: addLine3,
-                                            addLine4: addLine4,
-                                            addLine5: addLine5,
-                                            contactNo: contactNo,
-                                            email: email,
-                                            guardian: guardian,
-                                            guardianContactNo: guardianContactNo
-                                        };
+                                        let employeeObject = new Employee(employeeCode, employeeName, employeePic, gender, status, designation, role, dob, joinDate,
+                                                                branch, addLine1, addLine2, addLine3, addLine4, addLine5, contactNo, email, guardian, guardianContactNo);
                                         let employeeJSON = JSON.stringify(employeeObject);
                                         $.ajax({
                                             url: `${EmployeeServiceUrl}/update`,
                                             type: "PUT",
                                             data: employeeJSON,
-                                            headers: {"Content-Type": "application/json"},
+                                            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("AuthToken")},
                                             success: (res) => {
                                                 Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Updated!', showConfirmButton: false, timer: 2000});
                                                 $("#employee_btns>button[type='button']").eq(3).click();
                                             },
-                                            error: (err) => { console.error(err);}
+                                            error: (err) => {
+                                                if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                                else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                                            }
                                         });
                                     } else { showError('Invalid employee pic!');}
                                 } else { showError('Invalid email input!');}
@@ -209,22 +166,24 @@ $("#employee_btns>button[type='button']").eq(2).on("click", async () => {
     if (employeeCode) {
         if ((await isAvailableEmployeeCode(employeeCode))) {
             Swal.fire({
-                width: '300px', title: 'Delete Employee',
-                text: "Are you sure you want to permanently remove this employee?",
-                icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete!'
+                width: '300px', title: 'Delete Employee', icon: 'question',
+                text: "Are you sure you want to permanently remove this employee?",  iconColor: '#FF7E00FF',
+                showCancelButton: true, confirmButtonText: 'Yes, delete!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     const url = new URL(`${EmployeeServiceUrl}/delete`);
                     $.ajax({
                         url: url,
                         type: "DELETE",
-                        headers: { "employeeCode": employeeCode },
+                        headers: { "employeeCode": employeeCode, "Authorization": "Bearer " + localStorage.getItem("AuthToken")},
                         success: (res) => {
                             Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Deleted!', showConfirmButton: false, timer: 2000});
                             $("#employee_btns>button[type='button']").eq(3).click();
                         },
-                        error: (err) => { console.error(err)}
+                        error: (err) => {
+                            if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                            else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                        }
                     });
                 }
             });
@@ -258,7 +217,7 @@ $("#employee_btns>button[type='button']").eq(3).on("click", async () => {
 
     const getNextCodeURL = new URL(`${EmployeeServiceUrl}/getNextCode`);
     try {
-        const response = await fetch(getNextCodeURL, { method: 'GET', });
+        const response = await fetch(getNextCodeURL, { method: 'GET', headers: {"Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
         if (response.ok) {
             const nextEmployeeCode = await response.text();
             $("#employee_code").val(nextEmployeeCode);
@@ -269,7 +228,7 @@ $("#employee_btns>button[type='button']").eq(3).on("click", async () => {
 // load all employees to the table
 const loadEmployeeData = () => {
     const getAllURL = new URL(`${EmployeeServiceUrl}/getAll`);
-    fetch(getAllURL, { method: 'GET', })
+    fetch(getAllURL, { method: 'GET', headers: { "Authorization": "Bearer " + localStorage.getItem("AuthToken")}})
         .then(response => {
             if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status}`); }
             return response.json();
