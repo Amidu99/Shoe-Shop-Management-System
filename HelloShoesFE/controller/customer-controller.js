@@ -1,28 +1,14 @@
-let CustomerServiceUrl = 'http://localhost:8080/helloshoesbe/api/v1/customer';
-
-const customerCodePattern = /^[C]-\d{4}$/;
-const namePattern = /^[A-Za-z\s]{3,}$/;
-const addressPattern = /^[a-zA-Z0-9 ',.-]{3,}$/;
-const postalPattern = /^\b\d{5}\b$/;
-const contactPattern = /^(?:[0-9] ?){6,14}[0-9]$/;
-const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+import {Customer} from "../model/Customer.js";
+import {CustomerServiceUrl} from "../assets/js/urls.js";
+import {customerCodePattern, namePattern, addressPattern, postalPattern, contactPattern, emailPattern} from '../assets/js/regex.js';
+import {showError, showSwalError} from "../assets/js/notifications.js";
 let customer_row_index = null;
-
-// toastr error message
-function showError(message) {
-    toastr.error(message, 'Oops...', {
-        "closeButton": true,
-        "progressBar": true,
-        "positionClass": "toast-top-center",
-        "timeOut": "2500"
-    });
-}
 
 // check availability of the customerCode
 async function isAvailableCustomerCode(customerCode) {
     const url = new URL(`${CustomerServiceUrl}/get`);
     try {
-        const response = await fetch(url, {method: 'GET', headers: {"customerCode": customerCode}});
+        const response = await fetch(url, {method: 'GET', headers: {"customerCode": customerCode, "Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
         return response.status !== 204;
     } catch (error) {console.error('Error:', error);}
 }
@@ -58,34 +44,27 @@ $("#customer_btns>button[type='button']").eq(0).on("click", async () => {
                                         if (totalPoints > 99 && totalPoints < 200) { level = 'SILVER'; }
                                         if (totalPoints > 200) { level = 'GOLD'; }
                                         $("#customer_level").val(level);
-                                        let customerObject = {
-                                            customerCode: customerCode,
-                                            customerName: customerName,
-                                            gender: gender,
-                                            joinDate: joinDate,
-                                            level: level,
-                                            totalPoints: totalPoints,
-                                            dob: dob,
-                                            addLine1: addLine1,
-                                            addLine2: addLine2,
-                                            addLine3: addLine3,
-                                            addLine4: addLine4,
-                                            addLine5: addLine5,
-                                            contactNo: contactNo,
-                                            email: email,
-                                            rpDateTime : rpDateTime
-                                        };
+                                        let customerObject = new Customer(customerCode, customerName, gender, joinDate,
+                                                                level, totalPoints, dob, addLine1, addLine2, addLine3, addLine4, addLine5,
+                                                                contactNo, email, rpDateTime);
                                         let customerJSON = JSON.stringify(customerObject);
                                         $.ajax({
                                             url: `${CustomerServiceUrl}/save`,
                                             type: "POST",
                                             data: customerJSON,
-                                            headers: {"Content-Type": "application/json"},
+                                            headers: {
+                                                "Content-Type": "application/json",
+                                                "Authorization": "Bearer " + localStorage.getItem("AuthToken")
+                                            },
                                             success: (res) => {
-                                                Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Saved!', showConfirmButton: false, timer: 2000});
+                                                Swal.fire({width: '225px', position: 'center', icon: 'success',
+                                                title: 'Saved!', showConfirmButton: false, timer: 2000});
                                                 $("#customer_btns>button[type='button']").eq(3).click();
                                             },
-                                            error: (err) => { console.error(err);}
+                                            error: (err) => {
+                                                if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                                else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                                            }
                                         });
                                     } else { showError('Invalid email input!');}
                                 } else { showError('Invalid contact number input!');}
@@ -129,34 +108,23 @@ $("#customer_btns>button[type='button']").eq(1).on("click", async () => {
                                         if (totalPoints > 99 && totalPoints < 200) { level = 'SILVER'; }
                                         if (totalPoints > 200) { level = 'GOLD'; }
                                         $("#customer_level").val(level);
-                                        let customerObject = {
-                                            customerCode: customerCode,
-                                            customerName: customerName,
-                                            gender: gender,
-                                            joinDate: joinDate,
-                                            level: level,
-                                            totalPoints: totalPoints,
-                                            dob: dob,
-                                            addLine1: addLine1,
-                                            addLine2: addLine2,
-                                            addLine3: addLine3,
-                                            addLine4: addLine4,
-                                            addLine5: addLine5,
-                                            contactNo: contactNo,
-                                            email: email,
-                                            rpDateTime : rpDateTime
-                                        };
+                                        let customerObject = new Customer(customerCode, customerName, gender, joinDate,
+                                                                level, totalPoints, dob, addLine1, addLine2, addLine3, addLine4, addLine5,
+                                                                contactNo, email, rpDateTime);
                                         let customerJSON = JSON.stringify(customerObject);
                                         $.ajax({
                                             url: `${CustomerServiceUrl}/update`,
                                             type: "PUT",
                                             data: customerJSON,
-                                            headers: {"Content-Type": "application/json"},
+                                            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("AuthToken")},
                                             success: (res) => {
                                                 Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Updated!', showConfirmButton: false, timer: 2000});
                                                 $("#customer_btns>button[type='button']").eq(3).click();
                                             },
-                                            error: (err) => { console.error(err);}
+                                            error: (err) => {
+                                                if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                                else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                                            }
                                         });
                                     } else { showError('Invalid email input!');}
                                 } else { showError('Invalid contact number input!');}
@@ -176,22 +144,24 @@ $("#customer_btns>button[type='button']").eq(2).on("click", async () => {
         if (customerCodePattern.test(customerCode)) {
             if ((await isAvailableCustomerCode(customerCode))) {
                 Swal.fire({
-                    width: '300px', title: 'Delete Customer',
-                    text: "Are you sure you want to permanently remove this customer?",
-                    icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete!'
+                    width: '300px', titleText: 'Delete Customer', icon: 'question',
+                    text: "Are you sure you want to permanently remove this customer?", iconColor: '#FF7E00FF',
+                    showCancelButton: true, confirmButtonText: 'Yes, delete!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         const url = new URL(`${CustomerServiceUrl}/delete`);
                         $.ajax({
                             url: url,
                             type: "DELETE",
-                            headers: { "customerCode": customerCode },
+                            headers: { "customerCode": customerCode, "Authorization": "Bearer " + localStorage.getItem("AuthToken")},
                             success: (res) => {
                                 Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Deleted!', showConfirmButton: false, timer: 2000});
                                 $("#customer_btns>button[type='button']").eq(3).click();
                             },
-                            error: (err) => { console.error(err)}
+                            error: (err) => {
+                                if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                            }
                         });
                     }
                 });
@@ -220,7 +190,7 @@ $("#customer_btns>button[type='button']").eq(3).on("click", async () => {
 
     const getNextCodeURL = new URL(`${CustomerServiceUrl}/getNextCode`);
     try {
-        const response = await fetch(getNextCodeURL, { method: 'GET', });
+        const response = await fetch(getNextCodeURL, { method: 'GET', headers: {"Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
         if (response.ok) {
             const nextCustomerCode = await response.text();
             $("#customer_code").val(nextCustomerCode);
@@ -231,7 +201,7 @@ $("#customer_btns>button[type='button']").eq(3).on("click", async () => {
 // load all customer details to the table
 const loadCustomerData = () => {
     const getAllURL = new URL(`${CustomerServiceUrl}/getAll`);
-    fetch(getAllURL, { method: 'GET', })
+    fetch(getAllURL, { method: 'GET', headers: {"Authorization": "Bearer " + localStorage.getItem("AuthToken")}})
         .then(response => {
             if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status}`); }
             return response.json();
