@@ -1,5 +1,5 @@
 export class Stock {
-    constructor(supplierCode, size, originalQty, availableQty, status, itemCode, stockCode) {
+    constructor(stockCode, size, originalQty, availableQty, status, itemCode, supplierCode) {
             this.stockCode = stockCode;
             this.size = size;
             this.originalQty = originalQty;
