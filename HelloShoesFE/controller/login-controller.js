@@ -1,16 +1,6 @@
-const AuthServiceUrl = 'http://localhost:8080/helloshoesbe/api/v1/auth';
-const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-// toastr error message
-function showError(message) {
-    toastr.error(message, 'Oops...', {
-        "closeButton": true,
-        "progressBar": true,
-        "positionClass": "toast-top-center",
-        "timeOut": "2500"
-    });
-}
+import {AuthServiceUrl} from "../assets/js/urls.js";
+import {emailPattern, passwordPattern} from "../assets/js/regex.js";
+import {showError} from "../assets/js/notifications.js";
 
 $(document).ready(function(){
     $('.signup-slider').slick({
