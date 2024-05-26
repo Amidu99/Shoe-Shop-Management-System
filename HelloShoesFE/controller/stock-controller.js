@@ -1,23 +1,13 @@
-let StockServiceUrl = 'http://localhost:8080/helloshoesbe/api/v1/stock';
-
-const stockCodePattern = /^ST-\d{4}$/;
+import {Stock} from "../model/Stock.js";
+import {InventoryServiceUrl, StockServiceUrl} from "../assets/js/urls.js";
+import {showError, showSwalError} from "../assets/js/notifications.js";
 let stock_row_index = null;
-
-// toastr error message
-function showError(message) {
-    toastr.error(message, 'Oops...', {
-        "closeButton": true,
-        "progressBar": true,
-        "positionClass": "toast-top-center",
-        "timeOut": "2500"
-    });
-}
 
 // check availability of the stockCode
 async function isAvailableStockCode(stockCode) {
     const url = new URL(`${StockServiceUrl}/get`);
     try {
-        const response = await fetch(url, {method: 'GET', headers: {"stockCode": stockCode}});
+        const response = await fetch(url, {method: 'GET', headers: {"stockCode": stockCode, "Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
         return response.status !== 204;
     } catch (error) {console.error('Error:', error);}
 }
@@ -26,7 +16,7 @@ async function isAvailableStockCode(stockCode) {
 async function isAvailableSizeStock(itemCode, size) {
     const url = new URL(`${StockServiceUrl}/getStock`);
     try {
-        const response = await fetch(url, {method: 'GET', headers: {"itemCode": itemCode, "size": size}});
+        const response = await fetch(url, {method: 'GET', headers: {"itemCode": itemCode, "size": size, "Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
         return response.status !== 204;
     } catch (error) {console.error('Error:', error);}
 }
@@ -35,7 +25,7 @@ async function isAvailableSizeStock(itemCode, size) {
 async function isAvailableStock(stockCode, itemCode, size) {
     const url = new URL(`${StockServiceUrl}/checkThisStock`);
     try {
-        const response = await fetch(url, {method: 'GET', headers: {"stockCode": stockCode, "itemCode": itemCode, "size": size}});
+        const response = await fetch(url, {method: 'GET', headers: {"stockCode": stockCode, "itemCode": itemCode, "size": size, "Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
         return response.status !== 204;
     } catch (error) {console.error('Error:', error);}
 }
@@ -58,26 +48,21 @@ $("#stock_btns>button[type='button']").eq(0).on("click", async () => {
                             if((originalQty/2) < availableQty){status = 'Available';}
                             if((originalQty/2) >= availableQty){status = 'Low';}
                             if(availableQty===0){status = 'Not Available';}
-                            let stockObject = {
-                                stockCode: stockCode,
-                                size: size,
-                                originalQty: originalQty,
-                                availableQty: availableQty,
-                                status: status,
-                                itemCode: itemCode,
-                                supplierCode: supplierCode
-                            };
+                            let stockObject = new Stock(stockCode, size, originalQty, availableQty, status, itemCode, supplierCode);
                             let stockJSON = JSON.stringify(stockObject);
                             $.ajax({
                                 url: `${StockServiceUrl}/save`,
                                 type: "POST",
                                 data: stockJSON,
-                                headers: {"Content-Type": "application/json"},
+                                headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("AuthToken")},
                                 success: (res) => {
                                     Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Saved!', showConfirmButton: false, timer: 2000});
                                     $("#stock_btns>button[type='button']").eq(3).click();
                                 },
-                                error: (err) => { console.error(err);}
+                                error: (err) => {
+                                    if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                    else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                                }
                             });
                         } else { showError('Invalid Available Qty!');}
                     } else { showError('Invalid Original Qty!');}
@@ -105,26 +90,21 @@ $("#stock_btns>button[type='button']").eq(1).on("click", async () => {
                             if((originalQty/2) < availableQty){status = 'Available';}
                             if((originalQty/2) >= availableQty){status = 'Low';}
                             if(availableQty===0){status = 'Not Available';}
-                            let stockObject = {
-                                stockCode: stockCode,
-                                size: size,
-                                originalQty: originalQty,
-                                availableQty: availableQty,
-                                status: status,
-                                itemCode: itemCode,
-                                supplierCode: supplierCode
-                            };
+                            let stockObject = new Stock(stockCode, size, originalQty, availableQty, status, itemCode, supplierCode);
                             let stockJSON = JSON.stringify(stockObject);
                             $.ajax({
                                 url: `${StockServiceUrl}/update`,
                                 type: "PUT",
                                 data: stockJSON,
-                                headers: {"Content-Type": "application/json"},
+                                headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("AuthToken")},
                                 success: (res) => {
                                     Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Updated!', showConfirmButton: false, timer: 2000});
                                     $("#stock_btns>button[type='button']").eq(3).click();
                                 },
-                                error: (err) => { console.error(err);}
+                                error: (err) => {
+                                    if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                    else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                                }
                             });
                         } else { showError('Invalid Available Qty!');}
                     } else { showError('Invalid Original Qty!');}
@@ -141,23 +121,25 @@ $("#stock_btns>button[type='button']").eq(2).on("click", async () => {
         if (stockCodePattern.test(stockCode)) {
             if ((await isAvailableStockCode(stockCode))) {
                 Swal.fire({
-                    width: '300px', title: 'Delete Stock',
-                    text: "Are you sure you want to permanently remove this stock?",
-                    icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete!'
+                    width: '300px', title: 'Delete Stock', icon: 'question',
+                    text: "Are you sure you want to permanently remove this stock?",  iconColor: '#FF7E00FF',
+                    showCancelButton: true, confirmButtonText: 'Yes, delete!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         const url = new URL(`${StockServiceUrl}/delete`);
                         $.ajax({
                             url: url,
                             type: "DELETE",
-                            headers: { "stockCode": stockCode },
+                            headers: { "stockCode": stockCode, "Authorization": "Bearer " + localStorage.getItem("AuthToken") },
                             success: (res) => {
                                 console.log(JSON.stringify(res));
                                 Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Deleted!', showConfirmButton: false, timer: 2000});
                                 $("#stock_btns>button[type='button']").eq(3).click();
                             },
-                            error: (err) => { console.error(err)}
+                            error: (err) => {
+                                if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                            }
                         });
                     }
                 });
@@ -180,7 +162,7 @@ $("#stock_btns>button[type='button']").eq(3).on("click", async () => {
 
     const getNextCodeURL = new URL(`${StockServiceUrl}/getNextCode`);
     try {
-        const response = await fetch(getNextCodeURL, { method: 'GET', });
+        const response = await fetch(getNextCodeURL, { method: 'GET', headers:{"Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
         if (response.ok) {
             const nextStockCode = await response.text();
             $("#stock_code").val(nextStockCode);
@@ -195,7 +177,7 @@ $("#stock_item_code_select").on("change", async function () {
     const url = new URL(`${InventoryServiceUrl}/get`);
     if(selectedItemCode!=="0") {
         try {
-            const response = await fetch(url, {method: 'GET', headers: {"itemCode": selectedItemCode}});
+            const response = await fetch(url, {method: 'GET', headers: {"itemCode": selectedItemCode, "Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
             if (response.ok) {
                 const data = await response.json();
                 const supplierCode = data.supplierCode;
@@ -210,7 +192,7 @@ const loadItemCodes = () => {
     let title = $('<option>', { text: '-Select Item-', value: "0" });
     $("#stock_item_code_select").append(title);
     const getAllItemURL = new URL(`${InventoryServiceUrl}/getAll`);
-    fetch(getAllItemURL, { method: 'GET', })
+    fetch(getAllItemURL, { method: 'GET', headers:{"Authorization": "Bearer " + localStorage.getItem("AuthToken")}})
         .then(response => {
             if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status}`); }
             return response.json();
@@ -229,7 +211,7 @@ const loadItemCodes = () => {
 // load all stock details to the table
 const loadStockData = () => {
     const getAllURL = new URL(`${StockServiceUrl}/getAll`);
-    fetch(getAllURL, { method: 'GET', })
+    fetch(getAllURL, { method: 'GET', headers:{"Authorization": "Bearer " + localStorage.getItem("AuthToken")}})
         .then(response => {
             if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status}`); }
             return response.json();
@@ -249,7 +231,7 @@ const loadStockData = () => {
     .catch(error => { console.error('Error: ', error); });
 };
 
-// retrieve supplier by table click
+// retrieve stock by table click
 $("#stock_tbl_body").on("click", "tr", function() {
     stock_row_index = $(this).index();
     let stockCode = $(this).find(".stockCode").text();
