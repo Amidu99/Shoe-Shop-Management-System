@@ -68,6 +68,18 @@ public class Stock {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/getStockDetail")
+    @RolesAllowed({"ADMIN", "USER"})
+    public ResponseEntity<?> getItemSizeStockDetail(@RequestHeader String itemCode, @RequestHeader int size){
+        SupplierInventoriesDTO stock = stockService.getExistsByItemCodeAndSize(itemCode, size);
+        if (stock!=null){
+            System.out.println("Found the stock.");
+            return ResponseEntity.ok(stock);
+        }
+        System.out.println("Not Exists Stock.");
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/checkThisStock")
     @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> checkThisStock(@RequestHeader String stockCode, @RequestHeader String itemCode, @RequestHeader int size){

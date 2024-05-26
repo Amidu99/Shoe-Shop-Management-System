@@ -13,4 +13,5 @@ public interface StockService {
     void updateStock(SupplierInventoriesDTO supplierInventoriesDTO);
     void deleteStock(String stockCode);
     String getLastStockCode();
+    SupplierInventoriesDTO getExistsByItemCodeAndSize(String itemCode, int size);
 }

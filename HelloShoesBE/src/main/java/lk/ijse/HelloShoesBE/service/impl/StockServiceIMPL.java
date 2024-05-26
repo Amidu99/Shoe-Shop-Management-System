@@ -90,4 +90,16 @@ public class StockServiceIMPL implements StockService {
     public String getLastStockCode() {
         return stockRepo.getLastStockCode();
     }
+
+    @Override
+    public SupplierInventoriesDTO getExistsByItemCodeAndSize(String itemCode, int size) {
+        SupplierInventories stock = stockRepo.existsByItemCodeAndSize(itemCode, size);
+        if(stock!=null){
+            SupplierInventoriesDTO stockDTO = mapping.toSupplierInventoriesDTO(stock);
+            stockDTO.setItemCode(stock.getInventory().getItemCode());
+            stockDTO.setSupplierCode(stock.getSupplier().getSupplierCode());
+            return stockDTO;
+        }
+        return null;
+    }
 }
