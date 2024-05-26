@@ -1,23 +1,14 @@
-let SupplierServiceUrl = 'http://localhost:8080/helloshoesbe/api/v1/supplier';
-
-const supplierCodePattern = /^[S]-\d{4}$/;
+import {Supplier} from "../model/Supplier.js";
+import {SupplierServiceUrl} from "../assets/js/urls.js";
+import {namePattern, addressPattern, postalPattern, contactPattern, emailPattern} from '../assets/js/regex.js';
+import {showError, showSwalError} from "../assets/js/notifications.js";
 let supplier_row_index = null;
-
-// toastr error message
-function showError(message) {
-    toastr.error(message, 'Oops...', {
-        "closeButton": true,
-        "progressBar": true,
-        "positionClass": "toast-top-center",
-        "timeOut": "2500"
-    });
-}
 
 // check availability of the supplierCode
 async function isAvailableSupplierCode(supplierCode) {
     const url = new URL(`${SupplierServiceUrl}/get`);
     try {
-        const response = await fetch(url, {method: 'GET', headers: {"supplierCode": supplierCode}});
+        const response = await fetch(url, {method: 'GET', headers: {"supplierCode": supplierCode, "Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
         return response.status !== 204;
     } catch (error) {console.error('Error:', error);}
 }
@@ -36,7 +27,6 @@ $("#supplier_btns>button[type='button']").eq(0).on("click", async () => {
     let contactNo1 = $("#supplier_contact_no1").val();
     let contactNo2 = $("#supplier_contact_no2").val();
     let email = $("#supplier_email").val();
-
     if ( supplierName && addLine1 && addLine2 && addLine3 && addLine4 && addLine5 && addLine6 && contactNo1 && contactNo2 && email) {
         if (category!=="0") {
             if (!(await isAvailableSupplierCode(supplierCode))) {
@@ -46,31 +36,21 @@ $("#supplier_btns>button[type='button']").eq(0).on("click", async () => {
                             if (contactPattern.test(contactNo1)) {
                                 if (contactPattern.test(contactNo2)) {
                                     if (emailPattern.test(email)) {
-                                        let supplierObject = {
-                                            supplierCode: supplierCode,
-                                            supplierName: supplierName,
-                                            category: category,
-                                            addLine1: addLine1,
-                                            addLine2: addLine2,
-                                            addLine3: addLine3,
-                                            addLine4: addLine4,
-                                            addLine5: addLine5,
-                                            addLine6: addLine6,
-                                            contactNo1: contactNo1,
-                                            contactNo2: contactNo2,
-                                            email: email,
-                                        };
+                                        let supplierObject = new Supplier(supplierCode, supplierName, category, addLine1, addLine2, addLine3, addLine4, addLine5, addLine6, contactNo1, contactNo2, email);
                                         let supplierJSON = JSON.stringify(supplierObject);
                                         $.ajax({
                                             url: `${SupplierServiceUrl}/save`,
                                             type: "POST",
                                             data: supplierJSON,
-                                            headers: {"Content-Type": "application/json"},
+                                            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("AuthToken")},
                                             success: (res) => {
                                                 Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Saved!', showConfirmButton: false, timer: 2000});
                                                 $("#supplier_btns>button[type='button']").eq(3).click();
                                             },
-                                            error: (err) => { console.error(err);}
+                                            error: (err) => {
+                                                if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                                else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                                            }
                                         });
                                     } else { showError('Invalid email input!');}
                                 } else { showError('Invalid mobile number input!');}
@@ -97,7 +77,6 @@ $("#supplier_btns>button[type='button']").eq(1).on("click", async () => {
     let contactNo1 = $("#supplier_contact_no1").val();
     let contactNo2 = $("#supplier_contact_no2").val();
     let email = $("#supplier_email").val();
-
     if ( supplierName && addLine1 && addLine2 && addLine3 && addLine4 && addLine5 && addLine6 && contactNo1 && contactNo2 && email) {
         if (category!=="0") {
             if ((await isAvailableSupplierCode(supplierCode))) {
@@ -107,31 +86,21 @@ $("#supplier_btns>button[type='button']").eq(1).on("click", async () => {
                             if (contactPattern.test(contactNo1)) {
                                 if (contactPattern.test(contactNo2)) {
                                     if (emailPattern.test(email)) {
-                                        let supplierObject = {
-                                            supplierCode: supplierCode,
-                                            supplierName: supplierName,
-                                            category: category,
-                                            addLine1: addLine1,
-                                            addLine2: addLine2,
-                                            addLine3: addLine3,
-                                            addLine4: addLine4,
-                                            addLine5: addLine5,
-                                            addLine6: addLine6,
-                                            contactNo1: contactNo1,
-                                            contactNo2: contactNo2,
-                                            email: email,
-                                        };
+                                        let supplierObject = new Supplier(supplierCode, supplierName, category, addLine1, addLine2, addLine3, addLine4, addLine5, addLine6, contactNo1, contactNo2, email);
                                         let supplierJSON = JSON.stringify(supplierObject);
                                         $.ajax({
                                             url: `${SupplierServiceUrl}/update`,
                                             type: "PUT",
                                             data: supplierJSON,
-                                            headers: {"Content-Type": "application/json"},
+                                            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("AuthToken")},
                                             success: (res) => {
                                                 Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Updated!', showConfirmButton: false, timer: 2000});
                                                 $("#supplier_btns>button[type='button']").eq(3).click();
                                             },
-                                            error: (err) => { console.error(err);}
+                                            error: (err) => {
+                                                if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                                else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                                            }
                                         });
                                     } else { showError('Invalid email input!');}
                                 } else { showError('Invalid mobile number input!');}
@@ -151,22 +120,24 @@ $("#supplier_btns>button[type='button']").eq(2).on("click", async () => {
         if (supplierCodePattern.test(supplierCode)) {
             if ((await isAvailableSupplierCode(supplierCode))) {
                 Swal.fire({
-                    width: '300px', title: 'Delete Supplier',
-                    text: "Are you sure you want to permanently remove this supplier?",
-                    icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete!'
+                    width: '300px', title: 'Delete Supplier', icon: 'question',
+                    text: "Are you sure you want to permanently remove this supplier?",  iconColor: '#FF7E00FF',
+                    showCancelButton: true, confirmButtonText: 'Yes, delete!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         const url = new URL(`${SupplierServiceUrl}/delete`);
                         $.ajax({
                             url: url,
                             type: "DELETE",
-                            headers: { "supplierCode": supplierCode },
+                            headers: { "supplierCode": supplierCode, "Authorization": "Bearer " + localStorage.getItem("AuthToken") },
                             success: (res) => {
                                 Swal.fire({width: '225px', position: 'center', icon: 'success', title: 'Deleted!', showConfirmButton: false, timer: 2000});
                                 $("#supplier_btns>button[type='button']").eq(3).click();
                             },
-                            error: (err) => { console.error(err)}
+                            error: (err) => {
+                                if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                            }
                         });
                     }
                 });
@@ -192,7 +163,7 @@ $("#supplier_btns>button[type='button']").eq(3).on("click", async () => {
 
     const getNextCodeURL = new URL(`${SupplierServiceUrl}/getNextCode`);
     try {
-        const response = await fetch(getNextCodeURL, { method: 'GET', });
+        const response = await fetch(getNextCodeURL, { method: 'GET', headers: {"Authorization": "Bearer " + localStorage.getItem("AuthToken")}});
         if (response.ok) {
             const nextSupplierCode = await response.text();
             $("#supplier_code").val(nextSupplierCode);
@@ -203,7 +174,7 @@ $("#supplier_btns>button[type='button']").eq(3).on("click", async () => {
 // load all supplier details to the table
 const loadSupplierData = () => {
     const getAllURL = new URL(`${SupplierServiceUrl}/getAll`);
-    fetch(getAllURL, { method: 'GET', })
+    fetch(getAllURL, { method: 'GET', headers: {"Authorization": "Bearer " + localStorage.getItem("AuthToken")}})
         .then(response => {
             if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status}`); }
             return response.json();
