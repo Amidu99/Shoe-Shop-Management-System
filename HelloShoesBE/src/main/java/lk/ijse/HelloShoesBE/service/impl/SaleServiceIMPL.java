@@ -61,6 +61,12 @@ public class SaleServiceIMPL implements SaleService {
         Optional<SaleDTO> saleDTO = saleRepo.findSaleInfoByOrderCode(orderCode);
         if (saleDTO.isPresent()) {
             Set<SaleInventoriesDTO> orderDetails = detailRepo.findAllByOrderCode(orderCode);
+            for (SaleInventoriesDTO detail : orderDetails) {
+                Inventory inventory = inventoryRepo.getReferenceById(detail.getItemCode());
+                detail.setItemDesc(inventory.getItemDesc());
+                detail.setItemPrice(inventory.getSellPrice());
+                System.out.println(detail);
+            }
             saleDTO.get().setSaleInventories(orderDetails);
         }
         return saleDTO;
@@ -76,7 +82,22 @@ public class SaleServiceIMPL implements SaleService {
 
         Map<String, Set<SaleInventoriesDTO>> inventoriesByOrderCode = inventories.stream()
                 .collect(Collectors.groupingBy(SaleInventoriesDTO::getOrderCode, Collectors.toSet()));
-
+        // Extract all item codes
+        Set<String> itemCodes = inventories.stream()
+                .map(SaleInventoriesDTO::getItemCode)
+                .collect(Collectors.toSet());
+        // Fetch all inventory details for these item codes
+        List<Inventory> inventoryList = inventoryRepo.findAllById(itemCodes);
+        Map<String, Inventory> inventoryMap = inventoryList.stream()
+                .collect(Collectors.toMap(Inventory::getItemCode, inventory -> inventory));
+        // Set item description and price for each SaleInventoriesDTO
+        for (SaleInventoriesDTO detail : inventories) {
+            Inventory inventory = inventoryMap.get(detail.getItemCode());
+            if (inventory != null) {
+                detail.setItemDesc(inventory.getItemDesc());
+                detail.setItemPrice(inventory.getSellPrice());
+            }
+        }
         for (SaleDTO sale : sales) {
             sale.setSaleInventories(inventoriesByOrderCode.getOrDefault(sale.getOrderCode(), Set.of()));
         }
