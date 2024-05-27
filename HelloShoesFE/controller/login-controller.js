@@ -81,6 +81,7 @@ $("#signin_btn").on("click", async () => {
                     // Save the tokens in local storage
                     localStorage.setItem('AuthToken', firstToken);
                     localStorage.setItem('RefreshToken', secondToken);
+                    localStorage.setItem('CurrentUser', email);
                     window.location.href = '../dashboard/dashboard.html';
                 } else if (response.status===403) {Swal.fire({width: '215px', icon: "error", title: "Login failed", footer: '<b>Check your Email & Password!</b>', showConfirmButton: false, timer: 3000 });}
             } catch (error) { console.error('Error:', error); }
@@ -119,6 +120,7 @@ $("#signup_btn").on("click", async () => {
                             const secondToken = tokens[1].trim();
                             localStorage.setItem('AuthToken', firstToken);
                             localStorage.setItem('RefreshToken', secondToken);
+                            localStorage.setItem('CurrentUser', email);
                             window.location.href = '../dashboard/dashboard.html';
                         } else if (response.status===204) {Swal.fire({width: '240px', icon: "error", title: "Signup failed", footer: '<b>This email does not belong to an employee!</b>', showConfirmButton: false, timer: 3000 });
                         } else if (response.status===205) {Swal.fire({width: '240px', icon: "error", title: "Signup failed", footer: '<b>This email is already associated with a user!</b>', showConfirmButton: false, timer: 3000 });}
