@@ -5,6 +5,7 @@ export const descPattern = /^[A-Za-z\d\s.,@&*()#!"']{3,}$/;
 export const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 export const employeeCodePattern = /^[E]-\d{4}$/;
 export const namePattern = /^[A-Za-z\s]{3,}$/;
+export const orderCodePattern = /^[O]-\d{4}$/;
 export const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 export const postalPattern = /^\b\d{5}\b$/;
 export const stockCodePattern = /^ST-\d{4}$/;
