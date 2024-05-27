@@ -20,3 +20,16 @@ export function showSwalError(title, text) {
         showConfirmButton: true
     });
 }
+
+// SWAL Warning message
+export function showSwalWarning(title, text) {
+    Swal.fire({
+        width: '325px',
+        position: 'center',
+        icon: 'warning',
+        iconColor: '#FF7E00FF',
+        title: title,
+        text: text,
+        showConfirmButton: true
+    });
+}
