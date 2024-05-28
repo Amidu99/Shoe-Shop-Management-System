@@ -42,13 +42,13 @@ public class Sale {
 
     @GetMapping("/get")
     @RolesAllowed({"ADMIN", "USER"})
-    public ResponseEntity<?> getOneSale(@RequestHeader String oderCode){
-        boolean isExists = saleService.existsByOrderCode(oderCode);
+    public ResponseEntity<?> getOneSale(@RequestHeader String orderCode){
+        boolean isExists = saleService.existsByOrderCode(orderCode);
         if (!isExists){
             System.out.println("Not Exists Order.");
             return ResponseEntity.noContent().build();
         }
-        Optional<SaleDTO> saleDTO = saleService.getOrderByOrderCode(oderCode);
+        Optional<SaleDTO> saleDTO = saleService.getOrderByOrderCode(orderCode);
         System.out.println("Order founded: "+saleDTO);
         return ResponseEntity.ok(saleDTO);
     }
