@@ -52,8 +52,8 @@ public class SaleServiceIMPL implements SaleService {
     }
 
     @Override
-    public boolean existsByOrderCode(String oderCode) {
-        return saleRepo.existsByOrderCode(oderCode);
+    public boolean existsByOrderCode(String orderCode) {
+        return saleRepo.existsByOrderCode(orderCode);
     }
 
     @Override

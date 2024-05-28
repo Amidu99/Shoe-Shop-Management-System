@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SaleRepo extends JpaRepository<Sale, String> {
-    boolean existsByOrderCode(String oderCode);
+    boolean existsByOrderCode(String orderCode);
     @Query("SELECT NEW lk.ijse.HelloShoesBE.dto.SaleDTO(s.orderCode, s.customerName, s.totalPrice, s.date, s.payMethod, s.addedPoints, s.cashierName, s.user.userCode, s.customer.customerCode) FROM Sale s WHERE s.orderCode = :orderCode")
     Optional<SaleDTO> findSaleInfoByOrderCode(String orderCode);
     @Query("SELECT NEW lk.ijse.HelloShoesBE.dto.SaleDTO(s.orderCode, s.customerName, s.totalPrice, s.date, s.payMethod, s.addedPoints, s.cashierName, s.user.userCode, s.customer.customerCode) FROM Sale s")

@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface SaleService {
     SaleDTO saveSale(SaleDTO saleDTO);
-    boolean existsByOrderCode(String oderCode);
-    Optional<SaleDTO> getOrderByOrderCode(String oderCode);
+    boolean existsByOrderCode(String orderCode);
+    Optional<SaleDTO> getOrderByOrderCode(String orderCode);
     List<SaleDTO> getAllSales();
     String getLastOrderCode();
     void updateSale(SaleDTO saleDTO);
