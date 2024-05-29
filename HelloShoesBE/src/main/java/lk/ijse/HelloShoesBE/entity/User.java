@@ -1,5 +1,6 @@
 package lk.ijse.HelloShoesBE.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +30,8 @@ public class User implements UserDetails, SuperEntity {
     @JoinColumn(name = "employeeCode")
     private Employee employee;
 
-    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Sale> sales = new HashSet<>();
 
     @Override
