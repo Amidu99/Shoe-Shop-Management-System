@@ -1,5 +1,6 @@
 package lk.ijse.HelloShoesBE.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,6 +35,7 @@ public class Customer implements SuperEntity{
     private String email;
     private Timestamp rpDateTime;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Sale> sales = new ArrayList<>();
 }
