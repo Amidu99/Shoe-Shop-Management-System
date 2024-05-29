@@ -57,7 +57,6 @@ public class CustomerServiceIMPL implements CustomerService {
         existingCustomer.setAddLine5(customerDTO.getAddLine5());
         existingCustomer.setContactNo(customerDTO.getContactNo());
         existingCustomer.setEmail(customerDTO.getEmail());
-        existingCustomer.setRpDateTime(customerDTO.getRpDateTime());
         // Save the updated customer entity back to the db
         repo.save(existingCustomer);
     }
