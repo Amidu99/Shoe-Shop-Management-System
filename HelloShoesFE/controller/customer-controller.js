@@ -29,7 +29,7 @@ $("#customer_btns>button[type='button']").eq(0).on("click", async () => {
     let addLine5 = $("#postal_code").val();
     let contactNo = $("#contact_no").val();
     let email = $("#email").val();
-    let rpDateTime = $("#rp_date_time").val();
+    let rpDateTime = '';
     if ( customerName && joinDate && dob && addLine1 && addLine2 && addLine3 && addLine4 && addLine5 && contactNo && email) {
         if (gender!=="0") {
             if (!(await isAvailableCustomerCode(customerCode))) {
@@ -93,7 +93,7 @@ $("#customer_btns>button[type='button']").eq(1).on("click", async () => {
     let addLine5 = $("#postal_code").val();
     let contactNo = $("#contact_no").val();
     let email = $("#email").val();
-    let rpDateTime = $("#rp_date_time").val();
+    let rpDateTime = '';
     if ( customerName && joinDate && dob && addLine1 && addLine2 && addLine3 && addLine4 && addLine5 && contactNo && email) {
         if (gender!=="0") {
             if ((await isAvailableCustomerCode(customerCode))) {
@@ -245,7 +245,7 @@ $("#customer_tbl_body").on("click", "tr", function() {
     let addLine5 = addLines[4];
     let contactNo = $(this).find(".contactNo").text();
     let email = $(this).find(".email").text();
-    let toFormatRpDateTime = $(this).find(".rpDateTime").text().trim();
+    let toFormatRpDateTime = $(this).find(".rpDateTime").text();
 
     $("#customer_code").val(customerCode);
     $("#customer_name").val(customerName);
@@ -261,12 +261,15 @@ $("#customer_tbl_body").on("click", "tr", function() {
     $("#postal_code").val(addLine5);
     $("#contact_no").val(contactNo);
     $("#email").val(email);
-
-    if (toFormatRpDateTime !== "") {
-        let dateObject = new Date(toFormatRpDateTime);
-        if (!isNaN(dateObject.getTime())) { // Check if dateObject is a valid Date object
-            let rpDateTime = dateObject.toISOString().slice(0, 16);
-            $("#rp_date_time").val(rpDateTime);
-        } else { $("#rp_date_time").val("");}
-    } else { $("#rp_date_time").val("");}
+    if(toFormatRpDateTime!=='null'){convertToTimeZone(toFormatRpDateTime, 5.0);}
+    else{$("#rp_date_time").val('');}
 });
+
+// convert time to 5.0 timezone
+function convertToTimeZone(timestamp, offset) {
+    const dateObject = new Date(timestamp);
+    const offsetMilliseconds = offset * 60 * 60 * 1000 + 30 * 60 * 1000;
+    const localDate = new Date(dateObject.getTime() + offsetMilliseconds);
+    const formattedDate = localDate.toISOString().slice(0, 16).replace("T", " ");
+    $("#rp_date_time").val(formattedDate);
+}
