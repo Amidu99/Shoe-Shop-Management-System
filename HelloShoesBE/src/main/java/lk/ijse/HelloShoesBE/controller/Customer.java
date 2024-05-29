@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -68,6 +70,23 @@ public class Customer {
             validateCustomer(customerDTO);
             if (customerService.existsByCustomerCode(customerDTO.getCustomerCode())) {
                 customerService.updateCustomer(customerDTO);
+                return ResponseEntity.ok().build();
+            }
+            System.out.println("Not Exists Customer.");
+            return ResponseEntity.badRequest().body("This customer not exists.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "/updatePoints")
+    @RolesAllowed({"ADMIN", "USER"})
+    public ResponseEntity<?> updateCustomerPoints(@RequestHeader String customerCode, @RequestHeader double totalPoints, @RequestHeader String timestampString) {
+        try {
+            if (customerService.existsByCustomerCode(customerCode)) {
+                Instant instant = Instant.parse(timestampString);
+                Timestamp rpDateTime = Timestamp.from(instant);
+                customerService.updateCustomerPoints(customerCode, totalPoints, rpDateTime);
                 return ResponseEntity.ok().build();
             }
             System.out.println("Not Exists Customer.");

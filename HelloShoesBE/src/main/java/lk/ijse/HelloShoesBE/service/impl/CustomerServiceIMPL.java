@@ -3,12 +3,15 @@ package lk.ijse.HelloShoesBE.service.impl;
 import jakarta.transaction.Transactional;
 import lk.ijse.HelloShoesBE.dto.CustomerDTO;
 import lk.ijse.HelloShoesBE.entity.Customer;
+import lk.ijse.HelloShoesBE.entity.Level;
 import lk.ijse.HelloShoesBE.repo.CustomerRepo;
 import lk.ijse.HelloShoesBE.service.CustomerService;
 import lk.ijse.HelloShoesBE.util.Mapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.sql.Timestamp;
 import java.util.List;
+import static lk.ijse.HelloShoesBE.entity.Level.*;
 
 @Service
 @Transactional
@@ -67,5 +70,21 @@ public class CustomerServiceIMPL implements CustomerService {
     @Override
     public String getLastCustomerCode() {
         return repo.getLastCustomerCode();
+    }
+
+    @Override
+    public void updateCustomerPoints(String customerCode, double totalPoints, Timestamp rpDateTime) {
+        int intTotalPoints = (int) Math.round(totalPoints);
+        Customer existingCustomer = repo.getCustomerByCustomerCode(customerCode);
+        int oldPoints = existingCustomer.getTotalPoints();
+        int newPoints = (oldPoints+intTotalPoints);
+        Level level = NEW;
+        if (newPoints > 49 && newPoints < 100) { level = BRONZE; }
+        if (newPoints > 99 && newPoints < 200) { level = SILVER; }
+        if (newPoints > 200) { level = GOLD; }
+        existingCustomer.setLevel(level);
+        existingCustomer.setTotalPoints(newPoints);
+        existingCustomer.setRpDateTime(rpDateTime);
+        repo.save(existingCustomer);
     }
 }
