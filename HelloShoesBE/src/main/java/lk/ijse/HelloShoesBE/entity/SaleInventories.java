@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.sql.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +18,7 @@ public class SaleInventories implements SuperEntity{
     @JoinColumn(name = "itemCode")
     private Inventory inventory;
     private String orderCode;
+    private Date date;
     private int size;
     private int qty;
 }
