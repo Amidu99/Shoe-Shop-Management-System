@@ -4,6 +4,8 @@ import lk.ijse.HelloShoesBE.dto.SaleDTO;
 import lk.ijse.HelloShoesBE.entity.Sale;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +17,6 @@ public interface SaleRepo extends JpaRepository<Sale, String> {
     List<SaleDTO> findAllSales();
     @Query("SELECT MAX (s.orderCode) FROM Sale s")
     String getLastOrderCode();
+    @Query("SELECT COUNT(s) FROM Sale s WHERE s.date BETWEEN :startOfDay AND :endOfDay")
+    int getSaleCountByDate(@Param("startOfDay") Date startOfDay, @Param("endOfDay") Date endOfDay);
 }
