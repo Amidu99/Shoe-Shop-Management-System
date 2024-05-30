@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -71,6 +73,13 @@ public class Sale {
         int nextCode = Integer.parseInt(lastOrderCode.replace("O-", "")) + 1;
         System.out.println("Next OrderCode: "+nextCode);
         return ResponseEntity.ok(String.format("O-%04d", nextCode));
+    }
+
+    @GetMapping("/getSaleCount")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<?> getSaleCountByDate(@RequestHeader Date date){
+        int count = saleService.getSaleCountByDate(date);
+        return ResponseEntity.ok(count);
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
