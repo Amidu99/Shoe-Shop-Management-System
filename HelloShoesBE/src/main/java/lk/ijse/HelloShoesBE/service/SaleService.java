@@ -1,5 +1,6 @@
 package lk.ijse.HelloShoesBE.service;
 
+import lk.ijse.HelloShoesBE.dto.MostSoldItemDTO;
 import lk.ijse.HelloShoesBE.dto.SaleDTO;
 import java.sql.Date;
 import java.util.List;
@@ -13,4 +14,5 @@ public interface SaleService {
     String getLastOrderCode();
     void updateSale(SaleDTO saleDTO);
     int getSaleCountByDate(Date date);
+    Optional<MostSoldItemDTO> getMostSoldItemByDate(Date day);
 }

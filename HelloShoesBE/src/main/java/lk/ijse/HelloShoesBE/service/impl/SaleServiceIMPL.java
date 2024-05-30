@@ -1,6 +1,7 @@
 package lk.ijse.HelloShoesBE.service.impl;
 
 import jakarta.transaction.Transactional;
+import lk.ijse.HelloShoesBE.dto.MostSoldItemDTO;
 import lk.ijse.HelloShoesBE.dto.SaleDTO;
 import lk.ijse.HelloShoesBE.dto.SaleInventoriesDTO;
 import lk.ijse.HelloShoesBE.entity.*;
@@ -163,5 +164,14 @@ public class SaleServiceIMPL implements SaleService {
         calendar.set(Calendar.MILLISECOND, 999);
         Date endOfDay = new Date(calendar.getTimeInMillis());
         return saleRepo.getSaleCountByDate(startOfDay, endOfDay);
+    }
+
+    @Override
+    public Optional<MostSoldItemDTO> getMostSoldItemByDate(Date day) {
+        List<MostSoldItemDTO> items = detailRepo.getMostSoldItemByDate(day);
+        if (items.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(items.get(0));
     }
 }

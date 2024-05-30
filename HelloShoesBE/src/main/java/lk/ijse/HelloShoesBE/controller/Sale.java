@@ -1,13 +1,13 @@
 package lk.ijse.HelloShoesBE.controller;
 
 import jakarta.annotation.security.RolesAllowed;
+import lk.ijse.HelloShoesBE.dto.MostSoldItemDTO;
 import lk.ijse.HelloShoesBE.dto.SaleDTO;
 import lk.ijse.HelloShoesBE.service.SaleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -77,9 +77,20 @@ public class Sale {
 
     @GetMapping("/getSaleCount")
     @RolesAllowed({"ADMIN"})
-    public ResponseEntity<?> getSaleCountByDate(@RequestHeader Date date){
-        int count = saleService.getSaleCountByDate(date);
+    public ResponseEntity<?> getSaleCountByDate(@RequestHeader Date day){
+        int count = saleService.getSaleCountByDate(day);
         return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/getMostSaleItem")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<?> getMostSoldItemByDate(@RequestHeader Date day){
+        Optional<MostSoldItemDTO> mostSoldItem = saleService.getMostSoldItemByDate(day);
+        if (mostSoldItem.isPresent()) {
+            return ResponseEntity.ok(mostSoldItem.get());
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
