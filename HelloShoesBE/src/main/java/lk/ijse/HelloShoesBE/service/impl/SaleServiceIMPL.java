@@ -9,6 +9,7 @@ import lk.ijse.HelloShoesBE.service.SaleService;
 import lk.ijse.HelloShoesBE.util.Mapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.sql.Date;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,7 @@ public class SaleServiceIMPL implements SaleService {
     public SaleDTO saveSale(SaleDTO saleDTO) {
         Customer customer = customerRepo.getCustomerByCustomerCode(saleDTO.getCustomerCode());
         User user = userRepo.getReferenceById(saleDTO.getUserCode());
+        Date dateToDetail = new Date(saleDTO.getDate().getTime());
 
         Set<SaleInventories> saleInventories = new HashSet<>();
         for (SaleInventoriesDTO saleInventoriesDTO : saleDTO.getSaleInventories()) {
@@ -35,6 +37,7 @@ public class SaleServiceIMPL implements SaleService {
             Inventory inventory = inventoryRepo.getReferenceById(saleInventoriesDTO.getItemCode());
             saleInventory.setInventory(inventory);
             saleInventory.setOrderCode(saleInventoriesDTO.getOrderCode());
+            saleInventory.setDate(dateToDetail);
             saleInventory.setSize(saleInventoriesDTO.getSize());
             saleInventory.setQty(saleInventoriesDTO.getQty());
             saleInventories.add(saleInventory);
@@ -117,6 +120,7 @@ public class SaleServiceIMPL implements SaleService {
             detailRepo.removeAllByOrderCode(saleDTO.getOrderCode());
             Customer customer = customerRepo.getCustomerByCustomerCode(saleDTO.getCustomerCode());
             User user = userRepo.getReferenceById(saleDTO.getUserCode());
+            Date dateToDetail = new Date(saleDTO.getDate().getTime());
 
             Set<SaleInventories> saleInventories = new HashSet<>();
             for (SaleInventoriesDTO saleInventoriesDTO : saleDTO.getSaleInventories()) {
@@ -125,6 +129,7 @@ public class SaleServiceIMPL implements SaleService {
                 Inventory inventory = inventoryRepo.getReferenceById(saleInventoriesDTO.getItemCode());
                 saleInventory.setInventory(inventory);
                 saleInventory.setOrderCode(saleInventoriesDTO.getOrderCode());
+                saleInventory.setDate(dateToDetail);
                 saleInventory.setSize(saleInventoriesDTO.getSize());
                 saleInventory.setQty(saleInventoriesDTO.getQty());
                 saleInventories.add(saleInventory);
