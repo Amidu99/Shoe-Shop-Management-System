@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 public interface DetailRepo extends JpaRepository<SaleInventories, String> {
-    @Query("SELECT NEW lk.ijse.HelloShoesBE.dto.SaleInventoriesDTO(si.orderDetailCode, si.inventory.itemCode, si.orderCode, si.size, si.qty) FROM SaleInventories si WHERE si.orderCode = :orderCode")
+    @Query("SELECT NEW lk.ijse.HelloShoesBE.dto.SaleInventoriesDTO(si.orderDetailCode, si.inventory.itemCode, si.orderCode, si.date, si.size, si.qty) FROM SaleInventories si WHERE si.orderCode = :orderCode")
     Set<SaleInventoriesDTO> findAllByOrderCode(String orderCode);
-    @Query("SELECT NEW lk.ijse.HelloShoesBE.dto.SaleInventoriesDTO(si.orderDetailCode, si.inventory.itemCode, si.orderCode, si.size, si.qty) FROM SaleInventories si WHERE si.orderCode IN :orderCodes")
+    @Query("SELECT NEW lk.ijse.HelloShoesBE.dto.SaleInventoriesDTO(si.orderDetailCode, si.inventory.itemCode, si.orderCode, si.date, si.size, si.qty) FROM SaleInventories si WHERE si.orderCode IN :orderCodes")
     List<SaleInventoriesDTO> findAllByOrderCodes(List<String> orderCodes);
     @Modifying
     @Transactional
