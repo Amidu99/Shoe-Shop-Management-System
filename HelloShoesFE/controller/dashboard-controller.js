@@ -107,3 +107,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 });
+
+// Logout
+$("#btn-logout").on("click", () => {
+    Swal.fire({
+        width: '300px', title: 'Logout', icon: 'question',
+        text: "Are you sure you want to logout?",  iconColor: '#FF7E00FF',
+        showCancelButton: true, confirmButtonText: 'Logout'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('AuthToken');
+            localStorage.removeItem('RefreshToken');
+            localStorage.removeItem('CurrentUser');
+            window.location.href = '../login/login.html';
+            history.pushState(null, null, '../login/login.html');
+            window.addEventListener('popstate', function(event) {
+                history.pushState(null, null, '../login/login.html');
+            });
+        }
+    });
+});
