@@ -18,20 +18,21 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Hello Shoes</a>
+        <a class="navbar-brand" href="#">- Hello Shoes -</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="#"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="#"></a>
                 </li>
             </ul>
             <form class="d-flex">
+                <label id="current_user_name">Username</label>
                 <button class="btn btn-outline-warning" id="btn-logout" type="button">Logout</button>
             </form>
         </div>
@@ -40,23 +41,330 @@
 <!--side-menu-->
 <div class="d-flex align-items-start">
     <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-        <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</button>
-        <button class="nav-link" id="v-pills-customer-tab" data-bs-toggle="pill" data-bs-target="#v-pills-customer" type="button" role="tab" aria-controls="v-pills-customer" aria-selected="false"><i class="fa-solid fa-users fa-flip" style="color: #FFD43B;"></i>Customers</button>
-        <button class="nav-link" id="v-pills-items-tab" data-bs-toggle="pill" data-bs-target="#v-pills-items" type="button" role="tab" aria-controls="v-pills-items" aria-selected="false">Inventories</button>
-        <button class="nav-link" id="v-pills-suppliers-tab" data-bs-toggle="pill" data-bs-target="#v-pills-suppliers" type="button" role="tab" aria-controls="v-pills-suppliers" aria-selected="false">Suppliers</button>
-        <button class="nav-link" id="v-pills-stock-tab" data-bs-toggle="pill" data-bs-target="#v-pills-stock" type="button" role="tab" aria-controls="v-pills-stock" aria-selected="false">Stock</button>
-        <button class="nav-link" id="v-pills-employee-tab" data-bs-toggle="pill" data-bs-target="#v-pills-employee" type="button" role="tab" aria-controls="v-pills-employee" aria-selected="false">Employees</button>
-        <button class="nav-link" id="v-pills-user-tab" data-bs-toggle="pill" data-bs-target="#v-pills-user" type="button" role="tab" aria-controls="v-pills-user" aria-selected="false">Users</button>
+        <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true"><i class="fa-solid fa-house fa-fade"></i> Home</button>
+        <button class="nav-link" id="v-pills-sale-tab" data-bs-toggle="pill" data-bs-target="#v-pills-sale" type="button" role="tab" aria-controls="v-pills-sale" aria-selected="false"><i class="fa-solid fa-cart-shopping fa-bounce"></i> Sales</button>
+        <button class="nav-link" id="v-pills-customer-tab" data-bs-toggle="pill" data-bs-target="#v-pills-customer" type="button" role="tab" aria-controls="v-pills-customer" aria-selected="false"><i class="fa-solid fa-users fa-flip"></i> Customers</button>
+        <button class="nav-link" id="v-pills-items-tab" data-bs-toggle="pill" data-bs-target="#v-pills-items" type="button" role="tab" aria-controls="v-pills-items" aria-selected="false"><i class="fa-solid fa-info fa-shake"></i>nventories</button>
+        <button class="nav-link" id="v-pills-suppliers-tab" data-bs-toggle="pill" data-bs-target="#v-pills-suppliers" type="button" role="tab" aria-controls="v-pills-suppliers" aria-selected="false"><i class="fa-solid fa-s fa-shake"></i>uppliers</button>
+        <button class="nav-link" id="v-pills-stock-tab" data-bs-toggle="pill" data-bs-target="#v-pills-stock" type="button" role="tab" aria-controls="v-pills-stock" aria-selected="false"><i class="fa-brands fa-shopify fa-flip"></i> Stock</button>
+        <button class="nav-link" id="v-pills-employee-tab" data-bs-toggle="pill" data-bs-target="#v-pills-employee" type="button" role="tab" aria-controls="v-pills-employee" aria-selected="false"><i class="fa-solid fa-user-tie"></i> Employees</button>
+        <button class="nav-link" id="v-pills-user-tab" data-bs-toggle="pill" data-bs-target="#v-pills-user" type="button" role="tab" aria-controls="v-pills-user" aria-selected="false"><i class="fa-solid fa-user-shield fa-fade"></i> Users</button>
     </div>
     <div class="tab-content" id="v-pills-tabContent">
         <!--Home page-->
-        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0"> home</div>
+        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+            <section id="admin_section" class="form_sections">
+                <h3>Dashboard</h3><hr>
+                <div id="cards_section">
+                    <div class="row mb-3">
+                        <div class="col-xl-3 col-lg-6">
+                            <div class="card card-inverse card-success">
+                                <div class="card-block bg-success">
+                                    <div class="rotate">
+                                        <i class="fa-solid fa-calendar-check fa-4x"></i>
+                                    </div>
+                                    <h6 class="text-uppercase">Total sales</h6>
+                                    <h5 id="total_sales">25</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6">
+                            <div class="card card-inverse card-danger">
+                                <div class="card-block bg-danger">
+                                    <div class="rotate">
+                                        <i class="fa-solid fa-dollar-sign fa-4x"></i>
+                                    </div>
+                                    <h6 class="text-uppercase">Total profit</h6>
+                                    <h5 id="total_profit">Rs. 32 100.00</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6">
+                            <div class="card card-inverse card-info">
+                                <div class="card-block bg-info">
+                                    <div class="rotate">
+                                        <i class="fa-solid fa-ranking-star fa-4x"></i>
+                                    </div>
+                                    <h6 class="text-uppercase">Most sale item</h6>
+                                    <h5 id="most_sale_item">FMSH-0001</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6">
+                            <div class="card card-inverse card-warning">
+                                <div class="card-block bg-warning">
+                                    <div class="rotate">
+                                        <i class="fa-solid fa-arrow-up-wide-short fa-4x"></i>
+                                    </div>
+                                    <h6 class="text-uppercase">Item qty</h6>
+                                    <h5 id="most_sale_item_qty">11</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+                        <label for="check_date" class="form-label">Select a date to view status</label>
+                        <input type="date" class="form-control" id="check_date">
+                    </div>
+                </div>
+                <div id="most_item_pic_container">
+                    <figure class="figure" id="most_item_pic_figure">
+                        <img class="figure-img img-fluid rounded" id="preview_most_item_pic" src="../../assets/images/samplePic.png" alt="Preview">
+                        <h6>-Image of the most sale item-</h6>
+                    </figure>
+                </div>
+            </section>
+        </div>
+
+        <!--Sales page-->
+        <div class="tab-pane fade" id="v-pills-sale" role="tabpanel" aria-labelledby="v-pills-sale-tab" tabindex="0">
+            <!--Sale Form-->
+            <section id="order_main_section">
+                <h3><i class="fa-solid fa-cart-shopping fa-bounce"></i> Order Manage</h3><hr>
+                <section id="order_form_set" class="row g-3">
+                    <section id="form1">
+                        <h3>Invoice</h3>
+                        <form class="row g-3">
+                            <div class="col col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <label for="order_code" class="form-label">Order Code</label>
+                                <input type="text" class="form-control" id="order_code" readonly>
+                            </div>
+                            <div class="col col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <label for="order_customer_select" class="form-label">Customer</label>
+                                <select id="order_customer_select" class="form-select">
+                                    <option value="0">-Set Customer-</option>
+                                    <option value="Name1">C-0001</option>
+                                    <option value="Name2">C-0002</option>
+                                    <option value="Name3">C-0003</option>
+                                </select>
+                            </div>
+                            <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
+                                <label for="order_customer_name" class="form-label">Customer Name</label>
+                                <input type="text" class="form-control" id="order_customer_name">
+                            </div>
+                            <div class="col col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <label for="order_points" class="form-label">Add Points</label>
+                                <input type="number" class="form-control" id="order_points" readonly>
+                            </div>
+                            <div class="col col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <label for="order_pay_method_select" class="form-label">Pay Method</label>
+                                <select id="order_pay_method_select" class="form-select">
+                                    <option value="0">-Set PayMethod-</option>
+                                    <option value="Cash">Cash Payment</option>
+                                    <option value="Card">Card Payment</option>
+                                </select>
+                            </div>
+                            <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
+                                <label for="order_total" class="form-label">Total Price</label>
+                                <input type="number" class="form-control" id="order_total" readonly>
+                            </div>
+                            <div id="order_btns" class="mt-3 mb-4">
+                                <button type="button" class="btn btn-primary">Update</button>
+                                <button type="button" class="btn btn-danger">Delete</button>
+                                <button type="button" class="btn btn-warning"><i class="fa-solid fa-recycle fa-spin"></i></button>
+                            </div>
+                        </form>
+                    </section>
+                    <section id="form2">
+                        <h3>Cart</h3>
+                        <form class="row g-3">
+                            <div class="col col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <label for="order_item_select" class="form-label">Items</label>
+                                <select id="order_item_select" class="form-select">
+                                    <option value="0">-Select Item-</option>
+                                    <option>I-0001</option>
+                                    <option>I-0002</option>
+                                    <option>I-0003</option>
+                                </select>
+                            </div>
+                            <div class="col col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <label for="order_item_size_select" class="form-label">Sizes</label>
+                                <select id="order_item_size_select" class="form-select">
+                                    <option>-Select Size-</option>
+                                    <option value=5>5</option>
+                                    <option value=6>6</option>
+                                    <option value=7>7</option>
+                                    <option value=8>8</option>
+                                    <option value=9>9</option>
+                                    <option value=10>10</option>
+                                    <option value=11>11</option>
+                                </select>
+                            </div>
+                            <div class="col col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <label for="order_item_description" class="form-label">Description</label>
+                                <input type="text" class="form-control" id="order_item_description" readonly>
+                            </div>
+                            <div class="col col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <label for="order_item_unit_price" class="form-label">Unit Price</label>
+                                <input type="number" class="form-control" id="order_item_unit_price" readonly>
+                            </div>
+                            <div class="col col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <label for="total_item_qty" class="form-label">Qty on hand</label>
+                                <input type="number" class="form-control" id="total_item_qty" readonly>
+                            </div>
+                            <div class="col col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <label for="order_get_item_qty" class="form-label">Qty</label>
+                                <input type="number" class="form-control" id="order_get_item_qty">
+                            </div>
+                            <div id="cart_btns" class="mt-3 mb-4">
+                                <button type="button" class="btn btn-success">Add</button>
+                                <button type="button" class="btn btn-danger">Remove</button>
+                                <button type="reset" class="btn btn-warning"><i class="fa-solid fa-recycle fa-spin"></i></button>
+                            </div>
+                        </form>
+                    </section>
+                    <section id="form3">
+                        <h3>Payment</h3>
+                        <form class="row g-3">
+                            <h4 id="total">Total : Rs. 0.00</h4>
+                            <h5 id="subTotal">Sub : Rs. 0.00</h5>
+                            <div id="cash_section" style="display: none">
+                                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <label for="cash" class="form-label">Cash</label>
+                                    <input type="number" class="form-control" id="cash">
+                                </div>
+                                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <label for="balance" class="form-label">Balance</label>
+                                    <input type="number" class="form-control" id="balance" readonly>
+                                </div>
+                            </div>
+                            <div id="card_section" style="display: none">
+                                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <label for="order_bank_name_select" class="form-label">Name of Bank</label>
+                                    <select id="order_bank_name_select" class="form-select">
+                                        <option value="0">-Select Bank-</option>
+                                        <option value="BOC">Bank of Ceylon (BOC)</option>
+                                        <option value="COMB">Commercial Bank (COMB)</option>
+                                        <option value="HNB">Hatton National Bank (HNB)</option>
+                                        <option value="DFCC">DFCC Bank (DFCC)</option>
+                                        <option value="NDB">National Development Bank (NDB)</option>
+                                        <option value="NTB">Nations trust Bank (NTB)</option>
+                                        <option value="SEYB">Seylan Bank (SEYB)</option>
+                                        <option value="SAMP">Sampath Bank (SAMP)</option>
+                                    </select>
+                                </div>
+                                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <label for="card_digits" class="form-label">Last 4 Digits of Card</label>
+                                    <input type="number" class="form-control" id="card_digits">
+                                </div>
+                            </div>
+                            <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <label for="payment_date_time" class="form-label">Purchase D&T</label>
+                                <input type="datetime-local" class="form-control" id="payment_date_time" readonly>
+                            </div>
+                            <div class="mt-3 mb-4">
+                                <button id="btn_place_order" type="button" class="btn btn-success">Place Order</button>
+                            </div>
+                        </form>
+                    </section>
+                </section>
+                <section id="table_section1">
+                    <h4>Order Items Table</h4>
+                    <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 table-responsive">
+                        <table class="table table-info table-sm table-hover table-borderless">
+                            <thead>
+                            <tr>
+                                <th scope="col">Item Code</th>
+                                <th scope="col">Size</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Unit Price</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody id="order_item_tbl_body">
+                            <tr>
+                                <td>I-0001</td>
+                                <td>6</td>
+                                <td>Nike Air</td>
+                                <td>16000.00</td>
+                                <td>2</td>
+                                <td>32000.00</td>
+                            </tr>
+                            <tr>
+                                <td>I-0002</td>
+                                <td>9</td>
+                                <td>Waves</td>
+                                <td>1800.00</td>
+                                <td>1</td>
+                                <td>1800.00</td>
+                            </tr>
+                            <tr>
+                                <td>I-0003</td>
+                                <td>8</td>
+                                <td>Adidas dec</td>
+                                <td>23000.00</td>
+                                <td>1</td>
+                                <td>23000.00</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <section id="table_section2">
+                    <h4>Order Table</h4>
+                    <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 table-responsive">
+                        <table class="table table-info table-sm table-hover table-borderless">
+                            <thead>
+                            <tr>
+                                <th scope="col">Order Code</th>
+                                <th scope="col">Customer Code</th>
+                                <th scope="col">Customer Name</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Pay Method</th>
+                                <th scope="col">Added Points</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody id="order_tbl_body">
+                            <tr>
+                                <td>O-0001</td>
+                                <td>C-0001</td>
+                                <td>Sunil Shantha</td>
+                                <td>2024-05-04</td>
+                                <td>Cash</td>
+                                <td>4</td>
+                                <td>3200.00</td>
+                            </tr>
+                            <tr>
+                                <td>O-0002</td>
+                                <td>C-0003</td>
+                                <td>Saman Soyza</td>
+                                <td>2024-05-01</td>
+                                <td>Card</td>
+                                <td>2</td>
+                                <td>1600.00</td>
+                            </tr>
+                            <tr>
+                                <td>O-0003</td>
+                                <td>C-0004</td>
+                                <td>Amal Kumara</td>
+                                <td>2023-10-01</td>
+                                <td>Cash</td>
+                                <td>3</td>
+                                <td>2400.00</td>
+                            </tr>
+                            <tr>
+                                <td>O-0004</td>
+                                <td>C-0002</td>
+                                <td>Sunil Shantha</td>
+                                <td>2023-10-01</td>
+                                <td>Cash</td>
+                                <td>5</td>
+                                <td>4000.00</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </section>
+        </div>
 
         <!--Customer page-->
         <div class="tab-pane fade" id="v-pills-customer" role="tabpanel" aria-labelledby="v-pills-customer-tab" tabindex="0">
             <!--Customer Form-->
-            <section id="customer_form_section">
-                <h3><i class="fa-solid fa-users fa-flip" style="color: #FFD43B;"></i>Customer</h3><hr>
+            <section id="customer_form_section" class="form_sections">
+                <h3><i class="fa-solid fa-users fa-flip"></i> Customer</h3><hr>
                 <form class="row g-3">
                     <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                         <label for="customer_code" class="form-label">Customer Code</label>
@@ -120,19 +428,19 @@
                     </div>
                     <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                         <label for="rp_date_time" class="form-label">Recent Purchase D&T</label>
-                        <input type="datetime-local" class="form-control" id="rp_date_time" readonly>
+                        <input type="text" class="form-control" id="rp_date_time" readonly>
                     </div>
                     <div id="customer_btns" class="mt-3 mb-4">
                         <button type="button" class="btn btn-success" id="save">Save</button>
                         <button type="button" class="btn btn-primary">Update</button>
                         <button type="button" class="btn btn-danger">Delete</button>
-                        <button type="button" class="btn btn-warning">RE</button>
+                        <button type="button" class="btn btn-warning"><i class="fa-solid fa-recycle fa-spin"></i></button>
                     </div>
                 </form>
             </section>
             <!--Customer Table-->
-            <section id="customer_table_section">
-                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <section id="customer_table_section" class="table_sections">
+                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 table-responsive">
                     <table class="table table-info table-sm table-hover table-borderless">
                         <thead>
                         <tr>
@@ -210,9 +518,9 @@
         <!--Inventories page-->
         <div class="tab-pane fade" id="v-pills-items" role="tabpanel" aria-labelledby="v-pills-items-tab" tabindex="0">
             <!--Inventories Form-->
-            <section id="inventory_form_section">
+            <section id="inventory_form_section" class="form_sections">
                 <h3>Inventories</h3><hr>
-                <div class="item_pic_container">
+                <div class="pic_container">
                     <figure class="figure" id="item_pic_figure">
                         <img class="figure-img img-fluid rounded" id="preview_item_pic" src="#" alt="Preview" style="display: none;">
                     </figure>
@@ -292,13 +600,13 @@
                         <button type="button" class="btn btn-success">Save</button>
                         <button type="button" class="btn btn-primary">Update</button>
                         <button type="button" class="btn btn-danger">Delete</button>
-                        <button type="button" class="btn btn-warning">RE</button>
+                        <button type="button" class="btn btn-warning"><i class="fa-solid fa-recycle fa-spin"></i></button>
                     </div>
                 </form>
             </section>
             <!--Inventories Table-->
-            <section id="inventory_table_section">
-                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <section id="inventory_table_section" class="table_sections">
+                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 table-responsive">
                     <table class="table table-info table-sm table-hover table-borderless">
                         <thead>
                         <tr>
@@ -371,7 +679,7 @@
         <!--Suppliers page-->
         <div class="tab-pane fade" id="v-pills-suppliers" role="tabpanel" aria-labelledby="v-pills-suppliers-tab" tabindex="0">
             <!--Suppliers Form-->
-            <section id="supplier_form_section">
+            <section id="supplier_form_section" class="form_sections">
                 <h3>Suppliers</h3><hr>
                 <form class="row g-3">
                     <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
@@ -430,13 +738,13 @@
                         <button type="button" class="btn btn-success">Save</button>
                         <button type="button" class="btn btn-primary">Update</button>
                         <button type="button" class="btn btn-danger">Delete</button>
-                        <button type="button" class="btn btn-warning">RE</button>
+                        <button type="button" class="btn btn-warning"><i class="fa-solid fa-recycle fa-spin"></i></button>
                     </div>
                 </form>
             </section>
             <!--Suppliers Table-->
-            <section id="supplier_table_section">
-                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <section id="supplier_table_section" class="table_sections">
+                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 table-responsive">
                     <table class="table table-info table-sm table-hover table-borderless">
                         <thead>
                         <tr>
@@ -494,8 +802,8 @@
         <!--Stock page-->
         <div class="tab-pane fade" id="v-pills-stock" role="tabpanel" aria-labelledby="v-pills-stock-tab" tabindex="0">
             <!--Stock Form-->
-            <section id="stock_form_section">
-                <h3>Stock</h3><hr>
+            <section id="stock_form_section" class="form_sections">
+                <h3><i class="fa-brands fa-shopify fa-flip"></i> Stock</h3><hr>
                 <form class="row g-3">
                     <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                         <label for="stock_code" class="form-label">Stock Code</label>
@@ -513,7 +821,7 @@
                         <label for="stock_supplier_code" class="form-label">Supplier Code</label>
                         <input type="text" class="form-control" id="stock_supplier_code" readonly>
                     </div>
-                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                    <div class="col col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
                         <label for="stock_item_size_select" class="form-label">Size</label>
                         <select id="stock_item_size_select" class="form-select">
                             <option value="0">-Select Size-</option>
@@ -526,15 +834,15 @@
                             <option value="11">11</option>
                         </select>
                     </div>
-                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                    <div class="col col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
                         <label for="original_qty" class="form-label">Original Qty.</label>
                         <input type="number" class="form-control" id="original_qty">
                     </div>
-                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                    <div class="col col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
                         <label for="available_qty" class="form-label">Available Qty.</label>
                         <input type="number" class="form-control" id="available_qty">
                     </div>
-                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                    <div class="col col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
                         <label for="stock_status" class="form-label">Status</label>
                         <input type="text" class="form-control" id="stock_status" readonly>
                     </div>
@@ -542,13 +850,13 @@
                         <button type="button" class="btn btn-success">Save</button>
                         <button type="button" class="btn btn-primary">Update</button>
                         <button type="button" class="btn btn-danger">Delete</button>
-                        <button type="button" class="btn btn-warning">RE</button>
+                        <button type="button" class="btn btn-warning"><i class="fa-solid fa-recycle fa-spin"></i></button>
                     </div>
                 </form>
             </section>
             <!--Stock Table-->
-            <section id="stock_table_section">
-                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <section id="stock_table_section" class="table_sections">
+                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 table-responsive">
                     <table class="table table-info table-sm table-hover table-borderless">
                         <thead>
                         <tr>
@@ -606,9 +914,9 @@
         <!--Employee page-->
         <div class="tab-pane fade" id="v-pills-employee" role="tabpanel" aria-labelledby="v-pills-employee-tab" tabindex="0">
             <!--Employee Form-->
-            <section id="employee_form_section">
-                <h3><i class="fa-solid fa-users fa-flip" style="color: #FFD43B;"></i>Employees</h3><hr>
-                <div class="employee_pic_container">
+            <section id="employee_form_section" class="form_sections">
+                <h3><i class="fa-solid fa-user-tie"></i> Employees</h3><hr>
+                <div class="pic_container">
                     <figure class="figure" id="employee_pic_figure">
                         <img class="figure-img img-fluid rounded" id="preview_employee_pic" src="#" alt="Preview" style="display: none;">
                     </figure>
@@ -708,12 +1016,12 @@
                         <button type="button" class="btn btn-success">Save</button>
                         <button type="button" class="btn btn-primary">Update</button>
                         <button type="button" class="btn btn-danger">Delete</button>
-                        <button type="button" class="btn btn-warning">RE</button>
+                        <button type="button" class="btn btn-warning"><i class="fa-solid fa-recycle fa-spin"></i></button>
                     </div>
                 </form>
             </section>
             <!--Employee Table-->
-            <section id="employee_table_section">
+            <section id="employee_table_section" class="table_sections">
                 <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 table-responsive">
                     <table class="table table-info table-sm table-hover table-borderless">
                         <thead>
@@ -812,8 +1120,72 @@
         <!--User page-->
         <div class="tab-pane fade" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab" tabindex="0">
             <!--User Form-->
-            Users
+            <section id="user_form_section" class="form_sections">
+                <h3><i class="fa-solid fa-user-shield fa-fade"></i> User</h3><hr>
+                <form class="row g-3">
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="user_employee_code" class="form-label">Employee Code</label>
+                        <input type="text" class="form-control" id="user_employee_code" readonly>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="user_email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="user_email" readonly>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="user_role" class="form-label">Access Role</label>
+                        <input type="text" class="form-control" id="user_role" readonly>
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="user_old_password" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="user_old_password">
+                    </div>
+                    <div class="col col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <label for="user_new_password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="user_new_password">
+                    </div>
+                    <div id="user_btns" class="mt-3 mb-4">
+                        <button type="button" class="btn btn-primary">Update</button>
+                        <button type="button" class="btn btn-danger">Delete</button>
+                        <button type="button" class="btn btn-warning"><i class="fa-solid fa-recycle fa-spin"></i></button>
+                    </div>
+                </form>
+            </section>
             <!--User Table-->
+            <section id="user_table_section" class="table_sections">
+                <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <table class="table table-info table-sm table-hover table-borderless">
+                        <thead>
+                        <tr>
+                            <th scope="col">Employee Code</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Access Role</th>
+                        </tr>
+                        </thead>
+                        <tbody id="user_tbl_body">
+                        <tr>
+                            <td>E-0001</td>
+                            <td>manager@gmail.com</td>
+                            <td>ADMIN</td>
+                        </tr>
+                        <tr>
+                            <td>E-0002</td>
+                            <td>user1@gmail.com</td>
+                            <td>USER</td>
+                        </tr>
+                        <tr>
+                            <td>E-0003</td>
+                            <td>user2@gmail.com</td>
+                            <td>USER</td>
+                        </tr>
+                        <tr>
+                            <td>E-0004</td>
+                            <td>user3@gmail.com</td>
+                            <td>USER</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </div>
     </div>
 </div>
@@ -823,13 +1195,14 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="../../assets/js/navigation.js"></script>
-<script src="../../controller/dashboard-controller.js"></script>
-<script src="../../controller/customer-controller.js"></script>
-<script src="../../controller/inventory-controller.js"></script>
-<script src="../../controller/supplier-controller.js"></script>
-<script src="../../controller/stock-controller.js"></script>
-<script src="../../controller/employee-controller.js"></script>
-<script src="../../controller/user-controller.js"></script>
+<script type="module" src="../../assets/js/navigation.js"></script>
+<script type="module" src="../../controller/dashboard-controller.js"></script>
+<script type="module" src="../../controller/sale-controller.js"></script>
+<script type="module" src="../../controller/customer-controller.js"></script>
+<script type="module" src="../../controller/inventory-controller.js"></script>
+<script type="module" src="../../controller/supplier-controller.js"></script>
+<script type="module" src="../../controller/stock-controller.js"></script>
+<script type="module" src="../../controller/employee-controller.js"></script>
+<script type="module" src="../../controller/user-controller.js"></script>
 </body>
 </html>
