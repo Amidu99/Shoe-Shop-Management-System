@@ -4,6 +4,8 @@ import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.HelloShoesBE.dto.InventoryDTO;
 import lk.ijse.HelloShoesBE.service.InventoryService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +16,13 @@ import java.util.regex.Pattern;
 @RequestMapping("/api/v1/inventory")
 @RequiredArgsConstructor
 public class Inventory {
+    final static Logger logger = LoggerFactory.getLogger(Inventory.class);
     private final InventoryService inventoryService;
 
     @GetMapping("/health")
     @RolesAllowed({"ADMIN", "USER"})
     public String healthTest(){
-        System.out.println("Inventory Health Test Passed.");
+        logger.info("Inventory Health Test Passed.");
         return "Inventory Health Test Passed.";
     }
 
@@ -29,12 +32,13 @@ public class Inventory {
         try {
             validateInventory(inventoryDTO);
             if (inventoryService.existsByItemCode(inventoryDTO.getItemCode())) {
-                System.out.println("Exists Item.");
+                logger.info("Exists Item.");
                 return ResponseEntity.badRequest().body("This item already exists.");
             }
             inventoryService.saveInventory(inventoryDTO);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -44,11 +48,11 @@ public class Inventory {
     public ResponseEntity<?> getOneInventory(@RequestHeader String itemCode){
         boolean isExists = inventoryService.existsByItemCode(itemCode);
         if (!isExists){
-            System.out.println("Not Exists Item.");
+            logger.info("Not Exists Item.");
             return ResponseEntity.noContent().build();
         }
         InventoryDTO inventoryDTO = inventoryService.getInventoryByItemCode(itemCode);
-        System.out.println("Item founded: "+inventoryDTO);
+        logger.info("Item founded: "+inventoryDTO.getItemCode());
         return ResponseEntity.ok(inventoryDTO);
     }
 
@@ -56,7 +60,7 @@ public class Inventory {
     @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getAllInventories(){
         List<InventoryDTO> allItems = inventoryService.getAllInventories();
-        System.out.println("No of all items: "+allItems.size());
+        logger.info("No of all items: "+allItems.size());
         if (allItems.size() == 0) return ResponseEntity.ok().body("No items found");
         return ResponseEntity.ok().body(allItems);
     }
@@ -70,9 +74,10 @@ public class Inventory {
                 inventoryService.updateInventory(inventoryDTO);
                 return ResponseEntity.ok().build();
             }
-            System.out.println("Not Exists Item.");
+            logger.info("Not Exists Item.");
             return ResponseEntity.badRequest().body("This item is not exists.");
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -82,11 +87,11 @@ public class Inventory {
     public ResponseEntity<?> deleteInventory(@RequestHeader String itemCode){
         boolean isExists = inventoryService.existsByItemCode(itemCode);
         if (!isExists){
-            System.out.println("Not Exists Item.");
+            logger.info("Not Exists Item.");
             return ResponseEntity.badRequest().body("Item not found!");
         }
         inventoryService.deleteInventory(itemCode);
-        System.out.println("Item deleted.");
+        logger.info("Item deleted.");
         return ResponseEntity.ok().build();
     }
 
@@ -94,10 +99,10 @@ public class Inventory {
     @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getNextInventoryCode(){
         String lastItemCode = inventoryService.getLastItemCode();
-        System.out.println("Last ItemCode: "+lastItemCode);
+        logger.info("Last ItemCode: "+lastItemCode);
         if (lastItemCode==null) return ResponseEntity.ok("0001");
         int nextCode = Integer.parseInt(lastItemCode) + 1;
-        System.out.println("Next ItemCode: "+nextCode+" : "+String.format("%04d", nextCode));
+        logger.info("Next ItemCode: "+nextCode+" : "+String.format("%04d", nextCode));
         return ResponseEntity.ok(String.format("%04d", nextCode));
     }
 
@@ -117,6 +122,6 @@ public class Inventory {
         if (!Pattern.compile("^\\d*\\.?\\d+$").matcher(Double.toString(inventoryDTO.getProfitMargin())).matches()) {
             throw new RuntimeException("Invalid Profit Margin.");
         }
-        System.out.println("Inventory validated.");
+        logger.info("Inventory validated.");
     }
 }

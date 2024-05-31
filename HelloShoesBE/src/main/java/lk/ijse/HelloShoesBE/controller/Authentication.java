@@ -8,6 +8,8 @@ import lk.ijse.HelloShoesBE.service.AuthenticationService;
 import lk.ijse.HelloShoesBE.service.EmployeeService;
 import lk.ijse.HelloShoesBE.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/auth/")
 @RequiredArgsConstructor
 public class Authentication {
+    final static Logger logger = LoggerFactory.getLogger(Authentication.class);
     private final AuthenticationService authenticationService;
     private final EmployeeService employeeService;
     private final UserService userService;
@@ -25,12 +28,12 @@ public class Authentication {
         boolean isExistsUser = userService.existsByEmail(signup.getEmail());
 
         if (!isExistsEmployee) {
-            System.out.println("Not Exists Employee.");
+            logger.info("Not Exists Employee.");
             return ResponseEntity.status(204).build();
         }
 
         if (isExistsUser) {
-            System.out.println("Already Exists User.");
+            logger.info("Already Exists User.");
             return ResponseEntity.status(205).build();
         }
 

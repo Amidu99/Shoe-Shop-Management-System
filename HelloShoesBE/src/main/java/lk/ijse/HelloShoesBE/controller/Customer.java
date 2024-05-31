@@ -4,6 +4,8 @@ import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.HelloShoesBE.dto.CustomerDTO;
 import lk.ijse.HelloShoesBE.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +18,13 @@ import java.util.regex.Pattern;
 @RequestMapping("/api/v1/customer")
 @RequiredArgsConstructor
 public class Customer {
+    final static Logger logger = LoggerFactory.getLogger(Customer.class);
     private final CustomerService customerService;
 
     @GetMapping("/health")
     @RolesAllowed({"ADMIN", "USER"})
     public String healthTest(){
-        System.out.println("Customer Health Test Passed.");
+        logger.info("Customer Health Test Passed.");
         return "Customer Health Test Passed.";
     }
 
@@ -31,7 +34,7 @@ public class Customer {
         try {
             validateCustomer(customerDTO);
             if (customerService.existsByCustomerCode(customerDTO.getCustomerCode())) {
-                System.out.println("Exists Customer.");
+                logger.info("Exists Customer.");
                 return ResponseEntity.badRequest().body("This customer already exists.");
             }
             customerService.saveCustomer(customerDTO);
@@ -46,11 +49,11 @@ public class Customer {
     public ResponseEntity<?> getOneCustomer(@RequestHeader String customerCode){
         Boolean isExists = customerService.existsByCustomerCode(customerCode);
         if (!isExists){
-            System.out.println("Not Exists Customer.");
+            logger.info("Not Exists Customer.");
             return ResponseEntity.noContent().build();
         }
         CustomerDTO customerDTO = customerService.getCustomerByCustomerCode(customerCode);
-        System.out.println("Customer founded: "+customerDTO);
+        logger.info("Customer founded: "+customerDTO.getCustomerName());
         return ResponseEntity.ok(customerDTO);
     }
 
@@ -58,7 +61,7 @@ public class Customer {
     @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getAllCustomers(){
         List<CustomerDTO> allCustomers = customerService.getAllCustomers();
-        System.out.println("No of all customers: "+allCustomers.size());
+        logger.info("No of all customers: "+allCustomers.size());
         if (allCustomers.size() == 0) return ResponseEntity.ok().body("No customers found");
         return ResponseEntity.ok().body(allCustomers);
     }
@@ -72,9 +75,10 @@ public class Customer {
                 customerService.updateCustomer(customerDTO);
                 return ResponseEntity.ok().build();
             }
-            System.out.println("Not Exists Customer.");
+            logger.info("Not Exists Customer.");
             return ResponseEntity.badRequest().body("This customer not exists.");
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -89,9 +93,10 @@ public class Customer {
                 customerService.updateCustomerPoints(customerCode, totalPoints, rpDateTime);
                 return ResponseEntity.ok().build();
             }
-            System.out.println("Not Exists Customer.");
+            logger.info("Not Exists Customer.");
             return ResponseEntity.badRequest().body("This customer not exists.");
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -101,11 +106,11 @@ public class Customer {
     public ResponseEntity<?> deleteCustomer(@RequestHeader String customerCode){
         Boolean isExists = customerService.existsByCustomerCode(customerCode);
         if (!isExists){
-            System.out.println("Not Exists Customer.");
+            logger.info("Not Exists Customer.");
             return ResponseEntity.badRequest().body("Customer not found!");
         }
         customerService.deleteCustomer(customerCode);
-        System.out.println("Customer deleted.");
+        logger.info("Customer deleted.");
         return ResponseEntity.ok().build();
     }
 
@@ -113,10 +118,10 @@ public class Customer {
     @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getNextCustomerCode(){
         String lastCustomerCode = customerService.getLastCustomerCode();
-        System.out.println("Last CustomerCode: "+lastCustomerCode);
+        logger.info("Last CustomerCode: "+lastCustomerCode);
         if (lastCustomerCode==null) return ResponseEntity.ok("C-0001");
         int nextCode = Integer.parseInt(lastCustomerCode.replace("C-", "")) + 1;
-        System.out.println("Next CustomerCode: "+nextCode);
+        logger.info("Next CustomerCode: "+nextCode);
         return ResponseEntity.ok(String.format("C-%04d", nextCode));
     }
 
@@ -130,6 +135,6 @@ public class Customer {
         if (!Pattern.compile("^(?:0|94|\\+94|0094)?(?:(11|21|23|24|25|26|27|31|32|33|34|35|36|37|38|41|45|47|51|52|54|55|57|63|65|66|67|81|91)(0|2|3|4|5|7|9)|7(0|1|2|4|5|6|7|8)\\d)\\d{6}$").matcher(customerDTO.getContactNo()).matches()) {
             throw new RuntimeException("Invalid Customer Contact Number.");
         }
-        System.out.println("Customer validated.");
+        logger.info("Customer validated.");
     }
 }

@@ -5,6 +5,8 @@ import lk.ijse.HelloShoesBE.dto.MostSoldItemDTO;
 import lk.ijse.HelloShoesBE.dto.SaleDTO;
 import lk.ijse.HelloShoesBE.service.SaleService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +19,13 @@ import java.util.regex.Pattern;
 @RequestMapping("/api/v1/sale")
 @RequiredArgsConstructor
 public class Sale {
+    final static Logger logger = LoggerFactory.getLogger(Sale.class);
     private final SaleService saleService;
 
     @GetMapping("/health")
     @RolesAllowed({"ADMIN", "USER"})
     public String healthTest(){
-        System.out.println("Sale Health Test Passed.");
+        logger.info("Sale Health Test Passed.");
         return "Sale Health Test Passed.";
     }
 
@@ -32,7 +35,7 @@ public class Sale {
         try {
             validateSale(saleDTO);
             if (saleService.existsByOrderCode(saleDTO.getOrderCode())) {
-                System.out.println("Exists Order.");
+                logger.info("Exists Order.");
                 return ResponseEntity.badRequest().body("This order already exists.");
             }
             saleService.saveSale(saleDTO);
@@ -47,11 +50,11 @@ public class Sale {
     public ResponseEntity<?> getOneSale(@RequestHeader String orderCode){
         boolean isExists = saleService.existsByOrderCode(orderCode);
         if (!isExists){
-            System.out.println("Not Exists Order.");
+            logger.info("Not Exists Order.");
             return ResponseEntity.noContent().build();
         }
         Optional<SaleDTO> saleDTO = saleService.getOrderByOrderCode(orderCode);
-        System.out.println("Order founded: "+saleDTO);
+        logger.info("Order founded.");
         return ResponseEntity.ok(saleDTO);
     }
 
@@ -59,7 +62,7 @@ public class Sale {
     @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getAllSales(){
         List<SaleDTO> allSales = saleService.getAllSales();
-        System.out.println("No of all sales: "+allSales.size());
+        logger.info("No of all sales: "+allSales.size());
         if (allSales.size() == 0) return ResponseEntity.ok().body("No sales found");
         return ResponseEntity.ok().body(allSales);
     }
@@ -68,10 +71,10 @@ public class Sale {
     @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getNextOrderCode(){
         String lastOrderCode = saleService.getLastOrderCode();
-        System.out.println("Last OrderCode: "+lastOrderCode);
+        logger.info("Last OrderCode: "+lastOrderCode);
         if (lastOrderCode==null) return ResponseEntity.ok("O-0001");
         int nextCode = Integer.parseInt(lastOrderCode.replace("O-", "")) + 1;
-        System.out.println("Next OrderCode: "+nextCode);
+        logger.info("Next OrderCode: "+nextCode);
         return ResponseEntity.ok(String.format("O-%04d", nextCode));
     }
 
@@ -102,9 +105,10 @@ public class Sale {
                 saleService.updateSale(saleDTO);
                 return ResponseEntity.ok().build();
             }
-            System.out.println("Not Exists Order.");
+            logger.info("Not Exists Order.");
             return ResponseEntity.badRequest().body("This order is not exists.");
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -125,6 +129,6 @@ public class Sale {
         if (saleDTO.getTotalPrice()<0) {
             throw new RuntimeException("Invalid Total Price.");
         }
-        System.out.println("Sale validated.");
+        logger.info("Sale validated.");
     }
 }

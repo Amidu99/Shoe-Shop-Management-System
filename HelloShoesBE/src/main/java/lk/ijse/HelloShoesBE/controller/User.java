@@ -5,6 +5,8 @@ import lk.ijse.HelloShoesBE.dto.UserDTO;
 import lk.ijse.HelloShoesBE.service.AuthenticationService;
 import lk.ijse.HelloShoesBE.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +16,14 @@ import java.util.List;
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class User {
+    final static Logger logger = LoggerFactory.getLogger(User.class);
     private final UserService userService;
     private final AuthenticationService authService;
 
     @GetMapping("/health")
     @RolesAllowed({"ADMIN", "USER"})
     public String healthTest(){
-        System.out.println("User Health Test Passed.");
+        logger.info("User Health Test Passed.");
         return "User Health Test Passed.";
     }
 
@@ -29,11 +32,11 @@ public class User {
     public ResponseEntity<?> getUserByEmail(@RequestHeader String email){
         boolean isExists = userService.existsByEmail(email);
         if (!isExists){
-            System.out.println("Not Exists User.");
+            logger.info("Not Exists User.");
             return ResponseEntity.noContent().build();
         }
         UserDTO userDTO = userService.getUserByEmail(email);
-        System.out.println("User founded: "+userDTO);
+        logger.info("User founded");
         return ResponseEntity.ok(userDTO);
     }
 
@@ -41,7 +44,7 @@ public class User {
     @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getAllUsers(){
         List<UserDTO> allUsers = userService.getAllUsers();
-        System.out.println("No of all users: "+allUsers.size());
+        logger.info("No of all users: "+allUsers.size());
         if (allUsers.size() == 0) return ResponseEntity.ok().body("No users found");
         return ResponseEntity.ok().body(allUsers);
     }
@@ -53,13 +56,13 @@ public class User {
             if (userService.existsByEmail(userDTO.getEmail())) {
                 if(authService.matchPassword(userDTO)) {
                     authService.updatePassword(userDTO);
-                    System.out.println("Password changed successfully.");
+                    logger.info("Password changed successfully.");
                     return ResponseEntity.ok().build();
                 }
-                System.out.println("Password didn't match!");
+                logger.info("Password didn't match!");
                 return ResponseEntity.status(205).build();
             }
-            System.out.println("Not Exists User!");
+            logger.info("Not Exists User!");
             return ResponseEntity.status(204).build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -71,11 +74,11 @@ public class User {
     public ResponseEntity<?> deleteUser(@RequestHeader String email){
         boolean isExists = userService.existsByEmail(email);
         if (!isExists){
-            System.out.println("Not Exists User.");
+            logger.info("Not Exists User.");
             return ResponseEntity.badRequest().body("User not found!");
         }
         userService.deleteUser(email);
-        System.out.println("User deleted.");
+        logger.info("User deleted.");
         return ResponseEntity.ok().build();
     }
 }

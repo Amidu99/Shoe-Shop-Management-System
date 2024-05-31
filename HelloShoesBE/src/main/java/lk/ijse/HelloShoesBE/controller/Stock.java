@@ -4,6 +4,8 @@ import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.HelloShoesBE.dto.SupplierInventoriesDTO;
 import lk.ijse.HelloShoesBE.service.StockService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +16,13 @@ import java.util.regex.Pattern;
 @RequestMapping("/api/v1/stock")
 @RequiredArgsConstructor
 public class Stock {
+    final static Logger logger = LoggerFactory.getLogger(Stock.class);
     private final StockService stockService;
 
     @GetMapping("/health")
     @RolesAllowed({"ADMIN", "USER"})
     public String healthTest(){
-        System.out.println("Stock Health Test Passed.");
+        logger.info("Stock Health Test Passed.");
         return "Stock Health Test Passed.";
     }
 
@@ -29,16 +32,17 @@ public class Stock {
         try {
             validateStock(supplierInventoriesDTO);
             if (stockService.existsByStockCode(supplierInventoriesDTO.getStockCode())) {
-                System.out.println("Exists Stock.");
+                logger.info("Exists Stock.");
                 return ResponseEntity.badRequest().body("This stock is already exists.");
             }
             if (stockService.existsByItemCodeAndSize(supplierInventoriesDTO.getItemCode(), supplierInventoriesDTO.getSize())) {
-                System.out.println("Exists Stock.");
+                logger.info("Exists Stock.");
                 return ResponseEntity.badRequest().body("This stock is already exists.");
             }
             stockService.saveStock(supplierInventoriesDTO);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -48,11 +52,11 @@ public class Stock {
     public ResponseEntity<?> getOneStock(@RequestHeader String stockCode){
         boolean isExists = stockService.existsByStockCode(stockCode);
         if (!isExists){
-            System.out.println("Not Exists Stock.");
+            logger.info("Not Exists Stock.");
             return ResponseEntity.noContent().build();
         }
         SupplierInventoriesDTO stock = stockService.getStockByStockCode(stockCode);
-        System.out.println("Stock founded: "+stock);
+        logger.info("Stock founded: "+stock);
         return ResponseEntity.ok(stock);
     }
 
@@ -61,10 +65,10 @@ public class Stock {
     public ResponseEntity<?> getItemSizeStock(@RequestHeader String itemCode, @RequestHeader int size){
         boolean isExists = stockService.existsByItemCodeAndSize(itemCode, size);
         if (!isExists){
-            System.out.println("Not Exists Stock.");
+            logger.info("Not Exists Stock.");
             return ResponseEntity.noContent().build();
         }
-        System.out.println("This stock is already exists.");
+        logger.info("This stock is already exists.");
         return ResponseEntity.ok().build();
     }
 
@@ -73,10 +77,10 @@ public class Stock {
     public ResponseEntity<?> getItemSizeStockDetail(@RequestHeader String itemCode, @RequestHeader int size){
         SupplierInventoriesDTO stock = stockService.getExistsByItemCodeAndSize(itemCode, size);
         if (stock!=null){
-            System.out.println("Found the stock.");
+            logger.info("Found the stock.");
             return ResponseEntity.ok(stock);
         }
-        System.out.println("Not Exists Stock.");
+        logger.info("Not Exists Stock.");
         return ResponseEntity.noContent().build();
     }
 
@@ -85,10 +89,10 @@ public class Stock {
     public ResponseEntity<?> checkThisStock(@RequestHeader String stockCode, @RequestHeader String itemCode, @RequestHeader int size){
         boolean isExists = stockService.existsByStockCodeItemCodeSize(stockCode, itemCode, size);
         if (!isExists){
-            System.out.println("Not Exists Stock.");
+            logger.info("Not Exists Stock.");
             return ResponseEntity.noContent().build();
         }
-        System.out.println("This stock is already exists.");
+        logger.info("This stock is already exists.");
         return ResponseEntity.ok().build();
     }
 
@@ -96,7 +100,7 @@ public class Stock {
     @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getAllStocks(){
         List<SupplierInventoriesDTO> allStocks = stockService.getAllStocks();
-        System.out.println("No of all stocks: "+allStocks.size());
+        logger.info("No of all stocks: "+allStocks.size());
         if (allStocks.size() == 0) return ResponseEntity.ok().body("No stocks found");
         return ResponseEntity.ok().body(allStocks);
     }
@@ -110,9 +114,10 @@ public class Stock {
                 stockService.updateStock(supplierInventoriesDTO);
                 return ResponseEntity.ok().build();
             }
-            System.out.println("Not Exists Stock.");
+            logger.info("Not Exists Stock.");
             return ResponseEntity.badRequest().body("This stock is not exists.");
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -122,11 +127,11 @@ public class Stock {
     public ResponseEntity<?> deleteStock(@RequestHeader String stockCode){
         boolean isExists = stockService.existsByStockCode(stockCode);
         if (!isExists){
-            System.out.println("Not Exists Stock.");
+            logger.info("Not Exists Stock.");
             return ResponseEntity.badRequest().body("Stock not found!");
         }
         stockService.deleteStock(stockCode);
-        System.out.println("Stock deleted.");
+        logger.info("Stock deleted.");
         return ResponseEntity.ok().build();
     }
 
@@ -134,10 +139,10 @@ public class Stock {
     @RolesAllowed({"ADMIN", "USER"})
     public ResponseEntity<?> getNextStockCode(){
         String lastStockCode = stockService.getLastStockCode();
-        System.out.println("Last StockCode: "+lastStockCode);
+        logger.info("Last StockCode: "+lastStockCode);
         if (lastStockCode==null) return ResponseEntity.ok("ST-0001");
         int nextCode = Integer.parseInt(lastStockCode.replace("ST-", "")) + 1;
-        System.out.println("Next StockCode: "+nextCode);
+        logger.info("Next StockCode: "+nextCode);
         return ResponseEntity.ok(String.format("ST-%04d", nextCode));
     }
 
@@ -163,6 +168,6 @@ public class Stock {
         if (!Pattern.compile("^[S]-\\d{4}$").matcher(supplierInventoriesDTO.getSupplierCode()).matches()) {
             throw new RuntimeException("Invalid Supplier Code.");
         }
-        System.out.println("Stock validated.");
+        logger.info("Stock validated.");
     }
 }
