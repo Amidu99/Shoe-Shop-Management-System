@@ -22,7 +22,7 @@ public class BirthdayScheduler {
 
     final static Logger logger = LoggerFactory.getLogger(BirthdayScheduler.class);
 
-    @Scheduled(cron = "0 19 00 * * ?") // Run at 7:30 AM every day
+    @Scheduled(cron = "0 30 07 * * ?") // set to run at 7:30 AM every day
     public void sendBirthdayWishes() {
         LocalDate today = LocalDate.now();
         int month = today.getMonthValue();
