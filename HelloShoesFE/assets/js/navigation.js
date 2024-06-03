@@ -3,7 +3,7 @@ $("#v-pills-home-tab").on("click", async () => {
 });
 $("#v-pills-sale-tab").on("click", async () => {
     console.log("Sale-tab");
-    if(!$("#order_code").val()){ $("#order_btns>button[type='button']").eq(2).click(); }
+    if(!$("#order_code").val()){ $("#order_btns>button[type='button']").eq(1).click(); }
 });
 $("#v-pills-customer-tab").on("click", async () => {
     console.log("Customer-tab");

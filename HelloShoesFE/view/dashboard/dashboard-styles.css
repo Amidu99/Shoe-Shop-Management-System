@@ -17,19 +17,24 @@ th,label{
 .form-control {
     background-color: rgba(255, 255, 255, 0.1) !important;
     font-weight: bold;
-    color: rgba(33, 32, 32, 0.8);
+    color: rgb(255, 255, 255);
 }
 
 .form-select {
     background-color: rgba(255, 255, 255, 0.1) !important;
     font-weight: bold;
-    color: rgba(33, 32, 32, 0.8);
+    color: rgb(255, 255, 255);
+}
+
+select option {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #000000; /* Text color of the options */
 }
 
 .form-control:disabled, .form-control[readonly] {
     background-color: rgba(255, 255, 255, 0.1) !important;
     font-weight: bold;
-    color: rgba(33, 32, 32, 0.8);
+    color: rgb(255, 255, 255);
 }
 
 .table-info {
@@ -103,7 +108,7 @@ th,label{
 }
 
 .navbar-brand:hover {
-    color: #000000;
+    color: #f38813;
 }
 
 #current_user_name{
@@ -126,7 +131,7 @@ th,label{
 }
 #v-pills-tab>button:hover{
     font-size: 17px;
-    color: #000000;
+    color: #f38813;
 }
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
     background-color: rgba(255, 255, 255, 0.1);
@@ -389,6 +394,8 @@ th,label{
 .card {
     overflow: hidden;
     border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.25)) !important;
 }
 
 .card-block{
@@ -434,4 +441,22 @@ th,label{
     color: #000000;
     font-size: 18px;
     font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+#footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
+}
+
+#footer p {
+    font-family: "Roboto Thin", sans-serif;
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 15px;
+    margin: 0;
 }

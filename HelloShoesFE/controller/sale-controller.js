@@ -5,6 +5,7 @@ import {showError, showSwalError, showSwalWarning} from "../assets/js/notificati
 import {namePattern, orderCodePattern} from "../assets/js/regex.js";
 import {employeeName} from "./dashboard-controller.js";
 import {Stock} from "../model/Stock.js";
+let previousPoints = 0;
 let order_row_index = null;
 let item_row_index = null;
 let userCode = null;
@@ -65,7 +66,6 @@ const loadOrderData = () => {
         })
         .then(data => {
             if (Array.isArray(data)) {
-                console.log('Response order info data: ', data);
                 $('#order_tbl_body').empty();
                 data.forEach(order => {
                     let record = `<tr><td class="orderCode">${order.orderCode}</td>
@@ -150,16 +150,22 @@ function getCurrentTimestamp() {
     return now.toISOString();
 }
 
-// check availability of the ID in temp_cart
+// check availability of the code in temp_cart
 function isAvailableForUpdate(orderCode) {
-    let order_detail = temp_cart.find(order_detail => order_detail.orderCode === orderCode);
-    return !!order_detail;
+    const order_detail = temp_cart.find(order_detail =>
+        order_detail.orderCode === orderCode
+    );
+    return order_detail !== undefined;
 }
 
-// check availability of the item code in temp_cart
 function isAvailableCode(orderCode, itemCode, size) {
-    let order_detail = temp_cart.find(order_detail => order_detail.orderCode === orderCode && order_detail.itemCode === itemCode && order_detail.size === size);
-    return !!order_detail;
+    console.log('temp_cart:', temp_cart);
+    const order_detail = temp_cart.find(order_detail =>
+        order_detail.orderCode === orderCode &&
+        order_detail.itemCode === itemCode &&
+        order_detail.size === size
+    );
+    return order_detail !== undefined;
 }
 
 // check availability of the orderCode
@@ -172,7 +178,7 @@ async function isAvailableOrderCode(orderCode) {
 }
 
 // reset the invoice form
-$("#order_btns>button[type='button']").eq(2).on("click", async () => {
+$("#order_btns>button[type='button']").eq(1).on("click", async () => {
     $("#order_customer_select").empty();
     loadCustomers();
     $("#order_item_select").empty();
@@ -185,6 +191,7 @@ $("#order_btns>button[type='button']").eq(2).on("click", async () => {
     clear_form3();
     temp_cart = [];
     sub_total = 0.00;
+    previousPoints = 0;
     $("#order_item_tbl_body").empty();
     loadOrderData();
 
@@ -290,7 +297,7 @@ $("#cart_btns>button[type='button']").eq(1).on("click", () => {
     let itemCode = $("#order_item_select option:selected").text();
     let itemDesc = $("#order_item_description").val();
     let itemPrice = $("#order_item_unit_price").val();
-    let size = $("#order_item_size_select").val();
+    let size = parseInt($("#order_item_size_select").val());
     let get_item_qty = parseInt($("#order_get_item_qty").val());
     if(orderCode) {
         if (orderCodePattern.test(orderCode)) {
@@ -321,7 +328,7 @@ $("#cart_btns>button[type='button']").eq(1).on("click", () => {
                 } else { showError('This Item is not available in this order!'); }
             } else { showError('Fields can not be empty!'); }
         } else { showError('Invalid Order Code format!'); }
-    } else { showError('Order ID can not be empty!'); }
+    } else { showError('Order Code can not be empty!'); }
 });
 
 // retrieve cart item by table click
@@ -384,6 +391,7 @@ $("#order_tbl_body").on("click", "tr", async function () {
         $("#cash_section").css("display", "none");
     }
     $("#order_points").val(addedPoints);
+    previousPoints = addedPoints;
     sub_total = totalPrice;
     document.getElementById("total").innerHTML = "Total : Rs. " + totalPrice;
     document.getElementById("subTotal").innerHTML = "Sub Total : Rs. " + sub_total;
@@ -507,8 +515,10 @@ $("#btn_place_order").on("click", async () => {
                                         title: 'Saved!', showConfirmButton: false, timer: 2000
                                     });
                                     await updateItemQuantities();
-                                    if(customerCode!==''){ await updatePoints(customerCode, addedPoints, date);}
-                                    $("#order_btns>button[type='button']").eq(2).click();
+                                    if(customerCode!=='') {
+                                        await updatePoints(customerCode, addedPoints, date);
+                                    }
+                                    $("#order_btns>button[type='button']").eq(1).click();
                                 },
                                 error: (err) => {
                                     if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
@@ -522,6 +532,88 @@ $("#btn_place_order").on("click", async () => {
         } else { showError('Invalid Order Code format!');}
     } else { showError('Order Code can not be empty!');}
 });
+
+// update and refund
+$("#order_btns>button[type='button']").eq(0).on("click", async () => {
+    let orderCode = $("#order_code").val();
+    let customerName = $("#order_customer_name").val();
+    let total = sub_total;
+    let date = getCurrentTimestamp();
+    let payMethod = $("#order_pay_method_select").val();
+    let bank = $("#order_bank_name_select").val();
+    let digits = $("#card_digits").val();
+    let addedPoints = parseFloat($("#order_points").val());
+    let cashierName = employeeName;
+    await getUserCodeByEmail();
+    let customerCode;
+    let customer_select_val = $("#order_customer_select").val();
+    if (customer_select_val!=="0"){ customerCode = $("#order_customer_select option:selected").text();}
+    else {customerCode = '';}
+    let saleInventories = temp_cart;
+    if (orderCode) {
+        if (orderCodePattern.test(orderCode)) {
+            if ((await isAvailableOrderCode(orderCode))) {
+                if (namePattern.test(customerName)) {
+                    if (payMethod!=="0") {
+                        if(payMethod==="Card"){
+                            if(bank!=="0"){
+                                if(/^\d{4}$/.test(digits)){
+                                    payMethod = (payMethod+'~'+bank+'*'+digits);
+                                }else{showError('Enter only the last 4 digits!'); return;}
+                            }else{showError('Invalid Bank Name!'); return;}
+                        }
+                        if (total >= 0) {
+                            if (isAvailableForUpdate(orderCode)) {
+                                if (isOrderDateWithinThreeDays()) {
+                                    if (parseFloat(previousPoints)!==addedPoints) { addedPoints = (parseFloat(previousPoints) - addedPoints);}
+                                    let saleObject = new Sale(orderCode, customerName, total, date, payMethod, addedPoints, cashierName, userCode, customerCode, saleInventories);
+                                    let saleJSON = JSON.stringify(saleObject);
+                                    $.ajax({
+                                        url: `${SaleServiceUrl}/update`,
+                                        type: "PUT",
+                                        data: saleJSON,
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                            "Authorization": "Bearer " + localStorage.getItem("AuthToken")
+                                        },
+                                        success: async (res) => {
+                                            Swal.fire({
+                                                width: '225px', position: 'center', icon: 'success',
+                                                title: 'Updated!', showConfirmButton: false, timer: 2000
+                                            });
+                                            await updateItemQuantities();
+                                            if(customerCode!=='' && previousPoints!==addedPoints) {
+                                                let updatedPoints = addedPoints - previousPoints;
+                                                await updatePoints(customerCode, updatedPoints, date);
+                                            }
+                                            $("#order_btns>button[type='button']").eq(1).click();
+                                        },
+                                        error: (err) => {
+                                            if (err.status === 403) { showSwalError('Forbidden','You do not have permission to perform this action!');}
+                                            else { showSwalError('Error', 'An error occurred while proceeding. Please try again later.');}
+                                        }
+                                    });
+                                } else { showError("Orders over 3 days can't be updated.");}
+                            } else { showError('No details to update!');}
+                        } else { showError('Invalid total!');}
+                    } else { showError('Invalid Pay Method!');}
+                } else { showError('Enter valid Customer Name!');}
+            } else { showError('This Order Code is not exist for update!');}
+        } else { showError('Invalid Order Code format!');}
+    } else { showError('Order Code can not be empty!');}
+});
+
+// check possibility for refund
+function isOrderDateWithinThreeDays() {
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let orderDate = $("#payment_date_time").val();
+    let orderDateTime = new Date(orderDate);
+    orderDateTime.setHours(0, 0, 0, 0);
+    let timeDifference = today - orderDateTime;
+    let dayDifference = timeDifference / (1000 * 60 * 60 * 24);
+    return dayDifference <= 3;
+}
 
 // calculate balance & points
 const inputElement = document.getElementById('cash');
