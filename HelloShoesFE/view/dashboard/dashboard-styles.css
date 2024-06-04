@@ -336,6 +336,121 @@ select option {
     }
 }
 
+
+/*  Bill  */
+
+#bill_section {
+    position: fixed;
+    top: 20px;
+    right: 0;
+    left: 0;
+    background-color: #ffffff;
+    width: 100mm;
+    height: fit-content;
+    padding: 10mm 10mm 2mm;
+    margin: auto;
+    border: 2px solid #000;
+}
+
+#bill {
+    width: 100%;
+}
+
+#bill h4 {
+    text-align: center;
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+#bill h4 span {
+    font-size: small;
+}
+
+#bill h6 {
+    font-size: small;
+    margin-top: 4px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+#bill h5 {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+#bill h5:nth-child(4) {
+    width: 146px;
+    text-align: left;
+}
+
+#bill h5:nth-child(5) {
+    width: 146px;
+    text-align: right;
+}
+
+.bill-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 3mm;
+}
+
+.bill-table, .bill-table th, .bill-table td {
+    border: 1px solid black;
+}
+
+.bill-table th, .bill-table td {
+    padding: 4px;
+    text-align: left;
+}
+
+.bill-table th {
+    background-color: #f2f2f2;
+    font-size: 11px;
+    font-weight: bold;
+    color: black;
+}
+
+.bill-table td {
+    font-size: 10px;
+}
+
+.bill-footer {
+    margin-top: 2mm;
+}
+
+.bill-footer h3 {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.bill-footer h3:nth-child(1) {
+    width: 146px;
+    text-align: left;
+}
+
+.bill-footer h3:nth-child(2) {
+    width: 146px;
+    text-align: right;
+}
+
+.print-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 5mm;
+}
+
+.print-button button {
+    padding: 2px;
+    font-size: 13px;
+    font-weight: bold;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+}
 /* --------------------------------------------------------------------------------------------------- */
 
 /*     Admin panel    */
