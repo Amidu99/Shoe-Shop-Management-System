@@ -1,10 +1,17 @@
 import {OrderDetail} from "../model/OrderDetail.js";
 import {Sale} from "../model/Sale.js";
-import {CustomerServiceUrl, InventoryServiceUrl, SaleServiceUrl, StockServiceUrl, UserServiceUrl} from "../assets/js/urls.js";
+import {
+    CustomerServiceUrl,
+    InventoryServiceUrl,
+    SaleServiceUrl,
+    StockServiceUrl,
+    UserServiceUrl
+} from "../assets/js/urls.js";
 import {showError, showSwalError, showSwalWarning} from "../assets/js/notifications.js";
 import {namePattern, orderCodePattern} from "../assets/js/regex.js";
 import {employeeName} from "./dashboard-controller.js";
 import {Stock} from "../model/Stock.js";
+
 let previousPoints = 0;
 let order_row_index = null;
 let item_row_index = null;
@@ -515,6 +522,7 @@ $("#btn_place_order").on("click", async () => {
                                         title: 'Saved!', showConfirmButton: false, timer: 2000
                                     });
                                     await updateItemQuantities();
+                                    displayBill(saleObject.orderCode, getToday(), saleObject.payMethod, saleObject.saleInventories);
                                     if(customerCode!=='') {
                                         await updatePoints(customerCode, addedPoints, date);
                                     }
@@ -676,3 +684,49 @@ async function updateItemQuantities() {
         } catch (error) {console.error('Error:', error);}
     }
 }
+
+function getToday() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return year + "-" + month + "-" + day;
+}
+
+function displayBill(orderCode, orderDate, payMethod, orderItems) {
+    document.getElementById('billOrderCode').innerText = orderCode;
+    document.getElementById('billOrderDate').innerText = orderDate;
+    document.getElementById('billPayMethod').innerText = payMethod;
+
+    const tableBody = document.getElementById('billTable').getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = '';
+
+    orderItems.forEach(item => {
+        const total = item.qty * item.itemPrice;
+        const row = document.createElement('tr');
+        row.innerHTML = `
+                    <td>${item.itemCode}</td>
+                    <td>${item.size}</td>
+                    <td>${item.qty}</td>
+                    <td>${item.itemPrice}</td>
+                    <td>${total.toFixed(2)}</td>
+                `;
+        tableBody.appendChild(row);
+    });
+    document.getElementById('billTotal').innerText = sub_total.toFixed(2);
+    $('#bill_section').css('display', 'block');
+}
+
+$(".print-button>button[type='button']").eq(0).on("click", () => {
+    const sectionToPrint = document.getElementById("bill");
+    printJS({
+        printable: sectionToPrint,
+        type: 'html',
+        ignoreElements: ['print-buttons'],
+        targetStyles: ['*']
+    });
+});
+
+$(".print-button>button[type='button']").eq(1).on("click", () => {
+    $('#bill_section').css('display', 'none');
+});
