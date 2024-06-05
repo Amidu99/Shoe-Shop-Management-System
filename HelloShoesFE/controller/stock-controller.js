@@ -1,6 +1,7 @@
 import {Stock} from "../model/Stock.js";
 import {InventoryServiceUrl, StockServiceUrl} from "../assets/js/urls.js";
 import {showError, showSwalError} from "../assets/js/notifications.js";
+import {getLowStockAlerts} from "./dashboard-controller.js";
 let stock_row_index = null;
 
 // check availability of the stockCode
@@ -159,7 +160,7 @@ $("#stock_btns>button[type='button']").eq(3).on("click", async () => {
     $("#original_qty").val("");
     $("#available_qty").val("");
     $("#stock_status").val("");
-
+    getLowStockAlerts();
     const getNextCodeURL = new URL(`${StockServiceUrl}/getNextCode`);
     try {
         const response = await fetch(getNextCodeURL, { method: 'GET', headers:{"Authorization": "Bearer " + localStorage.getItem("AuthToken")}});

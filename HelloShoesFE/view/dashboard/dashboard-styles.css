@@ -456,16 +456,18 @@ select option {
 /*     Admin panel    */
 
 #most_item_pic_container {
-    display: flex;
-    justify-content: center;
+    width: fit-content;
+    margin: auto;
 }
 #most_item_pic_figure{
-    border-radius: 50px;
+    margin: auto;
 }
 #preview_most_item_pic{
     width: 200px;
     aspect-ratio: 1/1;
     border: 2px solid white;
+    position: relative;
+    left: 24px;
 }
 
 @keyframes rotate {
@@ -573,5 +575,23 @@ select option {
     font-weight: 700;
     letter-spacing: 1px;
     font-size: 15px;
+    margin: 0;
+}
+
+#alert_table_section {
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.25)) !important;
+}
+#alert_table_section>h3 {
+    text-align: center;
+    color: rgba(255, 0, 0, 0.75);
+    font-size: 25px;
+    font-weight: bold;
+    -webkit-text-stroke: 1px #000000;
+    text-stroke: 1px #000000;
+}
+#alert_table_section>div>table {
     margin: 0;
 }

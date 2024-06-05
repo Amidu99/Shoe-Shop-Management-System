@@ -107,11 +107,49 @@
                         <input type="date" class="form-control" id="check_date">
                     </div>
                 </div>
-                <div id="most_item_pic_container">
-                    <figure class="figure" id="most_item_pic_figure">
-                        <img class="figure-img img-fluid rounded" id="preview_most_item_pic" src="../../assets/images/samplePic.png" alt="Preview">
-                        <h6>-Image of the most sale item-</h6>
-                    </figure>
+                <div class="row mb-3">
+                    <div class="col-xl-4 col-lg-4"></div>
+                    <div class="col-xl-4 col-lg-4">
+                        <div id="most_item_pic_container">
+                            <figure class="figure" id="most_item_pic_figure">
+                                <img class="figure-img img-fluid rounded" id="preview_most_item_pic" src="../../assets/images/samplePic.png" alt="Preview">
+                                <h6>-Image of the most sale item-</h6>
+                            </figure>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4">
+                        <section id="alert_table_section">
+                            <h3>Stock Alerts</h3>
+                            <div class="col col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <table class="table table-info table-sm table-hover table-borderless">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Item Code</th>
+                                        <th scope="col">Size</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="alert_tbl_body">
+                                    <tr>
+                                        <td>E-0001</td>
+                                        <td>6</td>
+                                        <td>Not available</td>
+                                    </tr>
+                                    <tr>
+                                        <td>E-0002</td>
+                                        <td>7</td>
+                                        <td>Not available</td>
+                                    </tr>
+                                    <tr>
+                                        <td>E-0003</td>
+                                        <td>5</td>
+                                        <td>Not available</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </section>
         </div>

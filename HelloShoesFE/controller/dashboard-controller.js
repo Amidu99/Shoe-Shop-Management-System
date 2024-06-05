@@ -1,4 +1,4 @@
-import {EmployeeServiceUrl, SaleServiceUrl, InventoryServiceUrl} from "../assets/js/urls.js";
+import {EmployeeServiceUrl, SaleServiceUrl, InventoryServiceUrl, StockServiceUrl} from "../assets/js/urls.js";
 import {showSwalError} from "../assets/js/notifications.js";
 export let employeeName;
 let mostSellItemQty = null;
@@ -9,6 +9,7 @@ let base64MostSellItemPic = null;
 document.addEventListener('DOMContentLoaded', async function() {
     try {
         await getEmployeeByEmail();
+        await getLowStockAlerts();
     } catch (error) {
         console.error('Error fetching employee data:', error);
     }
@@ -26,6 +27,29 @@ async function getEmployeeByEmail() {
         } else {console.error('Error:', response.status, response.statusText);}
     } catch (error) {console.error('Error:', error);}
 }
+
+export const getLowStockAlerts = () => {
+    const getAllURL = new URL(`${StockServiceUrl}/getLowStocks`);
+    fetch(getAllURL, { method: 'GET', headers:{"Authorization": "Bearer " + localStorage.getItem("AuthToken")}})
+        .then(response => {
+            if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status}`); }
+            return response.json();
+        })
+        .then(data => {
+            if (Array.isArray(data)) {
+                $('#alert_tbl_body').empty();
+                data.forEach(stock => {
+                    let statusColor;
+                    if (stock.status === 'Low') { statusColor = '#FF7E00FF';}
+                    else if (stock.status === 'Not Available') { statusColor = 'rgba(224,4,4,0.8)';}
+                    else { statusColor = 'black';}
+                    let record = `<tr><td>${stock.inventory.itemCode}</td><td>${stock.size}</td><td style="color: ${statusColor};">${stock.status}</td></tr>`;
+                    $("#alert_tbl_body").append(record);
+                });
+            } else { console.error('Error: Expected JSON array, but received: ', data); }
+        })
+        .catch(error => { console.error('Error: ', error); $('#alert_tbl_body').empty(); });
+};
 
 document.addEventListener('DOMContentLoaded', (event) => {
     const dateInput = document.getElementById('check_date');
