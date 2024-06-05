@@ -105,6 +105,15 @@ public class Stock {
         return ResponseEntity.ok().body(allStocks);
     }
 
+    @GetMapping("/getLowStocks")
+    @RolesAllowed({"ADMIN", "USER"})
+    public ResponseEntity<?> getLowStocks(){
+        List<SupplierInventoriesDTO> lowStocks = stockService.getLowStocks();
+        logger.info("No of low stocks: "+lowStocks.size());
+        if (lowStocks.size() == 0) return ResponseEntity.ok().body("No low stocks found");
+        return ResponseEntity.ok().body(lowStocks);
+    }
+
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     @RolesAllowed({"ADMIN"})
     public ResponseEntity<?> updateStock(@RequestBody SupplierInventoriesDTO supplierInventoriesDTO) {

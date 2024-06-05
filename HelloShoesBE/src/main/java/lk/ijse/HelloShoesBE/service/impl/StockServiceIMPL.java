@@ -102,4 +102,9 @@ public class StockServiceIMPL implements StockService {
         }
         return null;
     }
+
+    @Override
+    public List<SupplierInventoriesDTO> getLowStocks() {
+        return mapping.toSupplierInventoriesDTOList(stockRepo.getLowStocks());
+    }
 }

@@ -14,4 +14,5 @@ public interface StockService {
     void deleteStock(String stockCode);
     String getLastStockCode();
     SupplierInventoriesDTO getExistsByItemCodeAndSize(String itemCode, int size);
+    List<SupplierInventoriesDTO> getLowStocks();
 }
