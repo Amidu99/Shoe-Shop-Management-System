@@ -595,3 +595,19 @@ select option {
 #alert_table_section>div>table {
     margin: 0;
 }
+
+#showcase {
+    width: 100%;
+    height: fit-content;
+}
+
+.card-img-top {
+    width: 150px;
+    aspect-ratio: 1/1;
+    margin: 20px auto auto;
+    border-radius: 10px;
+}
+
+.card-body h5, .card-body p, .card-body h6 {
+    color: white;
+}
