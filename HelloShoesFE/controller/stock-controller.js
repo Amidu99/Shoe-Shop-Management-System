@@ -2,6 +2,7 @@ import {Stock} from "../model/Stock.js";
 import {InventoryServiceUrl, StockServiceUrl} from "../assets/js/urls.js";
 import {showError, showSwalError} from "../assets/js/notifications.js";
 import {getLowStockAlerts} from "./dashboard-controller.js";
+import {stockCodePattern} from "../assets/js/regex.js";
 let stock_row_index = null;
 
 // check availability of the stockCode

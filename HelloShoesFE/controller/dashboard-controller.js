@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
         await getEmployeeByEmail();
         await getLowStockAlerts();
+        await getShowcaseItems();
     } catch (error) {
         console.error('Error fetching employee data:', error);
     }
@@ -49,6 +50,36 @@ export const getLowStockAlerts = () => {
             } else { console.error('Error: Expected JSON array, but received: ', data); }
         })
         .catch(error => { console.error('Error: ', error); $('#alert_tbl_body').empty(); });
+};
+
+const getShowcaseItems = () => {
+    const getAllURL = new URL(`${InventoryServiceUrl}/getAll`);
+    fetch(getAllURL, { method: 'GET', headers: { "Authorization": "Bearer " + localStorage.getItem("AuthToken")}})
+        .then(response => {
+            if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status}`); }
+            return response.json();
+        })
+        .then(data => {
+            if (Array.isArray(data)) {
+                const cardContainer = document.getElementById('card-container');
+                data.forEach(inventory => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('col');
+                cardElement.innerHTML = `
+                    <div class="card">
+                        <img src="${inventory.itemPic}" class="card-img-top" alt="${inventory.itemCode}">
+                        <div class="card-body">
+                            <h5 class="card-title">${inventory.itemCode}</h5>
+                            <p class="card-text">${inventory.itemDesc}</p>
+                            <h6>Rs. ${inventory.sellPrice}/=</h6>
+                        </div>
+                    </div>
+                `;
+                cardContainer.appendChild(cardElement);
+                });
+            } else { console.error('Error: Expected JSON array, but received: ', data); }
+        })
+        .catch(error => { console.error('Error: ', error); });
 };
 
 document.addEventListener('DOMContentLoaded', (event) => {

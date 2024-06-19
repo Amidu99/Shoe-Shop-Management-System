@@ -432,7 +432,6 @@ function formatISOToLocalDateTime(date) {
 async function getOrderDetailsToTemp(orderCode) {
     await getOrderDetailsToRealTemp(orderCode);
     temp_cart = [...real_temp_cart];
-    console.log('temp_cart:', temp_cart);
 }
 
 // get order details to real_temp_cart_db
